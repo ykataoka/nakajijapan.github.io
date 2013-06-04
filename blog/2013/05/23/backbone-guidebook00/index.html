@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Nakajijapan</title>
+  <title>Backbone.js読書会01 - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="サービスをRailsにした話 from Daichi Nakajima rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。 &hellip;">
+  <meta name="description" content="Backbone.js読書会１日目 Webも徐々にGUIアプリのような振る舞いが求められていく世の中になってきたし、技術的に可能になってきたと。クライアントでそんな振る舞いをしてくれてるのが現状javascriptです。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -64,198 +63,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/06/05/rubyhiroba/">Rubyhiroba</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-05T00:12:00+09:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
-
-<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
-やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
-反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
-
-<p>perlにしろrubyにしろテストがあるのは大変心強いし、安心します。
-たとえ、最新のRailsにのせ変えたとしてもテストがない時点でもう技術的負債。前のコードと何ら変わりはない。
-まぁ作成した時点負債は負債なんだけどその劣化速度は抑えられるはず。</p>
-
-<p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
-
-<p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.js 読書会01-02</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>第１章の続き</p>
-
-<p>Eventsあたりのところから</p>
-
-<blockquote><p>Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている</p></blockquote>
-
-<p>と記述されている。</p>
-
-<h2>オブザーバパターンとは</h2>
-
-<p>購読者と発行者と呼ばれるオブジェクトが存在する。
-発行者が購読者のメソッドを直接呼び出す代わりに、購読者は発行者
-のイベントを購読する。イベントが発生したらそれを購読している
-オブジェクトに通知される。</p>
-
-<p>発行者はだれが購読してるのか知らずに済む。</p>
-
-<p>イベント駆動開発の技法。</p>
-
-<p>詳細はここが分かりやすい。
-<a href="http://www.techscore.com/tech/DesignPattern/Observer.html/">http://www.techscore.com/tech/DesignPattern/Observer.html/</a></p>
-
-<h3>Backbone.jsでいう購読者と発行者</h3>
-
-<p>これを以下のようにして考えるとわかりやすい</p>
-
-<ul>
-<li>購読者: View</li>
-<li>発行者 : Model</li>
-</ul>
-
-
-<p>Modelはだれが購読してるかしらなくていい、イベントを通知してあげればいいんです。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># viewの中で
-</span><span class='line'>var entry = new Entry();
-</span><span class='line'>entry.on('change', this.render());</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>メディエータパターン</h2>
-
-<blockquote><p>複数オブジェクトの間を取り持つ仲介者と鳴るオブジェクトを用意し、オブジェクト間の連動の詳細をその仲介者に持たせる
-個々のオブジェクトの独自性を高める</p></blockquote>
-
-<p>内容は理解できたけど、使いどころまだピンときていない。</p>
-
-<p>ここに詳しく記述されていた。
-<a href="http://www.techscore.com/tech/DesignPattern/Mediator.html/">http://www.techscore.com/tech/DesignPattern/Mediator.html/</a></p>
-
-<h2>コラムでのまめ知識</h2>
-
-<p>メモリーリークの問題から<code>on() off()</code>ではなくて <code>listenTo() stopListening()</code>を利用するといい
-v1.0からはView#remove()内部でstopListening() ViewではlistenToしてるので大丈夫！</p>
-
-<h2>Underscore.js</h2>
-
-<p>便利関数の紹介だった。</p>
-
-<ul>
-<li>_.debounce()
-
-<ul>
-<li>一定時間イベントが発生しなかったときに処理を実行する</li>
-</ul>
-</li>
-<li>_.throtte()
-
-<ul>
-<li>コールバックの実行頻度をさげる</li>
-</ul>
-</li>
-<li>_.delay()
-
-<ul>
-<li>処理を遅らせる</li>
-</ul>
-</li>
-<li>_.defer()
-
-<ul>
-<li>コールバック関数の中で最後に実行されることを保証する</li>
-</ul>
-</li>
-</ul>
-
-
-<p>上記二つの関数は今にも使えそうな便利関数だったので導入していきたいな。</p>
-
-<p><a href="http://underscorejs.org/">http://underscorejs.org/</a></p>
-
-<p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
-
-<p>さて来週からは第二章ですよ。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.js読書会01</a></h1>
+      <h1 class="entry-title">Backbone.js読書会01</h1>
     
     
       <p class="meta">
@@ -278,7 +91,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   </header>
 
 
-  <div class="entry-content"><h2>Backbone.js読書会１日目</h2>
+<div class="entry-content"><h2>Backbone.js読書会１日目</h2>
 
 <p>Webも徐々にGUIアプリのような振る舞いが求められていく世の中になってきたし、技術的に可能になってきたと。クライアントでそんな振る舞いをしてくれてるのが現状javascriptです。僕たちはどんどんjavascriiptを利用して多種多様な振る舞いをしていかなければいけないけど、現状のjQueryでばんばん書いていくのにも限界がきてるんじゃないか。そのとき、外国で話題になっていたフレームワークをほそぼそと勉強しはじめ、今や業務にまで導入できることに成功しました。（まだ、いろいろ課題はありますが。。。）</p>
 
@@ -360,22 +173,16 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 
 <p><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank" title="Developing Backbone.js Applications"><img src="http://ecx.images-amazon.com/images/I/5171nmxXQdL._SL160_.jpg" width="114" height="150" alt="Developing Backbone.js Applications" /></a><br /><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank">Developing Backbone.js Applications</a></p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/03/hello/">Hello</a></h1>
-    
-    
-      <p class="meta">
-        
+  
+
+<span class="byline author vcard">Posted by <span class="fn">nakajijapan</span></span>
+
+      
 
 
 
@@ -387,47 +194,44 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   
 
 
-<time datetime="2013-03-03T10:23:00+09:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
-        
-      </p>
+<time datetime="2013-05-23T00:12:00+09:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
 
-
-  <div class="entry-content"><p>こちらでいろいろ記述していくことにしました。</p>
-
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
-
-<h1>Title</h1>
-
-<h2>Sub</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/03/03/hello/" title="Previous Post: hello">&laquo; hello</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/05/30/backbone-guidebook01/" title="Next Post: Backbone.js 読書会01-02">Backbone.js 読書会01-02 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
 
 </div>
-  
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -478,7 +282,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/nakajijapan">@nakajijapan</a> on GitHub
@@ -510,6 +314,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 
   
 </aside>
+
 
     </div>
   </div>
