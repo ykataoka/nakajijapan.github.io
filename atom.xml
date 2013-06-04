@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-06-05T02:52:26+09:00</updated>
+  <updated>2013-06-05T03:10:13+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -35,35 +35,6 @@
 <p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
 
 <p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[hello]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/06/03/hello/"/>
-    <updated>2013-06-03T10:23:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/06/03/hello</id>
-    <content type="html"><![CDATA[<p>こちらでいろいろ記述していくことにしました。</p>
-
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
-
-<h1>Title</h1>
-
-<h2>Sub</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
@@ -168,6 +139,35 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 <p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
 
 <p>さて来週からは第二章ですよ。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[hello]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/03/03/hello/"/>
+    <updated>2013-03-03T10:23:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/03/03/hello</id>
+    <content type="html"><![CDATA[<p>こちらでいろいろ記述していくことにしました。</p>
+
+<p>mkdownはなによりたのもしいです。
+さよならwordpress&hellip;</p>
+
+<h1>Title</h1>
+
+<h2>Sub</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
+</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
 ]]></content>
   </entry>
   
