@@ -4,7 +4,7 @@
   <title><![CDATA[Category: backbonejs | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/backbonejs/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-06-05T03:16:11+09:00</updated>
+  <updated>2013-07-02T23:45:53+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,173 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CSRF Protection for Rails and Backbone.js]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/07/01/csrf-protection/"/>
+    <updated>2013-07-01T07:53:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/07/01/csrf-protection</id>
+    <content type="html"><![CDATA[<p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
+Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
+して送信させるようにしました。</p>
+
+<p>ちなみに以前はModelに<code>toJSON</code>メソッドでtokenを付加させていたのですがPOST,PUTのみの対応だったので
+DELETE用にも対応できるよう実装してみた。（<code>Model.destroy</code>時には<code>toJSON()</code>を仲介しない）</p>
+
+<p>```javascript</p>
+
+<h1>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</h1>
+
+<h1>Sync</h1>
+
+<h1>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</h1>
+
+<p>Backbone._sync = Backbone.sync
+Backbone.sync = (method, model, options) &ndash;>
+  if method == &lsquo;create&rsquo; || method == &lsquo;update&rsquo; || method == &lsquo;delete&rsquo;</p>
+
+<pre><code>options_csrf =
+  headers:
+    'X-CSRF-Token': BackboneFrustration.Model.csrf_token()
+
+_.extend(
+  options,
+  options_csrf
+)
+</code></pre>
+
+<p>  return Backbone._sync(method, model, options)
+```</p>
+
+<p>メソッドをオーバーライドしてHEADERに<code>X−CSRF-Token</code>を付加して親処理に渡す。<code>BackboneFrustration.Model.csrf_token()</code>は
+単純にフォームからCSRF用のtokenを取得しているだけです。これでajax通信のときはtokenを無視して処理をするようなその場しのぎな実装をせずになりました。</p>
+
+<p>以下のような処理撲滅です。</p>
+
+<p><code>ruby
+protect_from_forgery except: :craete
+</code></p>
+
+<p>この修正で問題なく動作しているので適用させました。</p>
+
+<p>ところでRails用のgemで<code>backbone-rails</code>なんてものがありましてそこのコードを
+見ていたらだいたい同じことをしていたのであらかじめこれを参考にして勉強すれば良かったと思いました。とほほ。。</p>
+
+<p><a href="https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js">https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js</a></p>
+
+<p>とりあえず、これで一安心。</p>
+
+<h2>実際の修正箇所</h2>
+
+<p><a href="https://github.com/nakajijapan/frustrationme_app/pull/25/files">https://github.com/nakajijapan/frustrationme_app/pull/25/files</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bbackbone.js 読書会 第２章]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/"/>
+    <updated>2013-06-13T10:56:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03</id>
+    <content type="html"><![CDATA[<p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
+Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
+
+<p>概要と話題になったことをメモろうと思います。</p>
+
+<h2>Model</h2>
+
+<p>データを扱う方法を提供するもの。
+View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
+これがjavascriptで使えちゃう。</p>
+
+<h3>提供するもの</h3>
+
+<ul>
+<li>保持</li>
+<li>検証</li>
+<li>アクセス制御</li>
+<li>保存</li>
+</ul>
+
+
+<h3>Validationをどうするか</h3>
+
+<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
+場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
+その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
+とかはクライアント側でも利用するよねーという話をした。</p>
+
+<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
+それを継承して処理が動作するようになっている。</p>
+
+<p>```javascript</p>
+
+<h1>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</h1>
+
+<h1>Model</h1>
+
+<h1>&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&ndash;</h1>
+
+<p>class BackboneFrustration.Model extends Backbone.Model</p>
+
+<p>  initialize: (attributes, options) &ndash;></p>
+
+<pre><code>@on 'error',   @defaultErrorHandler
+@on 'invalid', @defaultErrorHandler
+</code></pre>
+
+<p>  defaultErrorHandler: (model, error) &ndash;></p>
+
+<pre><code>if typeof(error) == 'object'
+  if error.statusText != ''
+    alert 'Intal Server Error'
+    console.error error
+
+ else if typeof(error) == 'string'
+   if error? or error != ''
+     alert error
+</code></pre>
+
+<p>```</p>
+
+<h2>Collecation</h2>
+
+<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
+Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
+each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
+
+<h2>View</h2>
+
+<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
+
+<ul>
+<li>Viewとして、「適切にDOMツリーを構築する」</li>
+<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
+</ul>
+
+
+<p>前者でいうと</p>
+
+<ul>
+<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
+</ul>
+
+
+<p>後者でいうと</p>
+
+<ul>
+<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
+</ul>
+
+
+<p>なのかなと感じた。</p>
+
+<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
+
+<h2>Router</h2>
+
+<h2>Sync</h2>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backbone.js 読書会01-02]]></title>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: ruby | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/ruby/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2013-07-02T23:45:53+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive/"/>
+    <updated>2013-07-02T22:30:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive</id>
+    <content type="html"><![CDATA[<p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
+
+<p>便利だったのが<a href="https://github.com/gimite/google-drive-ruby">google-drive-ruby</a>で、中の通信部分の処理をいい感じに抽象化してくれる便利gemです。</p>
+
+<p>実際に<a href="http://www.frustration.me/">www.frustration.me</a>のユーザ数やアイテム数を計測するために使用してみました。</p>
+
+<p>まずは、gemでインストールしてrakeでバッチ処理を実装するだけです。</p>
+
+<p>```ruby
+desc &ldquo;send score data to google spreadsheet&rdquo;
+require &lsquo;google_drive&rsquo;</p>
+
+<p>namespace :batches do</p>
+
+<p>  task total_scores: :environment do |t, args|</p>
+
+<pre><code>fail 'no username' if ENV['GOOGLE_USERNAME'].blank?
+fail 'no password' if ENV['GOOGLE_PASSWORD'].blank?
+
+session = GoogleDrive.login(ENV['GOOGLE_USERNAME'], ENV['GOOGLE_PASSWORD'])
+spreadsheet = session.spreadsheet_by_key("input key name")
+worksheet = spreadsheet.worksheet_by_title(Rails.env)
+analyze_data = {
+  date:           Time.now.strftime("%Y-%m-%d"),
+  users_num:      User.all.count,
+  items_num:      Item.all.count,
+  comments_num:   Comment.all.count,
+  categories_num: Category.all.count
+}
+worksheet.list.push(analyze_data)
+worksheet.save()
+</code></pre>
+
+<p>  end</p>
+
+<p>end
+```</p>
+
+<p>これで<code>rake batches:total_scores</code>で実行すると指定のスプレッドシートに情報が送信され、スプレッドシート側では</p>
+
+<p><img src="/images/posts/2013-07-02_01.png" alt="ss" /></p>
+
+<p>な感じでどんどんレコードが追加されていきます。</p>
+
+<p>便利。</p>
+
+<p>ただし、注意点があります。今回は<a href="http://sqale.jp">sqale</a>のcronで動かしているのですがログインで以下のように失敗することがあります。</p>
+
+<p><code>bash
+$ bundle exec rake batches:total_scores
+WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.7.8
+rake aborted!
+Authentication failed for hogehoge@gmail.com: Response code 403 for post https://www.google.com/accounts/ClientLogin: Error=BadAuthentication
+Url=https://www.google.com/accounts/ServiceLogin?service=wise#Email=hogehoge%40gmail.com
+Info=WebLoginRequired
+/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:93:in `rescue in login'
+/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:86:in `login'
+/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:38:in `login'
+/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive.rb:18:in `login'
+/home/sqale/current/lib/tasks/scores.rake:10:in `block (2 levels) in &lt;top (required)&gt;'
+Tasks: TOP =&gt; batches:total_scores
+(See full trace by running task with --trace)
+</code></p>
+
+<p>これはGoogleがセキュリティ強化のため、変な場所からのログインは自動的に拒否しているためです。なので、通常通りWEBでGoogleにログインしてみてそのログインが大丈夫という設定をすれば問題無く通過できます。</p>
+
+<p><img src="/images/posts/2013-07-02_02.png" alt="ss" /></p>
+
+<p>あとはグラフツール使って簡単に見やすくできるのでお手軽&amp;便利メソッドでした。</p>
+
+<p><img src="/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
+まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
+]]></content>
+  </entry>
+  
+</feed>

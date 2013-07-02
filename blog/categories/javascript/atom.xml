@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: javascript | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/javascript/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2013-07-02T23:45:53+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[RailsでBowerの導入]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/06/09/install-bower/"/>
+    <updated>2013-06-09T16:07:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/06/09/install-bower</id>
+    <content type="html"><![CDATA[<p>javascriptのパッケージ管理がしたくて<code>bower</code>というパッケージ管理ツールを<a href="http://www.frustration.me">http://www.frustration.me</a> にインストールしてみました。
+(ブランチ切って試してみました・・・)</p>
+
+<p>とりあえず、バージョンが古いので最新のものにインストールします。</p>
+
+<p>```
+$ node -v
+v0.6.19</p>
+
+<p>$ brew install node</p>
+
+<p>==> Upgrading 1 outdated package, with result:
+node 0.10.7
+==> Upgrading node
+Beginning with 0.8.0, this recipe now comes with npm.
+It appears you already have npm installed at /usr/local/lib/node_modules/npm.
+To use the npm that comes with this recipe, first uninstall npm with
+<code>npm uninstall npm -g</code>, then run this command again.</p>
+
+<p>If you would like to keep your installation of npm instead of
+using the one provided with homebrew, install the formula with
+the <code>--without-npm</code> option.
+Error: An unsatisfied requirement failed this build.
+```</p>
+
+<p>npm をまずアンインストールしてほしいとのこと</p>
+
+<p><code>
+$ npm uninstall npm -g
+</code></p>
+
+<p>再度実行します。</p>
+
+<p><code>
+$ brew upgrade node
+$ node -v
+v0.10.7
+</code></p>
+
+<p>これで最新版になった。
+次にbowerをインストール</p>
+
+<p><code>
+$ npm install -g bower
+</code></p>
+
+<p>これでインストール完了。</p>
+
+<p>とりえず、検索でどうなるか確認。</p>
+
+<p>```
+bower search backbone
+Search results:</p>
+
+<pre><code>backbone git://github.com/documentcloud/backbone.git
+backbone-amd git://github.com/amdjs/backbone
+backbone.stickit git://github.com/NYTimes/backbone.stickit.git
+backbone.marionette git://github.com/marionettejs/backbone.marionette
+backbone.wreqr git://github.com/marionettejs/backbone.wreqr.git
+</code></pre>
+
+<p>・
+・
+・
+```</p>
+
+<p>てな感じでbackboneに関連するプラグインがどどどっと出力される</p>
+
+<p>試しにインストールすると、ホームディレクトリに生成されてしまうので
+アプリごとに管理したいところ</p>
+
+<p><code>
+$ bower install jquery
+bower cloning git://github.com/components/jquery.git
+bower cached git://github.com/components/jquery.git
+bower fetching jquery
+bower checking out jquery#2.0.2
+bower copying /Users/pp_kupepo_gattyanmo/.bower/cache/jquery/29cb4373d29144ca260ac7c3997f4381
+bower installing jquery#2.0.2
+</code></p>
+
+<p>ここからRaisに組み込んでいきます。</p>
+
+<p><code>
+$ bower init
+name: [frustration]
+version: [0.0.0]
+main file: []
+add current components as dependencies? (y/n): [y] y
+add commonly ignored files to ignore list? (y/n): [y]
+</code></p>
+
+<p>そうするとカレントディレクトリに以下のファイルが作成されます。
+このファイルでプラグインの管理を行います。</p>
+
+<p>```
+{
+  &ldquo;name&rdquo;: &ldquo;frustration&rdquo;,
+  &ldquo;version&rdquo;: &ldquo;0.0.0&rdquo;,
+  &ldquo;dependencies&rdquo;: {</p>
+
+<pre><code>"jquery": "~2.0.2"
+</code></pre>
+
+<p>  },
+  &ldquo;ignore&rdquo;: [</p>
+
+<pre><code>"**/.*",
+"node_modules",
+"components"
+</code></pre>
+
+<p>  ]
+}</p>
+
+<p>```</p>
+
+<p>現状の設定だとグローバルの設定なのでダウンロードがプロジェクト単位でできないので
+<code>.bowerrc</code>ファイルをプロジェクトディレクトリ直下に保存する。
+デフォルトは<code>~/.bowerrc</code>を参照するようだ。</p>
+
+<p>```
+{
+  &ldquo;directory&rdquo;: &ldquo;vendor/assets/javascripts/components&rdquo;,
+  &ldquo;json&rdquo;: &ldquo;bower.json&rdquo;,
+  &ldquo;searchpath&rdquo;: [</p>
+
+<pre><code>"https://bower.herokuapp.com"
+</code></pre>
+
+<p>  ]
+}
+```</p>
+
+<p>これで<code>bower install</code>すると指定のディレクトリに保存される。</p>
+
+<h2>Railsの場合</h2>
+
+<p><code>application.rb</code>でパスを通るようにする</p>
+
+<p>```</p>
+
+<pre><code># for bower
+config.assets.paths &lt;&lt; Rails.root.join('vendor', 'assets', 'javascripts', 'components')
+</code></pre>
+
+<p>```</p>
+
+<p><code>applicatio.js</code>でパスの再設定を行う。</p>
+
+<p><code>
+//= require components/jquery/jquery.js
+//= require components/jquery-ui/ui/jquery-ui.js
+</code></p>
+
+<p>これでRailsの場合は完了です。</p>
+
+<h2>所感</h2>
+
+<p>jsもbundlerのように管理できるようになったのは大変便利作業です。
+version上がることごとにサイト確認して<code>wget</code>してこないといけないし、コマンド一発でプラグインの削除・検索・バージョンのアップ・ダウングレードもできてしまうのは進化であるのです。</p>
+
+<p>ですが、まだ</p>
+
+<ul>
+<li>version 管理されていないプラグインある</li>
+<li>本番環境にnodeが入っていない・bowerが使えない</li>
+</ul>
+
+
+<p>ときがあるのでそこは共存なり、一旦保留なりしたほうが良いかもしれません。。。
+また、後者のときはいけてないけどパッケージも合わせてコミットするのが良いかもしれない。</p>
+
+<h2>Ref</h2>
+
+<ul>
+<li>source
+
+<ul>
+<li><a href="https://github.com/bower/bower">https://github.com/bower/bower</a></li>
+</ul>
+</li>
+<li>Bower components
+
+<ul>
+<li><a href="http://sindresorhus.com/bower-components/">http://sindresorhus.com/bower-components/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>ここにパッケージが登録されています</p>
+]]></content>
+  </entry>
+  
+</feed>
