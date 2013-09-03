@@ -9,7 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、 &hellip;">
+  <meta name="description" content="自分のサービスのRailsのversionがまだ3.2だったので地道にRails4にアップデートしました。
+その際に必要になった作業をメモっときます。 attr_accessible is extracted out of Rails into a gem. 1
+E, [2013-07-04T09 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -58,6 +60,7 @@
 <ul class="main-navigation">
   <li><a href="/">Blog</a></li>
   <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
 </ul>
 
 </nav>
@@ -65,6 +68,233 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/13/update-rails4/">Update-rails4</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-13T15:13:00+09:00" pubdate data-updated="true">Jul 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自分のサービスのRailsのversionがまだ<code>3.2</code>だったので地道にRails4にアップデートしました。
+その際に必要になった作業をメモっときます。</p>
+
+<h2>attr_accessible is extracted out of Rails into a gem.</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>E, [2013-07-04T09:54:39.926880 #2726] ERROR -- : `attr_accessible` is extracted out of Rails into a gem. Please use new recommended protection model for params(strong_parameters) or add `protected_attributes` to your Gemfile to use old one. (RuntimeError)</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>attr_accessible</code>はRailsから省いて<code>strong_parameters</code>を利用してとのこと。
+振るいものを利用するなら<code>protected_attributes</code>っていうGem使ってね。
+しかし、今回は<code>strong_parameters</code>を記述していきます。</p>
+
+<p>とりあえずModelからの排除を行う。</p>
+
+<h2>DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works.</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works. (called from block in &lt;top (required)&gt; at /private/var/www/frustration/config/environm
+</span><span class='line'>ents/development.rb:10)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>whiny_nils
+
+<ul>
+<li>初期化されていないオブジェクトが呼び出させたときに、警告を表示する</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-  # Log error messages when you accidentally call methods on nil</span>
+</span><span class='line'><span class="gd">-  config.whiny_nils = true</span>
+</span><span class='line'><span class="gd">-</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>config.eager_load is set to nil.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>config.eager_load is set to nil. Please update your config/environments/*.rb files accordingly:
+</span><span class='line'>
+</span><span class='line'>  * development - set it to false
+</span><span class='line'>  * test - set it to false (unless you use a tool that preloads your test environment)
+</span><span class='line'>  * production - set it to true
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>必須の設定項目増えたので<code>rails new</code>して作成された環境ファイルを眺めてみる。</p>
+
+<h2>The provided regular expression</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>E, [2013-07-04T12:00:26.429744 #7376] ERROR -- : The provided regular expression is using multiline anchors (^ or $), which may present a security risk. Did you mean to use \A and \z, or forgot to add the :multiline =&gt; true option? (ArgumentError)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>正規表現の処理にもセキュリティが強化されていました。
+一行を考慮したデータのチェック<code>^</code>なら<code>\A</code>、<code>$</code>なら<code>\z</code>にすると意図したチェックになるよ。
+複数行を考慮してるんだよ！ってときは<code>:multiline =&gt; true</code>にしてね！</p>
+
+<p>自分のValidationは一行のデータを考慮しているので修正します。</p>
+
+<h2>You should not use the <code>match</code> method in your router without specifying an HTTP method.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>E, [2013-07-04T12:07:42.318503 #7626] ERROR -- : You should not use the `match` method in your router without specifying an HTTP method.
+</span><span class='line'>If you want to expose your action to both GET and POST, add `via: [:get, :post]` option.
+</span><span class='line'>If you want to expose your action to GET, use `get` in the router:
+</span><span class='line'>  Instead of: match &quot;controller#action&quot;
+</span><span class='line'>  Do: get &quot;controller#action&quot; (RuntimeError)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>match</code>の代わりにHTTPメソッドをちゃんと宣言しようぜ！っていうメッセージ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-  match &#39;home&#39; =&gt; &#39;home#index&#39;, :via =&gt; :get</span>
+</span><span class='line'><span class="gi">+  get &#39;home&#39; =&gt; &#39;home#index&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なかんじで修正。</p>
+
+<p>これで起動はうまくいった。strong_parameterによる警告はあるけどこれは後ほど修正することにする。
+その後は、テストを流して全部通す。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>bundle exec rspec spec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>DEPRECATION WARNING: Calling #find(:first) is deprecated.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>DEPRECATION WARNING: Calling #find(:first) is deprecated. Please call #first directly instead. You have also used finder options. These are also deprecated. Please build a scope instead of using finder options. (called from block in create_with_item at /private/var/www/frustration/app/services/service_fuman.rb:51)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下のような推奨されていない使い方をしていたので修正しました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'>Hoge.find(:first, condition: {user_id: @user.id})
+</span><span class='line'>↓
+</span><span class='line'>Hoge.where(user_id: @user.id).first
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>strong_parameter</h2>
+
+<p>ここはひたすらcontroller側に制限の内容を記述。</p>
+
+<p>ホワイトリストとして許可するパラメータを記述していきます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">category_params</span>
+</span><span class='line'>      <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:category</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:user_id</span><span class="p">,</span> <span class="ss">:name</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>DEPRECATION WARNING: You didn&rsquo;t set config.secret_key_base.</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">DEPRECATION</span> <span class="ss">WARNING</span><span class="p">:</span> <span class="no">You</span> <span class="n">didn</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">set</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_key_base</span><span class="o">.</span> <span class="no">Read</span> <span class="n">the</span> <span class="n">upgrade</span> <span class="n">documentation</span> <span class="n">to</span> <span class="n">learn</span> <span class="n">more</span> <span class="n">about</span> <span class="n">this</span> <span class="kp">new</span> <span class="n">config</span> <span class="n">option</span><span class="o">.</span> <span class="p">(</span><span class="n">called</span> <span class="n">from</span> <span class="n">env_config</span> <span class="n">at</span> <span class="sr">/private/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">frustration</span><span class="o">/</span><span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">railties</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">rails</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">141</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>secret_token</code>はもう推奨されていなくて<code>secret_key_base</code>に名前が変更されたようです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_key_base</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>      <span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:Deprecation</span><span class="o">.</span><span class="n">warn</span> <span class="s2">&quot;You didn&#39;t set config.secret_key_base. &quot;</span> <span class="o">+</span>
+</span><span class='line'>        <span class="s2">&quot;Read the upgrade documentation to learn more about this new config option.&quot;</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_token</span><span class="o">.</span><span class="n">blank?</span>
+</span><span class='line'>        <span class="k">raise</span> <span class="s2">&quot;You must set config.secret_key_base in your app&#39;s config.&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>これですべてテストがうまくいったのでPull Requestを自分に送ってfin.</p>
+
+<p><a href="https://github.com/nakajijapan/frustrationme_app/pulls">https://github.com/nakajijapan/frustrationme_app/pulls</a></p>
+
+<p>メジャーバージョンが上がってるということで、新しい機能が追加されたり、機能が廃止されたり、名前が変更されていたりと、いろいろと変更するべき点は多かったですがテストを書いていたので実行させては修正、実行させては修正の連続で効率的に修正作業ができたんじゃないかとおもいます（最終的にはWEB上での確認はしましたが）。</p>
+
+<p>あと、今回は規模が小さいし、修正箇所もそんなに多くなかったのでstrong_parametersの部分も変更させてしましましたが、</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;strong_parameters&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>であらかじめ3系で実装しておくと細かい粒度で修正できて安心かもしれませんね。</p>
+
+<p>さてさて、アップデートできてよかった。。。</p>
+
+<h2>Ref</h2>
+
+<p><a href="http://www.upgradingtorails4.com/">http://www.upgradingtorails4.com/</a>
+<a href="http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast">http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -778,7 +1008,7 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.js 読書会01-02</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
     
     
       <p class="meta">
@@ -909,7 +1139,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.js読書会01</a></h1>
+      <h1 class="entry-title"><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
     
     
       <p class="meta">
@@ -1095,7 +1325,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   <h1>My Products</h1>
 
   <a href="http://frustration.me" style="text-decoration: none;">
-    <img src="http://www.frustration.me/assets/icon500_500.png" width="200px" />
+    <img src="https://raw.github.com/nakajijapan/frustrationme_app/master/app/assets/images/icon500_500.png" width="200px" />
   </a>
   
   <a href="http://click.linksynergy.com/fs-bin/stat?id=Elz8t6mkhKk&offerid=94348&type=3&subid=0&tmpid=2192&RD_PARM1=http%3A%2F%2Fitunes.apple.com%2Fjp%2Fapp%2Fid455944521%3Fmt%3D8%26uo%3D4" style="text-decoration: none;">
@@ -1109,6 +1339,10 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/07/13/update-rails4/">Update-rails4</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a>
@@ -1126,13 +1360,9 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
         <a href="/blog/2013/06/09/install-bower/">RailsでBowerの導入</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2013/06/05/rubyhiroba/">Rubyhiroba</a>
-      </li>
-    
   </ul>
 </section>
-
+Included file &#8216;asides/categories.html&#8217; not found in _includes directory
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">

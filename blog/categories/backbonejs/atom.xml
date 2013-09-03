@@ -4,7 +4,7 @@
   <title><![CDATA[Category: backbonejs | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/backbonejs/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-07-02T23:45:53+09:00</updated>
+  <updated>2013-09-04T07:18:53+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -181,7 +181,7 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Backbone.js 読書会01-02]]></title>
+    <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第１章 続き]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/"/>
     <updated>2013-05-30T00:12:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01</id>
@@ -285,7 +285,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Backbone.js読書会01]]></title>
+    <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第１章 続き]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00/"/>
     <updated>2013-05-23T00:12:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00</id>

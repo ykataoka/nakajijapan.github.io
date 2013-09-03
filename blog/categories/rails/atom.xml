@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: rails | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2013-09-04T07:18:53+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[update-rails4]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/07/13/update-rails4/"/>
+    <updated>2013-07-13T15:13:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/07/13/update-rails4</id>
+    <content type="html"><![CDATA[<p>自分のサービスのRailsのversionがまだ<code>3.2</code>だったので地道にRails4にアップデートしました。
+その際に必要になった作業をメモっときます。</p>
+
+<h2>attr_accessible is extracted out of Rails into a gem.</h2>
+
+<p><code>
+E, [2013-07-04T09:54:39.926880 #2726] ERROR -- : `attr_accessible` is extracted out of Rails into a gem. Please use new recommended protection model for params(strong_parameters) or add `protected_attributes` to your Gemfile to use old one. (RuntimeError)
+</code></p>
+
+<p><code>attr_accessible</code>はRailsから省いて<code>strong_parameters</code>を利用してとのこと。
+振るいものを利用するなら<code>protected_attributes</code>っていうGem使ってね。
+しかし、今回は<code>strong_parameters</code>を記述していきます。</p>
+
+<p>とりあえずModelからの排除を行う。</p>
+
+<h2>DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works.</h2>
+
+<p><code>
+DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works. (called from block in &lt;top (required)&gt; at /private/var/www/frustration/config/environm
+ents/development.rb:10)
+</code></p>
+
+<ul>
+<li>whiny_nils
+
+<ul>
+<li>初期化されていないオブジェクトが呼び出させたときに、警告を表示する</li>
+</ul>
+</li>
+</ul>
+
+
+<p>```diff
+&ndash;  # Log error messages when you accidentally call methods on nil</p>
+
+<h2>&ndash;  config.whiny_nils = true</h2>
+
+<p>```</p>
+
+<h2>config.eager_load is set to nil.</h2>
+
+<p>```
+config.eager_load is set to nil. Please update your config/environments/*.rb files accordingly:</p>
+
+<ul>
+<li>development &ndash; set it to false</li>
+<li>test &ndash; set it to false (unless you use a tool that preloads your test environment)</li>
+<li>production &ndash; set it to true
+```</li>
+</ul>
+
+
+<p>必須の設定項目増えたので<code>rails new</code>して作成された環境ファイルを眺めてみる。</p>
+
+<h2>The provided regular expression</h2>
+
+<p><code>
+E, [2013-07-04T12:00:26.429744 #7376] ERROR -- : The provided regular expression is using multiline anchors (^ or $), which may present a security risk. Did you mean to use \A and \z, or forgot to add the :multiline =&gt; true option? (ArgumentError)
+</code></p>
+
+<p>正規表現の処理にもセキュリティが強化されていました。
+一行を考慮したデータのチェック<code>^</code>なら<code>\A</code>、<code>$</code>なら<code>\z</code>にすると意図したチェックになるよ。
+複数行を考慮してるんだよ！ってときは<code>:multiline =&gt; true</code>にしてね！</p>
+
+<p>自分のValidationは一行のデータを考慮しているので修正します。</p>
+
+<h2>You should not use the <code>match</code> method in your router without specifying an HTTP method.</h2>
+
+<p><code>
+E, [2013-07-04T12:07:42.318503 #7626] ERROR -- : You should not use the `match` method in your router without specifying an HTTP method.
+If you want to expose your action to both GET and POST, add `via: [:get, :post]` option.
+If you want to expose your action to GET, use `get` in the router:
+  Instead of: match "controller#action"
+  Do: get "controller#action" (RuntimeError)
+</code></p>
+
+<p><code>match</code>の代わりにHTTPメソッドをちゃんと宣言しようぜ！っていうメッセージ。</p>
+
+<p><code>diff
+-  match 'home' =&gt; 'home#index', :via =&gt; :get
++  get 'home' =&gt; 'home#index'
+</code></p>
+
+<p>なかんじで修正。</p>
+
+<p>これで起動はうまくいった。strong_parameterによる警告はあるけどこれは後ほど修正することにする。
+その後は、テストを流して全部通す。</p>
+
+<p><code>
+bundle exec rspec spec
+</code></p>
+
+<h2>DEPRECATION WARNING: Calling #find(:first) is deprecated.</h2>
+
+<p><code>
+DEPRECATION WARNING: Calling #find(:first) is deprecated. Please call #first directly instead. You have also used finder options. These are also deprecated. Please build a scope instead of using finder options. (called from block in create_with_item at /private/var/www/frustration/app/services/service_fuman.rb:51)
+</code></p>
+
+<p>以下のような推奨されていない使い方をしていたので修正しました。</p>
+
+<p><code>
+Hoge.find(:first, condition: {user_id: @user.id})
+↓
+Hoge.where(user_id: @user.id).first
+</code></p>
+
+<h2>strong_parameter</h2>
+
+<p>ここはひたすらcontroller側に制限の内容を記述。</p>
+
+<p>ホワイトリストとして許可するパラメータを記述していきます。</p>
+
+<p>```ruby
+  private</p>
+
+<pre><code>def category_params
+  params.require(:category).permit(:user_id, :name)
+end
+</code></pre>
+
+<p>```</p>
+
+<h2>DEPRECATION WARNING: You didn&rsquo;t set config.secret_key_base.</h2>
+
+<p><code>
+DEPRECATION WARNING: You didn't set config.secret_key_base. Read the upgrade documentation to learn more about this new config option. (called from env_config at /private/var/www/frustration/vendor/bundle/ruby/2.0.0/gems/railties-4.0.0/lib/rails/application.rb:141)
+</code></p>
+
+<p><code>secret_token</code>はもう推奨されていなくて<code>secret_key_base</code>に名前が変更されたようです。</p>
+
+<p>```ruby</p>
+
+<pre><code>    if config.secret_key_base.blank?
+      ActiveSupport::Deprecation.warn "You didn't set config.secret_key_base. " +
+        "Read the upgrade documentation to learn more about this new config option."
+
+      if config.secret_token.blank?
+        raise "You must set config.secret_key_base in your app's config."
+      end
+    end
+</code></pre>
+
+<p>```</p>
+
+<h2>まとめ</h2>
+
+<p>これですべてテストがうまくいったのでPull Requestを自分に送ってfin.</p>
+
+<p><a href="https://github.com/nakajijapan/frustrationme_app/pulls">https://github.com/nakajijapan/frustrationme_app/pulls</a></p>
+
+<p>メジャーバージョンが上がってるということで、新しい機能が追加されたり、機能が廃止されたり、名前が変更されていたりと、いろいろと変更するべき点は多かったですがテストを書いていたので実行させては修正、実行させては修正の連続で効率的に修正作業ができたんじゃないかとおもいます（最終的にはWEB上での確認はしましたが）。</p>
+
+<p>あと、今回は規模が小さいし、修正箇所もそんなに多くなかったのでstrong_parametersの部分も変更させてしましましたが、</p>
+
+<p><code>
+gem 'strong_parameters'
+</code></p>
+
+<p>であらかじめ3系で実装しておくと細かい粒度で修正できて安心かもしれませんね。</p>
+
+<p>さてさて、アップデートできてよかった。。。</p>
+
+<h2>Ref</h2>
+
+<p><a href="http://www.upgradingtorails4.com/">http://www.upgradingtorails4.com/</a>
+<a href="http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast">http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast</a></p>
+]]></content>
+  </entry>
+  
+</feed>
