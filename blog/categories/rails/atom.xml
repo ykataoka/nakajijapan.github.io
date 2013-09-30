@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: rails | Nakajijapan]]></title>
+  <title><![CDATA[categories: rails | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-09-04T07:20:02+09:00</updated>
+  <updated>2013-10-01T02:27:13+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>

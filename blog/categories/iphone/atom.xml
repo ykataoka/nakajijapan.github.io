@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: iPhone, | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/iphone/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2013-10-01T02:27:13+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/"/>
+    <updated>2013-09-30T02:17:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie</id>
+    <content type="html"><![CDATA[<p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
+
+<p>先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
+その名も</p>
+
+<h3>心霊動画アプリ 「もう一度ご覧いただこう」</h3>
+
+<p><a href="http://owkr.info/movie">http://owkr.info/movie</a></p>
+
+<p>です。</p>
+
+<p>構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる</p>
+
+<h3>心霊写真アプリ「おわかりいただけただろうか」</h3>
+
+<p><a href="http://owkr.info">http://owkr.info</a></p>
+
+<p>を作成しました。その後時を経て、そろそろできるんじゃねという根拠ない自信がありまして
+作成するにいたった次第です。今回はそのリリースが出来ましたよっていうご報告であります！</p>
+
+<p>今回動画アプリを作成してみて、自分としてグッドっだったのは</p>
+
+<ul>
+<li>AVFoundationガリガリガリガリいじったし（未知の領域への挑戦）
+
+<ul>
+<li>動画動詞の結合</li>
+<li>動画内でのアニメーション</li>
+<li>動画のスローモーション</li>
+<li>動画内に動画をいれる（ワイプ）</li>
+</ul>
+</li>
+<li>いろんなTips学んだ
+
+<ul>
+<li>シュミレータで効率的に開発していく方法</li>
+<li>iOSのバージョンのデザインの差異（主に位置によるずれ）の直し方</li>
+</ul>
+</li>
+<li>キャンペーンの出し方
+
+<ul>
+<li>以前にリリースアプリと連携デザインに統一感をもたせた</li>
+</ul>
+</li>
+</ul>
+
+
+<p>失敗や改善した方がいいなというのも何個かあって</p>
+
+<p>iOS7でチェックしとけばよかった。しかもガンガンみんなiOS7にしてしまったのでこれはつらかった・・
+iOS7でテストして仮に問題が発生したときにその対応でリリースが遅れるのは避けたかったのでちょっと
+最後まで避けてたのが仇となりました。無念。やりかたとしては、新しいバージョンがリリース間近に
+なった場合はかならず確認を行うことをマストにしたほうがいいですね。これ勉強！</p>
+
+<p>リリースタイミングを逃しました。本当は夏にリリースすれば良かったのですが僕の技術力不足であえなく断念して
+しまいました。。。</p>
+
+<p>あとは、デザイナの確認作業についてです。デザイナにはある程度できあがらないとテストや確認出来ない状態でしたし、
+毎回自分のPCでビルドして渡すのはかなり面倒でした。（のでこの作業はほとんどやってない・・・）なので自分が修正
+したらすぐに自分の実機やシミュレータでがんがん確認出来るような状況を作ればなと思っていました。会社だとjenkins
+でビルドしてそれをダウンロードできる基盤があるのでそれ参考に個人でも作成してみようと思う。</p>
+
+<p>肝心のiOS7でのおばけが表示されないバグがありますが先日修正したものを申請しましたのでもう少しでiOS7にした人も
+使えることでしょう！！</p>
+
+<p>とりあえず、リリースできてよかったのです。</p>
+
+<p>また、いろんなことに挑戦していきたい。</p>
+
+<p>今後はもう一度の使い方なり、AVFoundationのTipsをちょこちょこ書いていこうと思います。</p>
+]]></content>
+  </entry>
+  
+</feed>

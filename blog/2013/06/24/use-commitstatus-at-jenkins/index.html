@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Nakajijapan</title>
+  <title>use_commitstatus_at_jenkins - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="Blog Archive 2013 心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。
-Sep 30 2013 posted in iPhone,, objective-c UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた
-Sep 18 2013 &hellip;">
+  <meta name="description" content="自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
+自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。 仕組みとしはcommit &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ Sep 18 2013 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io/blog/archives">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -67,191 +66,215 @@ Sep 18 2013 &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      <h1 class="entry-title">Use_commitstatus_at_jenkins</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
+自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
+
+<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
+
+<h2>監視用の親ジョブ作成</h2>
+
+<ul>
+<li><p>ソースコード管理</p>
+
+<ul>
+<li>Gitを選択</li>
+<li>Repository URL(テスト対象のものを入れる)
+
+<ul>
+<li>ex) git@github.com:paperboy-petit/user-app.git</li>
+</ul>
+</li>
+<li>Branch Specifier()
+
+<ul>
+<li><code>*/master</code>, <code>*/release</code>を記述する</li>
+<li>高度な設定のChoosing strategy
+
+<ul>
+<li><code>Inverse</code>を選択する</li>
+</ul>
+</li>
+<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ビルド環境</p>
+
+<ul>
+<li>テストに必要な環境の設定なので適宜設定する</li>
+</ul>
+</li>
+<li><p>ビルド</p>
+
+<ul>
+<li>ここでテストする処理を実行</li>
+</ul>
+</li>
+<li><p>ビルド後の処理</p>
+
+<ul>
+<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
+<li>Build Triggers 1
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>stable or unstable but not failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=success</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Build Triggers 2
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=failure</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>小ジョブ作成(CommitStatusUPdate)</h2>
+
+<ul>
+<li><p>ビルドのパラメータ化</p>
+
+<ul>
+<li>受け取るパラメータの設定
+
+<ul>
+<li>名前：commit_status</li>
+<li>デフォルト値：success</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ソースコード管理
+親ジョブと同じ設定にする</p></li>
+<li><p>シェルの実行
+コミットステータスの変更を行う</p></li>
+</ul>
 
-  
-  <h2>2013</h2>
 
-<article>
-  
-<h1><a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a></h1>
-<time datetime="2013-09-30T02:17:00+09:00" pubdate><span class='month'>Sep</span> <span class='day'>30</span> <span class='year'>2013</span></time>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -H <span class="s1">&#39;Authorization: token hogehogehogehogheohogehoge&#39;</span> <span class="se">\</span>
+</span><span class='line'>  --data <span class="s2">&quot;{\&quot;state\&quot;:\&quot;${commit_status}\&quot;, \&quot;target_url\&quot;:\&quot;${BUILD_URL}\&quot;}&quot;</span> <span class="se">\</span>
+</span><span class='line'>  https://api.github.com/repos/paperboy-petit/user-app/statuses/<span class="k">${</span><span class="nv">GIT_COMMIT</span><span class="k">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/iphone/'>iPhone,</a>, <a class='category' href='/blog/categories/objective-c/'>objective-c</a></span>
-</footer>
 
+<ul>
+<li>ビルド後の処理
+お好みでIRCに渡します</li>
+</ul>
 
-</article>
 
+<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
 
+<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
 
-<article>
-  
-<h1><a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a></h1>
-<time datetime="2013-09-18T20:19:00+09:00" pubdate><span class='month'>Sep</span> <span class='day'>18</span> <span class='year'>2013</span></time>
+<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/uikit/'>uikit</a></span>
-</footer>
+<ul>
+<li>参考
 
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a></h1>
-<time datetime="2013-09-07T07:42:00+09:00" pubdate><span class='month'>Sep</span> <span class='day'>07</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/uikit/'>uikit</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/07/13/update-rails4/">update-rails4</a></h1>
-<time datetime="2013-07-13T15:13:00+09:00" pubdate><span class='month'>Jul</span> <span class='day'>13</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>rails</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a></h1>
-<time datetime="2013-07-02T22:30:00+09:00" pubdate><span class='month'>Jul</span> <span class='day'>02</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/ruby/'>ruby</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/07/01/csrf-protection/">CSRF Protection for Rails and Backbone.js</a></h1>
-<time datetime="2013-07-01T07:53:00+09:00" pubdate><span class='month'>Jul</span> <span class='day'>01</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/24/use-commitstatus-at-jenkins/">use_commitstatus_at_jenkins</a></h1>
-<time datetime="2013-06-24T08:02:00+09:00" pubdate><span class='month'>Jun</span> <span class='day'>24</span> <span class='year'>2013</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/13/backbone-guidebook03/">Bbackbone.js 読書会 第２章</a></h1>
-<time datetime="2013-06-13T10:56:00+09:00" pubdate><span class='month'>Jun</span> <span class='day'>13</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/09/install-bower/">RailsでBowerの導入</a></h1>
-<time datetime="2013-06-09T16:07:00+09:00" pubdate><span class='month'>Jun</span> <span class='day'>09</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/06/05/rubyhiroba/">rubyhiroba</a></h1>
-<time datetime="2013-06-05T00:12:00+09:00" pubdate><span class='month'>Jun</span> <span class='day'>05</span> <span class='year'>2013</span></time>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-<time datetime="2013-05-30T00:12:00+09:00" pubdate><span class='month'>May</span> <span class='day'>30</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-<time datetime="2013-05-23T00:12:00+09:00" pubdate><span class='month'>May</span> <span class='day'>23</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2013/03/03/hello/">hello</a></h1>
-<time datetime="2013-03-03T10:23:00+09:00" pubdate><span class='month'>Mar</span> <span class='day'>03</span> <span class='year'>2013</span></time>
-
-
-</article>
+<ul>
+<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
+</ul>
+</li>
+</ul>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">nakajijapan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/13/backbone-guidebook03/" title="Previous Post: Bbackbone.js 読書会 第２章">&laquo; Bbackbone.js 読書会 第２章</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/07/01/csrf-protection/" title="Next Post: CSRF Protection for Rails and Backbone.js">CSRF Protection for Rails and Backbone.js &raquo;</a>
+      
+    </p>
+  </footer>
 </article>
 
 </div>

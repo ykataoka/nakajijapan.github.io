@@ -25,6 +25,10 @@
         <lastmod>2013-06-19T00:15:41+09:00</lastmod>
     </url>
     <url>
+        <loc>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/</loc>
+        <lastmod>2013-09-06T08:39:24+09:00</lastmod>
+    </url>
+    <url>
         <loc>http://nakajijapan.github.io/blog/2013/07/01/csrf-protection/</loc>
         <lastmod>2013-07-01T08:35:21+09:00</lastmod>
     </url>
@@ -37,12 +41,28 @@
         <lastmod>2013-07-14T09:30:30+09:00</lastmod>
     </url>
     <url>
+        <loc>http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/</loc>
+        <lastmod>2013-09-30T02:46:54+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton/</loc>
+        <lastmod>2013-09-19T12:02:35+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/</loc>
+        <lastmod>2013-10-01T02:26:40+09:00</lastmod>
+    </url>
+    <url>
         <loc>http://nakajijapan.github.io/blog/archives/</loc>
-        <lastmod>2013-07-14T09:30:30+09:00</lastmod>
+        <lastmod>2013-10-01T02:26:40+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/</loc>
-        <lastmod>2013-07-14T09:30:30+09:00</lastmod>
+        <lastmod>2013-10-01T02:26:40+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/new-page/</loc>
+        <lastmod>2013-09-05T02:47:23+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/robots.txt</loc>

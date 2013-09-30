@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>UIKitで人魂つくってみた - Nakajijapan</title>
+  <meta name="author" content="nakajijapan">
+
+  
+  <meta name="description" content="お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
+人魂でもいれてみようじゃないかと思い立って作ってみました。 iOS5からCore &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Nakajijapan</a></h1>
+  
+    <h2>生きるのに必死です。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:nakajijapan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/blog/categories">Categories</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">UIKitで人魂つくってみた</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-07T07:42:00+09:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
+人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
+
+<p>iOS5からCore AnimationなるものがサポートされていてパーティクルエフェクトがUIKitでも作成できるようになったので実装してみました。
+以前はCocos2Dのフレームワーク情報で作成していたのですがそれを利用しないのは初めて。</p>
+
+<p>まずはフレームワークをインポートする</p>
+
+<h2>1</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import &lt;QuartzCore/QuartzCore.h&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2</h2>
+
+<p>あとは表現したものを想像して実装するのみ！！！！っていってもパラメータが沢山あるので
+感覚的にGUIで設定できてその状態のパラメータをみれるツールをつかいました。</p>
+
+<ul>
+<li>UIEffectDesigner
+
+<ul>
+<li><a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>これにfire ballっていのがあったのでそれを参考にしつつ自分なりに調整してみました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterLayer</span><span class="o">*</span> <span class="n">fireEmitter</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterLayer</span> <span class="n">layer</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterPosition</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">renderMode</span> <span class="o">=</span> <span class="n">kCAEmitterLayerAdditive</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterCell</span><span class="o">*</span> <span class="n">fire</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterCell</span> <span class="n">emitterCell</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">birthRate</span>     <span class="o">=</span> <span class="mi">250</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetime</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetimeRange</span> <span class="o">=</span> <span class="mf">2.06</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocity</span>      <span class="o">=</span> <span class="mi">26</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocityRange</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">color</span>         <span class="o">=</span> <span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">0.0</span> <span class="nl">green:</span><span class="mf">0.0</span> <span class="nl">blue:</span><span class="mf">0.05</span> <span class="nl">alpha:</span><span class="mf">1.0</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">redRange</span>      <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">greenRange</span>    <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">blueRange</span>     <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">contents</span>      <span class="o">=</span> <span class="p">(</span><span class="kt">id</span><span class="p">)[[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;particle.png&quot;</span><span class="p">]</span> <span class="n">CGImage</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">fire</span> <span class="nl">setName:</span><span class="s">@&quot;fire&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaRange</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scale</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleRange</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spin</span>       <span class="o">=</span> <span class="mf">1.56</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spinRange</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.33</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionRange</span>     <span class="o">=</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLongitude</span> <span class="o">=</span> <span class="mf">1.57</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLatitude</span>  <span class="o">=</span> <span class="mf">2.33</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">xAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">yAcceleration</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">zAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterCells</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObject:</span><span class="n">fire</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">fireEmitter</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>とりあえずこれで自分なりの人魂作成に成功しました。
+パラメータをいろいろ覚えなければいけないものが沢山あるのでちょっと覚えるの大変だなという印象。
+今回その煩雑さをUIEffectDesignerで補完しましたが、それでもパラメータがどのような効果があるのかはある程度理解しておく必要があるようです。</p>
+
+<p><img src="/images/posts/2013-09-08_01.png" alt="ss" /></p>
+
+<h3>参照</h3>
+
+<p>iOS Developer Library
+<a href="https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html">https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html</a></p>
+
+<p>UIEffectDesigner
+<a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">nakajijapan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-07T07:42:00+09:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/uikit/'>uikit</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/07/13/update-rails4/" title="Previous Post: update-rails4">&laquo; update-rails4</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/09/18/customize-uibutton/" title="Next Post: UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Profile</h1>
+  <div style="text-align: center;">
+    <img src="http://blog.nakajijapan.net/wp-content/uploads/2012/09/ore.jpg" width="200px" style="border-radius: 100px;"/>
+  </div>
+  <b>nakajijapan</b>
+</section>
+<section>
+  <h1>My Products</h1>
+
+  <a href="http://www.frustration.me" style="text-decoration: none;">
+    <img src="https://raw.github.com/nakajijapan/frustrationme_app/master/app/assets/images/icon500_500.png" width="200px" />
+  </a>
+  
+  <a href="https://itunes.apple.com/jp/app/xin-ling-xie-zhenapuri-owakariitadaketadarouka/id455944521?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1758.phobos.apple.com/us/r30/Purple4/v4/88/23/fc/8823fce4-bb15-45c1-aff0-57f3dd2b1d44/mzl.uettjbrc.png" width="200px" alt="心霊写真アプリ 「おわかりいただけただろうか」 - HajiShiraZu" />
+  </a>
+
+  <a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" width="200px" alt="心霊動画アプリ もう一度ご覧いただこう - HajiShiraZu" />
+  </a>
+
+ 
+  <a href="https://itunes.apple.com/jp/app/zhong-dao-qing-sao-ju/id580907679?mt=8" style="text-decoration: none;">
+    <img src="http://a1561.phobos.apple.com/us/r1000/113/Purple/v4/bb/21/b8/bb21b8dd-3ec6-dea5-d7eb-64a033ca8ae2/mzl.rmbpduxb.png" width="200px" />
+  </a>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/13/update-rails4/">Update-rails4</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a>
+      </li>
+    
+  </ul>
+</section>
+Included file 'asides/categories.html' not found in _includes directory
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/nakajijapan">@nakajijapan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'nakajijapan',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - nakajijapan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
