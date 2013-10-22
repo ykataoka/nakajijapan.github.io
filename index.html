@@ -9,8 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
-その名も 心霊動画アプリ 「もう一度ご覧いただこう」 http://owkr.info/movie です。 構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる &hellip;">
+  <meta name="description" content="こんにちはあのnakajijapanです。
+以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。
+心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +68,249 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-22T23:08:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>こんにちはあのnakajijapanです。
+以前、<a href="http://owkr.info/movie/">心霊動画アプリで「もう一度ご覧いただこう」</a> というアプリをリリースしました。
+心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ
+やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理
+がてら情報をまためようと思います。</p>
+
+<p>今回主に利用したのが「AV Foundation」です。</p>
+
+<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の
+取得、作成、編集、再エンコードができたりできます。</p>
+
+<p>階層的には以下のような階層に存在して、簡単に動画とか写真の処理をしたい場合は</p>
+
+<ul>
+<li>Media Player Framework(MPMoviePlayerController, MPMoviePlayerViewController)</li>
+<li>UIKit(UIIMagePickerController)</li>
+</ul>
+
+
+<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御
+できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは
+いうまでもありません。</p>
+
+<p><img src="/images/posts/2013-10-22_01.png" alt="AV Foundation" />
+<a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
+
+<p>では実際にどう実装していけばいいかなのですが、そのために結構なクラスを利用するのでそれぞれざっくり説明していきます。</p>
+
+<h3>AVAsset</h3>
+
+<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること
+ができます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAsset</span><span class="o">*</span>                   <span class="n">videoAsset</span><span class="p">;</span>
+</span><span class='line'><span class="n">videoAsset</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVURLAsset</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">movieUrl</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVAssetTrack</h3>
+
+<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・）
+例えば、アセットから動画と音声に切り分ける。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAsset</span><span class="o">*</span>                   <span class="n">videoAsset</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVAssetTrack</span><span class="o">*</span>              <span class="n">videoTrack</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVAssetTrack</span><span class="o">*</span>              <span class="n">audioTrack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">videoAsset</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVURLAsset</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">movieUrl</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// アセットからトラックを取得</span>
+</span><span class='line'><span class="n">videoTrack</span> <span class="o">=</span> <span class="p">[[</span><span class="n">videoAsset</span> <span class="nl">tracksWithMediaType:</span><span class="n">AVMediaTypeVideo</span><span class="p">]</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'><span class="n">audioTrack</span> <span class="o">=</span> <span class="p">[[</span><span class="n">videoAsset</span> <span class="nl">tracksWithMediaType:</span><span class="n">AVMediaTypeAudio</span><span class="p">]</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableComposition</h3>
+
+<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり
+するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableComposition</span><span class="o">*</span>      <span class="n">mixComposition</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVMutableCompositionTrack</span><span class="o">*</span> <span class="n">compositionVideoTrack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// コンポジション作成</span>
+</span><span class='line'><span class="n">mixComposition</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableComposition</span> <span class="n">composition</span><span class="p">];</span>
+</span><span class='line'><span class="n">compositionVideoTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeVideo</span> <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableVideoComposition</h3>
+
+<p>AVMutableCompositionで新しいトラックを結合したときに返り値としてとれるもので空のトラックって感じなんでしょうか。
+ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒
+から何秒間を何秒目に結合させるとかできたりします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">compositionVideoTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeVideo</span> <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableVideoCompositionLayerInstruction</h3>
+
+<p>アセットのトラックに対して回転、透過度、クロッピングができます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ここでは動画を小さくして指定の位置へ移動させてます。</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">scale</span>      <span class="o">=</span> <span class="n">CGAffineTransformMakeScale</span><span class="p">(</span><span class="mf">0.30f</span><span class="p">,</span> <span class="mf">0.30f</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">trnsration</span> <span class="o">=</span> <span class="n">CGAffineTransformMakeTranslation</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">406</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AVMutableVideoCompositionLayerInstruction</span><span class="o">*</span> <span class="n">_layerInstruction</span><span class="p">;</span>
+</span><span class='line'><span class="n">_layerInstruction</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoCompositionLayerInstruction</span> <span class="nl">videoCompositionLayerInstructionWithAssetTrack:</span><span class="n">_compositionVideoTrack</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">_layerInstruction</span> <span class="nl">setTransform:</span><span class="n">CGAffineTransformConcat</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">trnsration</span><span class="p">)</span> <span class="nl">atTime:</span><span class="n">kCMTimeZero</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>AVAssetExportSession</h2>
+
+<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。
+例えば、mov形式、720x720サイズでファイルに保存させたりできます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">videoComp</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoComposition</span> <span class="n">videoComposition</span><span class="p">];</span>
+</span><span class='line'><span class="n">videoComp</span><span class="p">.</span><span class="n">renderSize</span>    <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">720</span><span class="p">,</span> <span class="mi">720</span><span class="p">);</span>
+</span><span class='line'><span class="n">videoComp</span><span class="p">.</span><span class="n">frameDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span> <span class="c1">// framerate</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// AVCompositionをベースにAVAssetExportを生成</span>
+</span><span class='line'><span class="n">assetExportSession</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVAssetExportSession</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithAsset:</span><span class="n">mixComposition</span> <span class="nl">presetName:</span><span class="n">AVAssetExportPreset1280x720</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 合成用のVideoCompositionを設定</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">videoComposition</span> <span class="o">=</span> <span class="n">videoComp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// エクスポートファイルの設定</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">composedMovieUrl</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">fileURLWithPath:</span><span class="n">composedMoviePath</span><span class="p">];</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">outputFileType</span> <span class="o">=</span> <span class="n">AVFileTypeQuickTimeMovie</span><span class="p">;</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">outputURL</span> <span class="o">=</span> <span class="n">composedMovieUrl</span><span class="p">;</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">shouldOptimizeForNetworkUse</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// エキスポート処理</span>
+</span><span class='line'><span class="p">[</span><span class="n">assetExportSession</span> <span class="nl">exportAsynchronouslyWithCompletionHandler:</span><span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">switch</span> <span class="p">([</span><span class="n">exportSession</span> <span class="n">status</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">AVAssetExportSessionStatusFailed:</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Export failed: %@&quot;</span><span class="p">,</span> <span class="p">[[</span><span class="n">exportSession</span> <span class="n">error</span><span class="p">]</span> <span class="n">localizedDescription</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">AVAssetExportSessionStatusCancelled:</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Export canceled&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">default</span><span class="o">:</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主に利用するクラスを説明しました。これらを駆使して実装すれば簡単な動画の結合ができるようになります。</p>
+
+<p>だいたいの大枠は以下の図を見ると何となくわかるかもしれませんね。</p>
+
+<p><img src="/images/posts/2013-10-22_02.png" alt="Editing" />
+<a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
+
+<h2>まとめ</h2>
+
+<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり
+説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。
+あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば
+やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った
+ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
+
+<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと
+いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
+
+<h2>Reference</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1541,58 +1785,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/05/rubyhiroba/">Rubyhiroba</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-05T00:12:00+09:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
-
-<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
-やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
-反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
-
-<p>perlにしろrubyにしろテストがあるのは大変心強いし、安心します。
-たとえ、最新のRailsにのせ変えたとしてもテストがない時点でもう技術的負債。前のコードと何ら変わりはない。
-まぁ作成した時点負債は負債なんだけどその劣化速度は抑えられるはず。</p>
-
-<p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
-
-<p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1639,6 +1831,10 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a>
       </li>
     
@@ -1652,10 +1848,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
     
       <li class="post">
         <a href="/blog/2013/07/13/update-rails4/">Update-rails4</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a>
       </li>
     
   </ul>
