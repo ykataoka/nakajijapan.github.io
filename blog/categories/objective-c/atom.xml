@@ -4,7 +4,7 @@
   <title><![CDATA[categories: objective-c | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/objective-c/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-10-23T11:25:39+09:00</updated>
+  <updated>2013-10-23T14:31:47+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -89,13 +89,22 @@ compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaType
 
 <h3>AVMutableVideoComposition</h3>
 
-<p>AVMutableCompositionで新しいトラックを結合したときに返り値としてとれるもので空のトラックって感じなんでしょうか。
+<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。
 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒
 から何秒間を何秒目に結合させるとかできたりします。</p>
 
-<p><code>obj-c
-compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-</code></p>
+<p>```obj-c
+compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];</p>
+
+<p>[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, timeDuration)</p>
+
+<pre><code>                           ofTrack:_videoTrack
+                            atTime:kCMTimeZero
+                             error:nil];
+</code></pre>
+
+<p>[compositionVideoTrack setPreferredTransform:[videoTrack preferredTransform]];
+```</p>
 
 <h3>AVMutableVideoCompositionLayerInstruction</h3>
 

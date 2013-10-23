@@ -182,12 +182,24 @@
 
 <h3>AVMutableVideoComposition</h3>
 
-<p>AVMutableCompositionで新しいトラックを結合したときに返り値としてとれるもので空のトラックって感じなんでしょうか。
+<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。
 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒
 から何秒間を何秒目に結合させるとかできたりします。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">compositionVideoTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeVideo</span> <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">compositionVideoTrack</span> <span class="nl">insertTimeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">kCMTimeZero</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)</span>
+</span><span class='line'>                               <span class="nl">ofTrack:</span><span class="n">_videoTrack</span>
+</span><span class='line'>                                <span class="nl">atTime:</span><span class="n">kCMTimeZero</span>
+</span><span class='line'>                                 <span class="nl">error:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">compositionVideoTrack</span> <span class="nl">setPreferredTransform:</span><span class="p">[</span><span class="n">videoTrack</span> <span class="n">preferredTransform</span><span class="p">]];</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
