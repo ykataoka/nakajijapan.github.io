@@ -4,7 +4,7 @@
   <title><![CDATA[categories: objective-c | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/objective-c/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-10-22T23:50:05+09:00</updated>
+  <updated>2013-10-23T11:25:39+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -173,6 +173,9 @@ assetExportSession.shouldOptimizeForNetworkUse = YES;</p>
 
 <ul>
 <li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation &ndash; 606</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques &ndash; 509</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation &ndash; 612</a></li>
 </ul>
 
 ]]></content>
