@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-10-23T14:31:47+09:00</updated>
+  <updated>2013-12-03T19:10:54+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -974,7 +974,7 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[use_commitstatus_at_jenkins]]></title>
+    <title type="html"><![CDATA[jenkinsでcommit statusを操作する]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/"/>
     <updated>2013-06-24T08:02:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins</id>
