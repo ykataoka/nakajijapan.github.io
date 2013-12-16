@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Bbackbone.js 読書会 第２章 - Nakajijapan</title>
+  <title>iOS勉強会 iBeaconでできること　に参加してきた - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。 概要と話題になったことをメモろうと思います。 Model &hellip;">
+  <meta name="description" content="Developer&rsquo;s IOさんが主催する勉強会に参加してきました。
+http://connpass.com/event/4225/ iOS7の発表がでてからiBeaconに興味を持ち出して、このにゅ〜てくのろじ〜を面白いことにつかえないかと調査していたのですが、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@ Backboneで利用される重要な３つのモデルModel, Coolection, Viewの�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -69,7 +69,7 @@ Backboneで利用される重要な３つのモデルModel, Coolection, Viewの�
   
   <header>
     
-      <h1 class="entry-title">Bbackbone.js 読書会 第２章</h1>
+      <h1 class="entry-title">iOS勉強会 iBeaconでできること　に参加してきた</h1>
     
     
       <p class="meta">
@@ -85,120 +85,236 @@ Backboneで利用される重要な３つのモデルModel, Coolection, Viewの�
   
 
 
-<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+<time datetime="2013-12-12T19:06:00+09:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
+<div class="entry-content"><p>Developer&rsquo;s IOさんが主催する勉強会に参加してきました。
+<a href="http://connpass.com/event/4225/">http://connpass.com/event/4225/</a></p>
 
-<p>概要と話題になったことをメモろうと思います。</p>
+<p>iOS7の発表がでてから<code>iBeacon</code>に興味を持ち出して、このにゅ〜てくのろじ〜を面白いことにつかえないかと調査していたのですが、今回もっと知識を深めるべく勉強会にさんかしてきました。そのメモを残しておこうと思います。</p>
 
-<h2>Model</h2>
+<h1>【初級】iBeaconの基礎のキ</h1>
 
-<p>データを扱う方法を提供するもの。
-View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
-これがjavascriptで使えちゃう。</p>
+<p>開発者以外にひとでも分かるようにiBeaconというものをざっくり説明してました。</p>
 
-<h3>提供するもの</h3>
+<h2>iBeaconとは</h2>
 
 <ul>
-<li>保持</li>
-<li>検証</li>
-<li>アクセス制御</li>
-<li>保存</li>
+<li>BLEを利用している</li>
+<li>Bluetooth onにしないといけない</li>
+<li>CoreLocation.framework</li>
+<li>iOS7がインストールされるからってBLEが利用されるわけではない
+
+<ul>
+<li>iOS7 + BLEが利用できるっていうのが重要</li>
+</ul>
+</li>
 </ul>
 
 
-<h3>Validationをどうするか</h3>
+<p>ざっくり定義すると</p>
 
-<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
-場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
-その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
-とかはクライアント側でも利用するよねーという話をした。</p>
+<p><code>BLEを利用したAppleの距離と領域観測のサービス</code></p>
 
-<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
-それを継承して処理が動作するようになっている。</p>
+<p>です。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<h2>利用したサービス</h2>
+
+<ul>
+<li>AppleStore
+
+<ul>
+<li>テーブルに近づくとiPhoneの紹介や下取りの情報が表示される</li>
+</ul>
+</li>
+<li>Macy&rsquo;s
+
+<ul>
+<li>入店検知してクーポンの取得、おすすめ商品の紹介</li>
+<li>O2O施策としてだいぶ確率されているようです</li>
+</ul>
+</li>
+<li>スマポ
+
+<ul>
+<li>来店ポイントがたまる</li>
+<li>日本でしっかりベジネスにしているサービスですね</li>
+</ul>
+</li>
+<li>MLB
+
+<ul>
+<li>入場用のバーコード</li>
+<li>point</li>
+<li>クーポン</li>
+<li>本日の対戦情報を表示してくれる</li>
+<li>自分の座席情報を教えてくれる</li>
+<li>とはいえ、現在まだベータ運用しているらしく、本番運用はまだのようですね</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>よく利用される用語</h2>
+
+<ul>
+<li>Beacon
+
+<ul>
+<li>電子情報を受信して現在情報を知る電子機器のことをいうらしい
+
+<ul>
+<li><a href="http://e-words.jp/w/E38393E383BCE382B3E383B3.html">http://e-words.jp/w/E38393E383BCE382B3E383B3.html</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>BLE
+
+<ul>
+<li>2.4GHz の無線を使った近距離無線通信規格</li>
+<li>少ない電池でもいままでよりも長くバッテリーが持つようにつくられている</li>
+</ul>
+</li>
+<li>Advertise
+
+<ul>
+<li>アドバタイズ：ある機器が別の機器に管理情報を伝達すること</li>
+<li>proximity UUID（企業）</li>
+<li>major（建物）</li>
+<li>minor（フロア）</li>
+</ul>
+</li>
+<li>リージョン監視
+
+<ul>
+<li>領域の入出チェック（虜域観測）</li>
+<li>リージョン=UUID</li>
+<li>出るイベントはドキュメント情報は２０秒っぽいが実際は３０秒かかるっぽい</li>
+</ul>
+</li>
+<li>Ranging
+
+<ul>
+<li>エリア内のBeaconの情報を取得（距離推定）</li>
+<li>Beacon距離
+
+<ul>
+<li>proximity
+
+<ul>
+<li>距離判定は４つとれる</li>
+<li>相対的に変わる</li>
+</ul>
+</li>
+<li>accuracy
+
+<ul>
+<li>位置情報取得の精度を指定</li>
+<li>もちろん精度が良いほど正確だが電池の量も多い</li>
+<li>領域はだいたいのもの</li>
+</ul>
+</li>
+<li>rssi
+
+<ul>
+<li>Received Signal Strength Indication</li>
+<li>無線通信機器が受信する信号の強度を測定するための回路または信号</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>電波法！！！！
+
+<ul>
+<li>技適マークがついていない無線機は電波法違反らしい</li>
+<li>estimoteのビーコン端末は日本実運用すると電波法違反になるぽいですね</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>iBeaconを使ってみよう</h2>
+
+<p>iBeaconアプリの作り方を二つのキーワードで説明しています。
+以下の二つをもとに実装を行っていく</p>
+
+<ul>
+<li>距離観測（Ranging）
+
+<ul>
+<li>各Beaconとの距離を約１秒おきに監視する</li>
+<li>それぞれの領域をみる</li>
+</ul>
+</li>
+<li><p>領域観測のた仕様</p>
+
+<ul>
+<li>Beaconグループで作成される領域</li>
+</ul>
+</li>
+<li><p>uuidgen
+ビーコン端末に固有のID振らないといけないのでコマンドを利用して生成したりできます</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
-</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
-</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ uuidgen
+</span><span class='line'>8649794A-0C6C-4D82-99F2-7084D6C231B1</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>Collecation</h2>
+<h1>Beaconアプリの作り方</h1>
 
-<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
-Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
-each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
-
-<h2>View</h2>
-
-<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
+<p>具体的にコードレベルでどんな風に作成されるのか、ハマりどころを説明していただきました。</p>
 
 <ul>
-<li>Viewとして、「適切にDOMツリーを構築する」</li>
-<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
+<li>具体的に実装がでてきたコード
+
+<ul>
+<li><a href="https://github.com/suwa-yuki/BeaconSample">https://github.com/suwa-yuki/BeaconSample</a></li>
+</ul>
+</li>
+<li>ハマりどころ
+
+<ul>
+<li>startMonitoringForRegionはバックグラウンドおk</li>
+</ul>
+</li>
 </ul>
 
 
-<p>前者でいうと</p>
+<h1>LTで話されたことメモ</h1>
 
 <ul>
-<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
+<li>Androidでの確認はほぼできない
+
+<ul>
+<li>Nexus5だと大丈夫</li>
+<li>あとは海外の端末を輸入する</li>
+<li>iPhoneは無論OK</li>
+</ul>
+</li>
 </ul>
 
 
-<p>後者でいうと</p>
+<h1>まとめ</h1>
 
-<ul>
-<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
-</ul>
+<p>今回はiBeaconを使って開発する為の基本知識をベースとした勉強会でたくさん学ばしていいただきました。
+まだまだ勉強不足なところはあるけれど、今回の勉強会でだいぶもやもやしていたところが解消したので次の開発に活かそうと思います。
+しかし、つい先日estimoteのbeacon端末を購入したのですが技適マークがついていないのは残念です。。。ビジネスで
+利用するとしたらまた別の端末（日本の電波法に準拠したハード製品）を購入してやらないとだめですね。。。</p>
 
+<h1>参考スライド</h1>
 
-<p>なのかなと感じた。</p>
-
-<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
-
-<h2>Router</h2>
-
-<h2>Sync</h2>
+<p><a href="http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007">http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007</a>
+<a href="http://www.slideshare.net/yuki0211s/i-beacon-29135560">http://www.slideshare.net/yuki0211s/i-beacon-29135560</a></p>
 </div>
 
 
@@ -221,12 +337,12 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
   
 
 
-<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+<time datetime="2013-12-12T19:06:00+09:00" pubdate data-updated="true">Dec 12<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a>
+    <a class='category' href='/blog/categories/iphone/'>iphone</a>
   
 </span>
 
@@ -235,7 +351,7 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -248,10 +364,8 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/06/09/install-bower/" title="Previous Post: RailsでBowerの導入">&laquo; RailsでBowerの導入</a>
+        <a class="basic-alignment left" href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/" title="Previous Post: AV Foundation Frameworkを利用して動画の結合を行う">&laquo; AV Foundation Frameworkを利用して動画の結合を行う</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/06/24/use-commitstatus-at-jenkins/" title="Next Post: jenkinsでcommit statusを操作する">jenkinsでcommit statusを操作する &raquo;</a>
       
     </p>
   </footer>
