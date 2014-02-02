@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2013-12-16T16:19:26+09:00</updated>
+  <updated>2014-02-03T00:44:08+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,206 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
+    <updated>2014-02-02T23:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
+    <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
+iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
+いろいろ収穫があり、たくさん勉強させていただきました。</p>
+
+<p>そんな僕もここでLTをしてきたのでのせときます。以前は、MA9でも発表している
+ですがあくまでプロダクトとして発表だったのと今回は技術的なカンファレンス
+なので技術的側面に焦点をあてて発表させていただきました。</p>
+
+<p>話した内容はアプリでがんがん利用していた<code>AV Foundation</code>の話をしてきました。</p>
+
+<script async class="speakerdeck-embed" data-id="ebaab3406d820131c6665e5071095c76" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>(発表時にディスプレイコネクタが認識しなくて発狂していたところ<code>@tamotamago</code>さんにパソコンを貸していただき大変感謝です！)</p>
+
+<p>自分でもいろいろとメモっていたのですが以下のサイトがよく纏められていたのでご参照ください。</p>
+
+<h3>Developers.IO</h3>
+
+<ul>
+<li><a href="http://dev.classmethod.jp/smartphone/ios-confwd2/">http://dev.classmethod.jp/smartphone/ios-confwd2/</a></li>
+</ul>
+
+
+<h3>Togetter</h3>
+
+<ul>
+<li><a href="http://togetter.com/li/623779">http://togetter.com/li/623779</a></li>
+</ul>
+
+
+<h3>Ustream録画</h3>
+
+<ul>
+<li><a href="http://www.ustream.tv/recorded/43319245">http://www.ustream.tv/recorded/43319245</a></li>
+<li><a href="http://www.ustream.tv/recorded/43323576">http://www.ustream.tv/recorded/43323576</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[AVMutableVideoCompositionLayerInstructionの使い方]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/"/>
+    <updated>2014-01-19T19:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction</id>
+    <content type="html"><![CDATA[<p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
+それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
+簡単に動画に対して<code>CGAffineTransform</code>を指定することで動画の移動・回転・拡大縮小
+ができたりフェードイン・アウトの設定ができたのでメモ。</p>
+
+<p>まずは対象のトラックをもとにして、レイヤーをインスタンス化します。</p>
+
+<p><code>+ (AVMutableVideoCompositionLayerInstruction *)videoCompositionLayerInstructionWithAssetTrack:(AVAssetTrack *)track</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableVideoCompositionLayerInstruction</span> <span class="o">*</span><span class="n">layerInstruction</span><span class="p">;</span>
+</span><span class='line'><span class="n">layerInstruction</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoCompositionLayerInstruction</span>
+</span><span class='line'>                    <span class="nl">videoCompositionLayerInstructionWithAssetTrack:</span><span class="n">compositionVideoTrack</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>TransForm</h3>
+
+<p><code>- (void)setTransformRampFromStartTransform:(CGAffineTransform)startTransform toEndTransform:(CGAffineTransform)endTransform timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと、３秒間左から動画が移動してきます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// transition</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">rotateStart</span><span class="p">,</span> <span class="n">rotateEnd</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeTranslation</span><span class="p">(</span><span class="o">-</span><span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateEnd</span>    <span class="o">=</span> <span class="n">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rotateStart</span><span class="p">,</span> <span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setTransformRampFromStartTransform:</span><span class="n">rotateStart</span>
+</span><span class='line'>                                      <span class="nl">toEndTransform:</span><span class="n">rotateEnd</span>
+</span><span class='line'>                                           <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Opacity</h3>
+
+<p><code>- (void)setOpacityRampFromStartOpacity:(float)startOpacity toEndOpacity:(float)endOpacity timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと最初から３秒間動画がフェードインしてきて最後の３秒間動画をフェードアウトします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// fade in</span>
+</span><span class='line'><span class="n">CMTime</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// fade out</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">CMTimeSubtract</span><span class="p">(</span><span class="n">videoComposition</span><span class="p">.</span><span class="n">currentTimeDuration</span><span class="p">,</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>Appleのドキュメントでこのクラスの説明をみると動画処理にしては結構シンプルだったので何個か試してみたのでした。
+ただ、<code>CMTime</code>関連・<code>CGAffineTransform</code>関連の知識はないと結構何がなんだかわからなくなるのであらかじめ知識として
+蓄えておくことはは必須ですね。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:">https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
+    <updated>2014-01-19T19:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
+    <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
+
+<h3>回転問題</h3>
+
+<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+</span><span class='line'>CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
+</span><span class='line'>CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
+</span><span class='line'>[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Happy New Year]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/"/>
+    <updated>2014-01-02T20:22:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/01/02/happy-new-year</id>
+    <content type="html"><![CDATA[<p>明けましておめでとうございます。</p>
+
+<p>時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
+３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。</p>
+
+<p>いかがおすごしでしょうか。
+nakajijapanです。</p>
+
+<p>去年を振り返ってみると、とにかく自分の可能性を信じつつ自分が未開拓な領域
+をガンガン攻めた年ではありました。しかし、まだスタート地点に立ったところ
+というか物足りないと感じてる次第です。もっとイケル！</p>
+
+<p>殻を打ち破る日はまだ分からないですが、あきらめず自分のケツを叩きながら
+一歩づつ前に突き進んでいこうと思います。</p>
+
+<p>今年も仕事にプライベートにがんばるぞ！</p>
+
+<p>今年もよろしくお願いします。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[iOS勉強会 iBeaconでできること　に参加してきた]]></title>
@@ -247,18 +447,13 @@
   <entry>
     <title type="html"><![CDATA[AV Foundation Frameworkを利用して動画の結合を行う]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/"/>
-    <updated>2013-10-22T23:08:00+09:00</updated>
+    <updated>2013-10-22T19:06:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation</id>
-    <content type="html"><![CDATA[<p>こんにちはあのnakajijapanです。
-以前、<a href="http://owkr.info/movie/">心霊動画アプリで「もう一度ご覧いただこう」</a> というアプリをリリースしました。
-心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ
-やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理
-がてら情報をまためようと思います。</p>
+    <content type="html"><![CDATA[<p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
 
 <p>今回主に利用したのが「AV Foundation」です。</p>
 
-<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の
-取得、作成、編集、再エンコードができたりできます。</p>
+<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の 取得、作成、編集、再エンコードができたりできます。</p>
 
 <p>階層的には以下のような階層に存在して、簡単に動画とか写真の処理をしたい場合は</p>
 
@@ -268,19 +463,17 @@
 </ul>
 
 
-<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御
-できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは
-いうまでもありません。</p>
+<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御 できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは いうまでもありません。</p>
 
-<p><img src="http://nakajijapan.github.io/images/posts/2013-10-22_01.png" alt="AV Foundation" />
-<a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
+<p><img src="images/posts/2013-10-22_01.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
 
 <p>では実際にどう実装していけばいいかなのですが、そのために結構なクラスを利用するのでそれぞれざっくり説明していきます。</p>
 
 <h3>AVAsset</h3>
 
-<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること
-ができます。</p>
+<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること ができます。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -291,8 +484,7 @@
 
 <h3>AVAssetTrack</h3>
 
-<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・）
-例えば、アセットから動画と音声に切り分ける。</p>
+<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・） 例えば、アセットから動画と音声に切り分ける。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -315,10 +507,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>AVMutableComposition</h3>
+<h3>AVMutableCompositionTrack</h3>
 
-<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり
-するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
+<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -337,9 +528,7 @@
 
 <h3>AVMutableVideoComposition</h3>
 
-<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。
-ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒
-から何秒間を何秒目に結合させるとかできたりします。</p>
+<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒 から何秒間を何秒目に結合させるとかできたりします。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -379,10 +568,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>AVAssetExportSession</h2>
+<hr />
 
-<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。
-例えば、mov形式、720x720サイズでファイルに保存させたりできます。</p>
+<h3>AVAssetExportSession</h3>
+
+<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。 例えば、mov形式、720x720サイズでファイルに保存させたりで</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -449,27 +639,23 @@
 
 <p>だいたいの大枠は以下の図を見ると何となくわかるかもしれませんね。</p>
 
-<p><img src="http://nakajijapan.github.io/images/posts/2013-10-22_02.png" alt="Editing" />
-<a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
+<p><img src="images/posts/2013-10-22_02.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
 
 <h2>まとめ</h2>
 
-<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり
-説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。
-あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば
-やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った
-ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
+<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり 説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。 あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
 
-<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと
-いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
+<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
 
 <h2>Reference</h2>
 
 <ul>
 <li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation &ndash; 606</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques &ndash; 509</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation &ndash; 612</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation – 606</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques – 509</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation – 612</a></li>
 </ul>
 
 ]]></content>

@@ -9,9 +9,7 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="自分のサービスのRailsのversionがまだ3.2だったので地道にRails4にアップデートしました。
-その際に必要になった作業をメモっときます。 attr_accessible is extracted out of Rails into a gem. 1
-E, [2013-07-04T09 &hellip;">
+  <meta name="description" content="こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,674 @@ E, [2013-07-04T09 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-22T19:06:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
+
+<p>今回主に利用したのが「AV Foundation」です。</p>
+
+<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の 取得、作成、編集、再エンコードができたりできます。</p>
+
+<p>階層的には以下のような階層に存在して、簡単に動画とか写真の処理をしたい場合は</p>
+
+<ul>
+<li>Media Player Framework(MPMoviePlayerController, MPMoviePlayerViewController)</li>
+<li>UIKit(UIIMagePickerController)</li>
+</ul>
+
+
+<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御 できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは いうまでもありません。</p>
+
+<p><img src="images/posts/2013-10-22_01.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
+
+<p>では実際にどう実装していけばいいかなのですが、そのために結構なクラスを利用するのでそれぞれざっくり説明していきます。</p>
+
+<h3>AVAsset</h3>
+
+<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること ができます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAsset</span><span class="o">*</span>                   <span class="n">videoAsset</span><span class="p">;</span>
+</span><span class='line'><span class="n">videoAsset</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVURLAsset</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">movieUrl</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVAssetTrack</h3>
+
+<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・） 例えば、アセットから動画と音声に切り分ける。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAsset</span><span class="o">*</span>                   <span class="n">videoAsset</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVAssetTrack</span><span class="o">*</span>              <span class="n">videoTrack</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVAssetTrack</span><span class="o">*</span>              <span class="n">audioTrack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">videoAsset</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVURLAsset</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithURL:</span><span class="n">movieUrl</span> <span class="nl">options:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// アセットからトラックを取得</span>
+</span><span class='line'><span class="n">videoTrack</span> <span class="o">=</span> <span class="p">[[</span><span class="n">videoAsset</span> <span class="nl">tracksWithMediaType:</span><span class="n">AVMediaTypeVideo</span><span class="p">]</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'><span class="n">audioTrack</span> <span class="o">=</span> <span class="p">[[</span><span class="n">videoAsset</span> <span class="nl">tracksWithMediaType:</span><span class="n">AVMediaTypeAudio</span><span class="p">]</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableCompositionTrack</h3>
+
+<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableComposition</span><span class="o">*</span>      <span class="n">mixComposition</span><span class="p">;</span>
+</span><span class='line'><span class="n">AVMutableCompositionTrack</span><span class="o">*</span> <span class="n">compositionVideoTrack</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// コンポジション作成</span>
+</span><span class='line'><span class="n">mixComposition</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableComposition</span> <span class="n">composition</span><span class="p">];</span>
+</span><span class='line'><span class="n">compositionVideoTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeVideo</span> <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableVideoComposition</h3>
+
+<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒 から何秒間を何秒目に結合させるとかできたりします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">compositionVideoTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">mixComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeVideo</span> <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">[</span><span class="n">compositionVideoTrack</span> <span class="nl">insertTimeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">kCMTimeZero</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)</span>
+</span><span class='line'>                               <span class="nl">ofTrack:</span><span class="n">_videoTrack</span>
+</span><span class='line'>                                <span class="nl">atTime:</span><span class="n">kCMTimeZero</span>
+</span><span class='line'>                                 <span class="nl">error:</span><span class="nb">nil</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">compositionVideoTrack</span> <span class="nl">setPreferredTransform:</span><span class="p">[</span><span class="n">videoTrack</span> <span class="n">preferredTransform</span><span class="p">]];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVMutableVideoCompositionLayerInstruction</h3>
+
+<p>アセットのトラックに対して回転、透過度、クロッピングができます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ここでは動画を小さくして指定の位置へ移動させてます。</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">scale</span>      <span class="o">=</span> <span class="n">CGAffineTransformMakeScale</span><span class="p">(</span><span class="mf">0.30f</span><span class="p">,</span> <span class="mf">0.30f</span><span class="p">);</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">trnsration</span> <span class="o">=</span> <span class="n">CGAffineTransformMakeTranslation</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">406</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">AVMutableVideoCompositionLayerInstruction</span><span class="o">*</span> <span class="n">_layerInstruction</span><span class="p">;</span>
+</span><span class='line'><span class="n">_layerInstruction</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoCompositionLayerInstruction</span> <span class="nl">videoCompositionLayerInstructionWithAssetTrack:</span><span class="n">_compositionVideoTrack</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">_layerInstruction</span> <span class="nl">setTransform:</span><span class="n">CGAffineTransformConcat</span><span class="p">(</span><span class="n">scale</span><span class="p">,</span> <span class="n">trnsration</span><span class="p">)</span> <span class="nl">atTime:</span><span class="n">kCMTimeZero</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<h3>AVAssetExportSession</h3>
+
+<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。 例えば、mov形式、720x720サイズでファイルに保存させたりで</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">videoComp</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoComposition</span> <span class="n">videoComposition</span><span class="p">];</span>
+</span><span class='line'><span class="n">videoComp</span><span class="p">.</span><span class="n">renderSize</span>    <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">720</span><span class="p">,</span> <span class="mi">720</span><span class="p">);</span>
+</span><span class='line'><span class="n">videoComp</span><span class="p">.</span><span class="n">frameDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">24</span><span class="p">);</span> <span class="c1">// framerate</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// AVCompositionをベースにAVAssetExportを生成</span>
+</span><span class='line'><span class="n">assetExportSession</span> <span class="o">=</span> <span class="p">[[</span><span class="n">AVAssetExportSession</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithAsset:</span><span class="n">mixComposition</span> <span class="nl">presetName:</span><span class="n">AVAssetExportPreset1280x720</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 合成用のVideoCompositionを設定</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">videoComposition</span> <span class="o">=</span> <span class="n">videoComp</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// エクスポートファイルの設定</span>
+</span><span class='line'><span class="n">NSURL</span> <span class="o">*</span><span class="n">composedMovieUrl</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSURL</span> <span class="nl">fileURLWithPath:</span><span class="n">composedMoviePath</span><span class="p">];</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">outputFileType</span> <span class="o">=</span> <span class="n">AVFileTypeQuickTimeMovie</span><span class="p">;</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">outputURL</span> <span class="o">=</span> <span class="n">composedMovieUrl</span><span class="p">;</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">shouldOptimizeForNetworkUse</span> <span class="o">=</span> <span class="n">YES</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// エキスポート処理</span>
+</span><span class='line'><span class="p">[</span><span class="n">assetExportSession</span> <span class="nl">exportAsynchronouslyWithCompletionHandler:</span><span class="o">^</span><span class="p">{</span>
+</span><span class='line'>    <span class="k">switch</span> <span class="p">([</span><span class="n">exportSession</span> <span class="n">status</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">AVAssetExportSessionStatusFailed:</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Export failed: %@&quot;</span><span class="p">,</span> <span class="p">[[</span><span class="n">exportSession</span> <span class="n">error</span><span class="p">]</span> <span class="n">localizedDescription</span><span class="p">]);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">case</span> <span class="nl">AVAssetExportSessionStatusCancelled:</span>
+</span><span class='line'>            <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Export canceled&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">default</span><span class="o">:</span>
+</span><span class='line'>            <span class="k">break</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主に利用するクラスを説明しました。これらを駆使して実装すれば簡単な動画の結合ができるようになります。</p>
+
+<p>だいたいの大枠は以下の図を見ると何となくわかるかもしれませんね。</p>
+
+<p><img src="images/posts/2013-10-22_02.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
+
+<h2>まとめ</h2>
+
+<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり 説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。 あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
+
+<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
+
+<h2>Reference</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation – 606</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques – 509</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation – 612</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-30T02:17:00+09:00" pubdate data-updated="true">Sep 30<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
+
+<p><a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8" target="_blank"><img src="/images/apple_store.png" /></a></p>
+
+<p>先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
+その名も</p>
+
+<h3>心霊動画アプリ 「もう一度ご覧いただこう」</h3>
+
+<p><a href="http://owkr.info/movie">http://owkr.info/movie</a></p>
+
+<p>です。</p>
+
+<p>構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる</p>
+
+<h3>心霊写真アプリ「おわかりいただけただろうか」</h3>
+
+<p><a href="http://owkr.info">http://owkr.info</a></p>
+
+<p>を作成しました。その後時を経て、そろそろできるんじゃねという根拠ない自信がありまして
+作成するにいたった次第です。今回はそのリリースが出来ましたよっていうご報告であります！</p>
+
+<p>今回動画アプリを作成してみて、自分としてグッドっだったのは</p>
+
+<ul>
+<li>AVFoundationガリガリガリガリいじったし（未知の領域への挑戦）
+
+<ul>
+<li>動画動詞の結合</li>
+<li>動画内でのアニメーション</li>
+<li>動画のスローモーション</li>
+<li>動画内に動画をいれる（ワイプ）</li>
+</ul>
+</li>
+<li>いろんなTips学んだ
+
+<ul>
+<li>シュミレータで効率的に開発していく方法</li>
+<li>iOSのバージョンのデザインの差異（主に位置によるずれ）の直し方</li>
+</ul>
+</li>
+<li>キャンペーンの出し方
+
+<ul>
+<li>以前にリリースアプリと連携デザインに統一感をもたせた</li>
+</ul>
+</li>
+</ul>
+
+
+<p>失敗や改善した方がいいなというのも何個かあって</p>
+
+<p>iOS7でチェックしとけばよかった。しかもガンガンみんなiOS7にしてしまったのでこれはつらかった・・
+iOS7でテストして仮に問題が発生したときにその対応でリリースが遅れるのは避けたかったのでちょっと
+最後まで避けてたのが仇となりました。無念。やりかたとしては、新しいバージョンがリリース間近に
+なった場合はかならず確認を行うことをマストにしたほうがいいですね。これ勉強！</p>
+
+<p>リリースタイミングを逃しました。本当は夏にリリースすれば良かったのですが僕の技術力不足であえなく断念して
+しまいました。。。</p>
+
+<p>あとは、デザイナの確認作業についてです。デザイナにはある程度できあがらないとテストや確認出来ない状態でしたし、
+毎回自分のPCでビルドして渡すのはかなり面倒でした。（のでこの作業はほとんどやってない・・・）なので自分が修正
+したらすぐに自分の実機やシミュレータでがんがん確認出来るような状況を作ればなと思っていました。会社だとjenkins
+でビルドしてそれをダウンロードできる基盤があるのでそれ参考に個人でも作成してみようと思う。</p>
+
+<p>肝心のiOS7でのおばけが表示されないバグがありますが先日修正したものを申請しましたのでもう少しでiOS7にした人も
+使えることでしょう！！</p>
+
+<p>とりあえず、リリースできてよかったのです。</p>
+
+<p>また、いろんなことに挑戦していきたい。</p>
+
+<p>今後はもう一度の使い方なり、AVFoundationのTipsをちょこちょこ書いていこうと思います。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-18T20:19:00+09:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
+UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
+しないといけないようです。</p>
+
+<p>なので自分なりにそれっぽいのを実装してみました。
+（とりあえず手動でon/offで切り替えるUIにしてます）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ライトが利用できたら表示</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">torchAvailable</span> <span class="o">==</span> <span class="n">YES</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIButton</span><span class="o">*</span> <span class="n">toggleLightButton</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">55</span><span class="p">)];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setTitle:</span><span class="s">@&quot;ON&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 画像を左側に埋め込む</span>
+</span><span class='line'>    <span class="n">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;light.png&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CALayer</span><span class="o">*</span> <span class="n">imgLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="n">layer</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">CFBridgingRelease</span><span class="p">([</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
+</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">frame</span>    <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">imgLayer</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
+</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">toggleLightButton</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>実際できたのがこんな感じ。
+なんかそれっぽくできました。（アイコンは当てなのであしからず）</p>
+
+<p><img src="/images/posts/2013-09-18_01.png" alt="ss" /></p>
+
+<p>基本は<code>CALayer</code>でデザインの修正をおこなう。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>画像を組み込んだ場合は文字と被るといけないので文字の表示位置をずらします。
+XIBの場合はIBの左側のメニューで設定できるのですが、それを実装で行うときは<code>UIEdgeInsets</code>クラスを
+利用します。CSSのイメージでいうとpaddingをイメージして設定すると想像できます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
+</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
+そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-07T07:42:00+09:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
+人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
+
+<p>iOS5からCore AnimationなるものがサポートされていてパーティクルエフェクトがUIKitでも作成できるようになったので実装してみました。
+以前はCocos2Dのフレームワーク情報で作成していたのですがそれを利用しないのは初めて。</p>
+
+<p>まずはフレームワークをインポートする</p>
+
+<h2>1</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import &lt;QuartzCore/QuartzCore.h&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2</h2>
+
+<p>あとは表現したものを想像して実装するのみ！！！！っていってもパラメータが沢山あるので
+感覚的にGUIで設定できてその状態のパラメータをみれるツールをつかいました。</p>
+
+<ul>
+<li>UIEffectDesigner
+
+<ul>
+<li><a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>これにfire ballっていのがあったのでそれを参考にしつつ自分なりに調整してみました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterLayer</span><span class="o">*</span> <span class="n">fireEmitter</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterLayer</span> <span class="n">layer</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterPosition</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">renderMode</span> <span class="o">=</span> <span class="n">kCAEmitterLayerAdditive</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterCell</span><span class="o">*</span> <span class="n">fire</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterCell</span> <span class="n">emitterCell</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">birthRate</span>     <span class="o">=</span> <span class="mi">250</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetime</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetimeRange</span> <span class="o">=</span> <span class="mf">2.06</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocity</span>      <span class="o">=</span> <span class="mi">26</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocityRange</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">color</span>         <span class="o">=</span> <span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">0.0</span> <span class="nl">green:</span><span class="mf">0.0</span> <span class="nl">blue:</span><span class="mf">0.05</span> <span class="nl">alpha:</span><span class="mf">1.0</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">redRange</span>      <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">greenRange</span>    <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">blueRange</span>     <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">contents</span>      <span class="o">=</span> <span class="p">(</span><span class="kt">id</span><span class="p">)[[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;particle.png&quot;</span><span class="p">]</span> <span class="n">CGImage</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">fire</span> <span class="nl">setName:</span><span class="s">@&quot;fire&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaRange</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scale</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleRange</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spin</span>       <span class="o">=</span> <span class="mf">1.56</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spinRange</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.33</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionRange</span>     <span class="o">=</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLongitude</span> <span class="o">=</span> <span class="mf">1.57</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLatitude</span>  <span class="o">=</span> <span class="mf">2.33</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">xAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">yAcceleration</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">zAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterCells</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObject:</span><span class="n">fire</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">fireEmitter</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>とりあえずこれで自分なりの人魂作成に成功しました。
+パラメータをいろいろ覚えなければいけないものが沢山あるのでちょっと覚えるの大変だなという印象。
+今回その煩雑さをUIEffectDesignerで補完しましたが、それでもパラメータがどのような効果があるのかはある程度理解しておく必要があるようです。</p>
+
+<p><img src="/images/posts/2013-09-08_01.png" alt="ss" /></p>
+
+<h3>参照</h3>
+
+<p>iOS Developer Library
+<a href="https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html">https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html</a></p>
+
+<p>UIEffectDesigner
+<a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -295,555 +961,6 @@ E, [2013-07-04T09 &hellip;">
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-02T22:30:00+09:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
-
-<p>便利だったのが<a href="https://github.com/gimite/google-drive-ruby">google-drive-ruby</a>で、中の通信部分の処理をいい感じに抽象化してくれる便利gemです。</p>
-
-<p>実際に<a href="http://www.frustration.me/">www.frustration.me</a>のユーザ数やアイテム数を計測するために使用してみました。</p>
-
-<p>まずは、gemでインストールしてrakeでバッチ処理を実装するだけです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;send score data to google spreadsheet&quot;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;google_drive&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">namespace</span> <span class="ss">:batches</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">task</span> <span class="n">total_scores</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
-</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no username&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">].</span><span class="n">blank?</span>
-</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no password&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">].</span><span class="n">blank?</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">session</span> <span class="o">=</span> <span class="no">GoogleDrive</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">spreadsheet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">spreadsheet_by_key</span><span class="p">(</span><span class="s2">&quot;input key name&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">worksheet</span> <span class="o">=</span> <span class="n">spreadsheet</span><span class="o">.</span><span class="n">worksheet_by_title</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">analyze_data</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>      <span class="ss">date</span><span class="p">:</span>           <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">),</span>
-</span><span class='line'>      <span class="n">users_num</span><span class="p">:</span>      <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">items_num</span><span class="p">:</span>      <span class="no">Item</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">comments_num</span><span class="p">:</span>   <span class="no">Comment</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">categories_num</span><span class="p">:</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">analyze_data</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで<code>rake batches:total_scores</code>で実行すると指定のスプレッドシートに情報が送信され、スプレッドシート側では</p>
-
-<p><img src="/images/posts/2013-07-02_01.png" alt="ss" /></p>
-
-<p>な感じでどんどんレコードが追加されていきます。</p>
-
-<p>便利。</p>
-
-<p>ただし、注意点があります。今回は<a href="http://sqale.jp">sqale</a>のcronで動かしているのですがログインで以下のように失敗することがあります。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake batches:total_scores
-</span><span class='line'>WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.7.8
-</span><span class='line'>rake aborted!
-</span><span class='line'>Authentication failed <span class="k">for </span>hogehoge@gmail.com: Response code 403 <span class="k">for </span>post https://www.google.com/accounts/ClientLogin: <span class="nv">Error</span><span class="o">=</span>BadAuthentication
-</span><span class='line'><span class="nv">Url</span><span class="o">=</span>https://www.google.com/accounts/ServiceLogin?service<span class="o">=</span>wise#Email<span class="o">=</span>hogehoge%40gmail.com
-</span><span class='line'><span class="nv">Info</span><span class="o">=</span>WebLoginRequired
-</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:93:in <span class="sb">`</span>rescue in login<span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:86:in `login&#39;</span>
-</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:38:in <span class="sb">`</span>login<span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive.rb:18:in `login&#39;</span>
-</span><span class='line'>/home/sqale/current/lib/tasks/scores.rake:10:in <span class="sb">`</span>block <span class="o">(</span>2 levels<span class="o">)</span> in &lt;top <span class="o">(</span>required<span class="o">)</span>&gt;<span class="err">&#39;</span>
-</span><span class='line'>Tasks: <span class="nv">TOP</span> <span class="o">=</span>&gt; batches:total_scores
-</span><span class='line'><span class="o">(</span>See full trace by running task with --trace<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これはGoogleがセキュリティ強化のため、変な場所からのログインは自動的に拒否しているためです。なので、通常通りWEBでGoogleにログインしてみてそのログインが大丈夫という設定をすれば問題無く通過できます。</p>
-
-<p><img src="/images/posts/2013-07-02_02.png" alt="ss" /></p>
-
-<p>あとはグラフツール使って簡単に見やすくできるのでお手軽&amp;便利メソッドでした。</p>
-
-<p><img src="/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
-まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/07/01/csrf-protection/">CSRF Protection for Rails and Backbone.js</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-07-01T07:53:00+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
-Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
-して送信させるようにしました。</p>
-
-<p>ちなみに以前はModelに<code>toJSON</code>メソッドでtokenを付加させていたのですがPOST,PUTのみの対応だったので
-DELETE用にも対応できるよう実装してみた。（<code>Model.destroy</code>時には<code>toJSON()</code>を仲介しない）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Sync</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span> <span class="o">=</span> <span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="k">if</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;update&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;delete&#39;</span>
-</span><span class='line'>    <span class="nx">options_csrf</span> <span class="o">=</span>
-</span><span class='line'>      <span class="nx">headers</span><span class="o">:</span>
-</span><span class='line'>        <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="o">:</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">csrf_token</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>      <span class="nx">options</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">options_csrf</span>
-</span><span class='line'>    <span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>メソッドをオーバーライドしてHEADERに<code>X−CSRF-Token</code>を付加して親処理に渡す。<code>BackboneFrustration.Model.csrf_token()</code>は
-単純にフォームからCSRF用のtokenを取得しているだけです。これでajax通信のときはtokenを無視して処理をするようなその場しのぎな実装をせずになりました。</p>
-
-<p>以下のような処理撲滅です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">protect_from_forgery</span> <span class="ss">except</span><span class="p">:</span> <span class="ss">:craete</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>この修正で問題なく動作しているので適用させました。</p>
-
-<p>ところでRails用のgemで<code>backbone-rails</code>なんてものがありましてそこのコードを
-見ていたらだいたい同じことをしていたのであらかじめこれを参考にして勉強すれば良かったと思いました。とほほ。。</p>
-
-<p><a href="https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js">https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js</a></p>
-
-<p>とりあえず、これで一安心。</p>
-
-<h2>実際の修正箇所</h2>
-
-<p><a href="https://github.com/nakajijapan/frustrationme_app/pull/25/files">https://github.com/nakajijapan/frustrationme_app/pull/25/files</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/24/use-commitstatus-at-jenkins/">Jenkinsでcommit Statusを操作する</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
-自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
-
-<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
-
-<h2>監視用の親ジョブ作成</h2>
-
-<ul>
-<li><p>ソースコード管理</p>
-
-<ul>
-<li>Gitを選択</li>
-<li>Repository URL(テスト対象のものを入れる)
-
-<ul>
-<li>ex) git@github.com:paperboy-petit/user-app.git</li>
-</ul>
-</li>
-<li>Branch Specifier()
-
-<ul>
-<li><code>*/master</code>, <code>*/release</code>を記述する</li>
-<li>高度な設定のChoosing strategy
-
-<ul>
-<li><code>Inverse</code>を選択する</li>
-</ul>
-</li>
-<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>ビルド環境</p>
-
-<ul>
-<li>テストに必要な環境の設定なので適宜設定する</li>
-</ul>
-</li>
-<li><p>ビルド</p>
-
-<ul>
-<li>ここでテストする処理を実行</li>
-</ul>
-</li>
-<li><p>ビルド後の処理</p>
-
-<ul>
-<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
-<li>Build Triggers 1
-
-<ul>
-<li>Project to build: <code>CommitSTatusUpdate</code></li>
-<li>Trigger when build is <code>stable or unstable but not failed</code></li>
-<li>parameters
-
-<ul>
-<li><code>commit_status=success</code>を設定</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Build Triggers 2
-
-<ul>
-<li>Project to build: <code>CommitSTatusUpdate</code></li>
-<li>Trigger when build is <code>failed</code></li>
-<li>parameters
-
-<ul>
-<li><code>commit_status=failure</code>を設定</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>小ジョブ作成(CommitStatusUPdate)</h2>
-
-<ul>
-<li><p>ビルドのパラメータ化</p>
-
-<ul>
-<li>受け取るパラメータの設定
-
-<ul>
-<li>名前：commit_status</li>
-<li>デフォルト値：success</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>ソースコード管理
-親ジョブと同じ設定にする</p></li>
-<li><p>シェルの実行
-コミットステータスの変更を行う</p></li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -H <span class="s1">&#39;Authorization: token hogehogehogehogheohogehoge&#39;</span> <span class="se">\</span>
-</span><span class='line'>  --data <span class="s2">&quot;{\&quot;state\&quot;:\&quot;${commit_status}\&quot;, \&quot;target_url\&quot;:\&quot;${BUILD_URL}\&quot;}&quot;</span> <span class="se">\</span>
-</span><span class='line'>  https://api.github.com/repos/paperboy-petit/user-app/statuses/<span class="k">${</span><span class="nv">GIT_COMMIT</span><span class="k">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>ビルド後の処理
-お好みでIRCに渡します</li>
-</ul>
-
-
-<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
-
-<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
-
-<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
-
-<ul>
-<li>参考
-
-<ul>
-<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/13/backbone-guidebook03/">Bbackbone.js 読書会 第２章</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
-
-<p>概要と話題になったことをメモろうと思います。</p>
-
-<h2>Model</h2>
-
-<p>データを扱う方法を提供するもの。
-View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
-これがjavascriptで使えちゃう。</p>
-
-<h3>提供するもの</h3>
-
-<ul>
-<li>保持</li>
-<li>検証</li>
-<li>アクセス制御</li>
-<li>保存</li>
-</ul>
-
-
-<h3>Validationをどうするか</h3>
-
-<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
-場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
-その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
-とかはクライアント側でも利用するよねーという話をした。</p>
-
-<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
-それを継承して処理が動作するようになっている。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
-</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Collecation</h2>
-
-<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
-Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
-each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
-
-<h2>View</h2>
-
-<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
-
-<ul>
-<li>Viewとして、「適切にDOMツリーを構築する」</li>
-<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
-</ul>
-
-
-<p>前者でいうと</p>
-
-<ul>
-<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
-</ul>
-
-
-<p>後者でいうと</p>
-
-<ul>
-<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
-</ul>
-
-
-<p>なのかなと感じた。</p>
-
-<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
-
-<h2>Router</h2>
-
-<h2>Sync</h2>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -892,30 +1009,30 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/02/conference-with-developers-2014/">Confrence With Developer2に参加してLTしてきた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/02/happy-new-year/">Happy New Year</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/12/study-ibeacon/">iOS勉強会 iBeaconでできること　に参加してきた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/iphone/'>iphone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (2)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/iphone/'>iphone (2)</a></li><li><a href='/blog/categories/iphone/'>iPhone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
 </section>
 
 <section>
@@ -957,7 +1074,7 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - nakajijapan -
+  Copyright &copy; 2014 - nakajijapan -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

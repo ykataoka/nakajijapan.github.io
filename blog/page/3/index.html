@@ -9,14 +9,7 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="javascriptのパッケージ管理がしたくてbowerというパッケージ管理ツールをhttp://www.frustration.me にインストールしてみました。
-(ブランチ切って試してみました・・・) とりあえず、バージョンが古いので最新のものにインストールします。 1
-2
-3
-4
-5
-6
-7 &hellip;">
+  <meta name="description" content="サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +65,555 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-02T22:30:00+09:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
+
+<p>便利だったのが<a href="https://github.com/gimite/google-drive-ruby">google-drive-ruby</a>で、中の通信部分の処理をいい感じに抽象化してくれる便利gemです。</p>
+
+<p>実際に<a href="http://www.frustration.me/">www.frustration.me</a>のユーザ数やアイテム数を計測するために使用してみました。</p>
+
+<p>まずは、gemでインストールしてrakeでバッチ処理を実装するだけです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;send score data to google spreadsheet&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;google_drive&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:batches</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">task</span> <span class="n">total_scores</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no username&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">].</span><span class="n">blank?</span>
+</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no password&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">].</span><span class="n">blank?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">session</span> <span class="o">=</span> <span class="no">GoogleDrive</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">spreadsheet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">spreadsheet_by_key</span><span class="p">(</span><span class="s2">&quot;input key name&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">worksheet</span> <span class="o">=</span> <span class="n">spreadsheet</span><span class="o">.</span><span class="n">worksheet_by_title</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">analyze_data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">date</span><span class="p">:</span>           <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">),</span>
+</span><span class='line'>      <span class="n">users_num</span><span class="p">:</span>      <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">items_num</span><span class="p">:</span>      <span class="no">Item</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">comments_num</span><span class="p">:</span>   <span class="no">Comment</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">categories_num</span><span class="p">:</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">analyze_data</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで<code>rake batches:total_scores</code>で実行すると指定のスプレッドシートに情報が送信され、スプレッドシート側では</p>
+
+<p><img src="/images/posts/2013-07-02_01.png" alt="ss" /></p>
+
+<p>な感じでどんどんレコードが追加されていきます。</p>
+
+<p>便利。</p>
+
+<p>ただし、注意点があります。今回は<a href="http://sqale.jp">sqale</a>のcronで動かしているのですがログインで以下のように失敗することがあります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake batches:total_scores
+</span><span class='line'>WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.7.8
+</span><span class='line'>rake aborted!
+</span><span class='line'>Authentication failed <span class="k">for </span>hogehoge@gmail.com: Response code 403 <span class="k">for </span>post https://www.google.com/accounts/ClientLogin: <span class="nv">Error</span><span class="o">=</span>BadAuthentication
+</span><span class='line'><span class="nv">Url</span><span class="o">=</span>https://www.google.com/accounts/ServiceLogin?service<span class="o">=</span>wise#Email<span class="o">=</span>hogehoge%40gmail.com
+</span><span class='line'><span class="nv">Info</span><span class="o">=</span>WebLoginRequired
+</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:93:in <span class="sb">`</span>rescue in login<span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:86:in `login&#39;</span>
+</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:38:in <span class="sb">`</span>login<span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive.rb:18:in `login&#39;</span>
+</span><span class='line'>/home/sqale/current/lib/tasks/scores.rake:10:in <span class="sb">`</span>block <span class="o">(</span>2 levels<span class="o">)</span> in &lt;top <span class="o">(</span>required<span class="o">)</span>&gt;<span class="err">&#39;</span>
+</span><span class='line'>Tasks: <span class="nv">TOP</span> <span class="o">=</span>&gt; batches:total_scores
+</span><span class='line'><span class="o">(</span>See full trace by running task with --trace<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これはGoogleがセキュリティ強化のため、変な場所からのログインは自動的に拒否しているためです。なので、通常通りWEBでGoogleにログインしてみてそのログインが大丈夫という設定をすれば問題無く通過できます。</p>
+
+<p><img src="/images/posts/2013-07-02_02.png" alt="ss" /></p>
+
+<p>あとはグラフツール使って簡単に見やすくできるのでお手軽&amp;便利メソッドでした。</p>
+
+<p><img src="/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
+まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/01/csrf-protection/">CSRF Protection for Rails and Backbone.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T07:53:00+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
+Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
+して送信させるようにしました。</p>
+
+<p>ちなみに以前はModelに<code>toJSON</code>メソッドでtokenを付加させていたのですがPOST,PUTのみの対応だったので
+DELETE用にも対応できるよう実装してみた。（<code>Model.destroy</code>時には<code>toJSON()</code>を仲介しない）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="err">#</span> <span class="nx">Sync</span>
+</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span> <span class="o">=</span> <span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;update&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;delete&#39;</span>
+</span><span class='line'>    <span class="nx">options_csrf</span> <span class="o">=</span>
+</span><span class='line'>      <span class="nx">headers</span><span class="o">:</span>
+</span><span class='line'>        <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="o">:</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">csrf_token</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
+</span><span class='line'>      <span class="nx">options</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">options_csrf</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>メソッドをオーバーライドしてHEADERに<code>X−CSRF-Token</code>を付加して親処理に渡す。<code>BackboneFrustration.Model.csrf_token()</code>は
+単純にフォームからCSRF用のtokenを取得しているだけです。これでajax通信のときはtokenを無視して処理をするようなその場しのぎな実装をせずになりました。</p>
+
+<p>以下のような処理撲滅です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">protect_from_forgery</span> <span class="ss">except</span><span class="p">:</span> <span class="ss">:craete</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この修正で問題なく動作しているので適用させました。</p>
+
+<p>ところでRails用のgemで<code>backbone-rails</code>なんてものがありましてそこのコードを
+見ていたらだいたい同じことをしていたのであらかじめこれを参考にして勉強すれば良かったと思いました。とほほ。。</p>
+
+<p><a href="https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js">https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js</a></p>
+
+<p>とりあえず、これで一安心。</p>
+
+<h2>実際の修正箇所</h2>
+
+<p><a href="https://github.com/nakajijapan/frustrationme_app/pull/25/files">https://github.com/nakajijapan/frustrationme_app/pull/25/files</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/24/use-commitstatus-at-jenkins/">Jenkinsでcommit Statusを操作する</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
+自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
+
+<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
+
+<h2>監視用の親ジョブ作成</h2>
+
+<ul>
+<li><p>ソースコード管理</p>
+
+<ul>
+<li>Gitを選択</li>
+<li>Repository URL(テスト対象のものを入れる)
+
+<ul>
+<li>ex) git@github.com:paperboy-petit/user-app.git</li>
+</ul>
+</li>
+<li>Branch Specifier()
+
+<ul>
+<li><code>*/master</code>, <code>*/release</code>を記述する</li>
+<li>高度な設定のChoosing strategy
+
+<ul>
+<li><code>Inverse</code>を選択する</li>
+</ul>
+</li>
+<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ビルド環境</p>
+
+<ul>
+<li>テストに必要な環境の設定なので適宜設定する</li>
+</ul>
+</li>
+<li><p>ビルド</p>
+
+<ul>
+<li>ここでテストする処理を実行</li>
+</ul>
+</li>
+<li><p>ビルド後の処理</p>
+
+<ul>
+<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
+<li>Build Triggers 1
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>stable or unstable but not failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=success</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Build Triggers 2
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=failure</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>小ジョブ作成(CommitStatusUPdate)</h2>
+
+<ul>
+<li><p>ビルドのパラメータ化</p>
+
+<ul>
+<li>受け取るパラメータの設定
+
+<ul>
+<li>名前：commit_status</li>
+<li>デフォルト値：success</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ソースコード管理
+親ジョブと同じ設定にする</p></li>
+<li><p>シェルの実行
+コミットステータスの変更を行う</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -H <span class="s1">&#39;Authorization: token hogehogehogehogheohogehoge&#39;</span> <span class="se">\</span>
+</span><span class='line'>  --data <span class="s2">&quot;{\&quot;state\&quot;:\&quot;${commit_status}\&quot;, \&quot;target_url\&quot;:\&quot;${BUILD_URL}\&quot;}&quot;</span> <span class="se">\</span>
+</span><span class='line'>  https://api.github.com/repos/paperboy-petit/user-app/statuses/<span class="k">${</span><span class="nv">GIT_COMMIT</span><span class="k">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>ビルド後の処理
+お好みでIRCに渡します</li>
+</ul>
+
+
+<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
+
+<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
+
+<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
+
+<ul>
+<li>参考
+
+<ul>
+<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/13/backbone-guidebook03/">Bbackbone.js 読書会 第２章</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
+Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
+
+<p>概要と話題になったことをメモろうと思います。</p>
+
+<h2>Model</h2>
+
+<p>データを扱う方法を提供するもの。
+View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
+これがjavascriptで使えちゃう。</p>
+
+<h3>提供するもの</h3>
+
+<ul>
+<li>保持</li>
+<li>検証</li>
+<li>アクセス制御</li>
+<li>保存</li>
+</ul>
+
+
+<h3>Validationをどうするか</h3>
+
+<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
+場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
+その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
+とかはクライアント側でも利用するよねーという話をした。</p>
+
+<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
+それを継承して処理が動作するようになっている。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
+</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
+</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
+</span><span class='line'>
+</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
+</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Collecation</h2>
+
+<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
+Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
+each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
+
+<h2>View</h2>
+
+<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
+
+<ul>
+<li>Viewとして、「適切にDOMツリーを構築する」</li>
+<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
+</ul>
+
+
+<p>前者でいうと</p>
+
+<ul>
+<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
+</ul>
+
+
+<p>後者でいうと</p>
+
+<ul>
+<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
+</ul>
+
+
+<p>なのかなと感じた。</p>
+
+<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
+
+<h2>Router</h2>
+
+<h2>Sync</h2>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -346,362 +888,9 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/05/rubyhiroba/">Rubyhiroba</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-05T00:12:00+09:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
-
-<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
-やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
-反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
-
-<p>perlにしろrubyにしろテストがあるのは大変心強いし、安心します。
-たとえ、最新のRailsにのせ変えたとしてもテストがない時点でもう技術的負債。前のコードと何ら変わりはない。
-まぁ作成した時点負債は負債なんだけどその劣化速度は抑えられるはず。</p>
-
-<p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
-
-<p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>第１章の続き</p>
-
-<p>Eventsあたりのところから</p>
-
-<blockquote><p>Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている</p></blockquote>
-
-<p>と記述されている。</p>
-
-<h2>オブザーバパターンとは</h2>
-
-<p>購読者と発行者と呼ばれるオブジェクトが存在する。
-発行者が購読者のメソッドを直接呼び出す代わりに、購読者は発行者
-のイベントを購読する。イベントが発生したらそれを購読している
-オブジェクトに通知される。</p>
-
-<p>発行者はだれが購読してるのか知らずに済む。</p>
-
-<p>イベント駆動開発の技法。</p>
-
-<p>詳細はここが分かりやすい。
-<a href="http://www.techscore.com/tech/DesignPattern/Observer.html/">http://www.techscore.com/tech/DesignPattern/Observer.html/</a></p>
-
-<h3>Backbone.jsでいう購読者と発行者</h3>
-
-<p>これを以下のようにして考えるとわかりやすい</p>
-
-<ul>
-<li>購読者: View</li>
-<li>発行者 : Model</li>
-</ul>
-
-
-<p>Modelはだれが購読してるかしらなくていい、イベントを通知してあげればいいんです。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># viewの中で
-</span><span class='line'>var entry = new Entry();
-</span><span class='line'>entry.on('change', this.render());</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>メディエータパターン</h2>
-
-<blockquote><p>複数オブジェクトの間を取り持つ仲介者と鳴るオブジェクトを用意し、オブジェクト間の連動の詳細をその仲介者に持たせる
-個々のオブジェクトの独自性を高める</p></blockquote>
-
-<p>内容は理解できたけど、使いどころまだピンときていない。</p>
-
-<p>ここに詳しく記述されていた。
-<a href="http://www.techscore.com/tech/DesignPattern/Mediator.html/">http://www.techscore.com/tech/DesignPattern/Mediator.html/</a></p>
-
-<h2>コラムでのまめ知識</h2>
-
-<p>メモリーリークの問題から<code>on() off()</code>ではなくて <code>listenTo() stopListening()</code>を利用するといい
-v1.0からはView#remove()内部でstopListening() ViewではlistenToしてるので大丈夫！</p>
-
-<h2>Underscore.js</h2>
-
-<p>便利関数の紹介だった。</p>
-
-<ul>
-<li>_.debounce()
-
-<ul>
-<li>一定時間イベントが発生しなかったときに処理を実行する</li>
-</ul>
-</li>
-<li>_.throtte()
-
-<ul>
-<li>コールバックの実行頻度をさげる</li>
-</ul>
-</li>
-<li>_.delay()
-
-<ul>
-<li>処理を遅らせる</li>
-</ul>
-</li>
-<li>_.defer()
-
-<ul>
-<li>コールバック関数の中で最後に実行されることを保証する</li>
-</ul>
-</li>
-</ul>
-
-
-<p>上記二つの関数は今にも使えそうな便利関数だったので導入していきたいな。</p>
-
-<p><a href="http://underscorejs.org/">http://underscorejs.org/</a></p>
-
-<p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
-
-<p>さて来週からは第二章ですよ。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T00:12:00+09:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Backbone.js読書会１日目</h2>
-
-<p>Webも徐々にGUIアプリのような振る舞いが求められていく世の中になってきたし、技術的に可能になってきたと。クライアントでそんな振る舞いをしてくれてるのが現状javascriptです。僕たちはどんどんjavascriiptを利用して多種多様な振る舞いをしていかなければいけないけど、現状のjQueryでばんばん書いていくのにも限界がきてるんじゃないか。そのとき、外国で話題になっていたフレームワークをほそぼそと勉強しはじめ、今や業務にまで導入できることに成功しました。（まだ、いろいろ課題はありますが。。。）</p>
-
-<p>そんなときに、満を持して洋書よりも早く日本の書籍がでてしまったので早速基本に振り返るがてらみんなで知識深めようという目的で読書会はじめました。</p>
-
-<p>「Backbone.js ガイドブック」</p>
-
-<p><a href="http://www.amazon.co.jp/Backbone-js%E3%82%AC%E3%82%A4%E3%83%89%E3%83%96%E3%83%83%E3%82%AF-%E9%AB%98%E6%A9%8B-%E4%BE%91%E4%B9%85/dp/4899773501%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4899773501" target="_blank" title="Backbone.jsガイドブック"><img src="http://ecx.images-amazon.com/images/I/31tI0WaZukL._SL160_.jpg" width="118" height="150" alt="Backbone.jsガイドブック" /></a><br /><a href="http://www.amazon.co.jp/Backbone-js%E3%82%AC%E3%82%A4%E3%83%89%E3%83%96%E3%83%83%E3%82%AF-%E9%AB%98%E6%A9%8B-%E4%BE%91%E4%B9%85/dp/4899773501%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4899773501" target="_blank">Backbone.jsガイドブック</a></p>
-
-<p>はじめは概要なのですらっと。</p>
-
-<p>一つ話題になったのは、基本は「.extend」を利用してインスタンス用のプロパティを作成していくのが基本だけど、クラス用のプロパティってどこで利用するケースがあるかってこと。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">Parent</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">instance_p</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">instance_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">class_p</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">class_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>サンプルみただけだとふーんですよね。僕もいまのところふーんです。</p>
-
-<p>ケースとしてはクラスプロパティにテンプレートをぶち込んでおくのがよさげなのかしらね。例えば、Viewが管理している内部でモーダルを管理しているとき。モーダルは基本一つなのでクラスプロパティであらかじめ作成しておけば使い回しがきくと。$(&lsquo;modal&rsquo;)とかで毎回DOMを操作しなくて済む。</p>
-
-<p>ふと思った訳です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">Parent</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">instance_p</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">instance_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">modal_template</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">class_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">modal_template</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#modal&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">()}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>こんなかんじ。</p>
-
-<p>あと、なんだかんだ実装しながら確認してたら時間かかってしまったので１章の半分くらいで終了。バタリ。</p>
-
-<p>さ。来週もすすめていきますよ。</p>
-
-<h2>追記</h2>
-
-<p>洋書は今月末にでるようだ。</p>
-
-<p><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank" title="Developing Backbone.js Applications"><img src="http://ecx.images-amazon.com/images/I/5171nmxXQdL._SL160_.jpg" width="114" height="150" alt="Developing Backbone.js Applications" /></a><br /><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank">Developing Backbone.js Applications</a></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/03/hello/">Hello</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-03T10:23:00+09:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>こちらでいろいろ記述していくことにしました。</p>
-
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
-
-<h1>Title</h1>
-
-<h2>Sub</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/4/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -747,30 +936,30 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/02/conference-with-developers-2014/">Confrence With Developer2に参加してLTしてきた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/02/happy-new-year/">Happy New Year</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/12/study-ibeacon/">iOS勉強会 iBeaconでできること　に参加してきた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/iphone/'>iphone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (2)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/iphone/'>iphone (2)</a></li><li><a href='/blog/categories/iphone/'>iPhone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
 </section>
 
 <section>
@@ -812,7 +1001,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - nakajijapan -
+  Copyright &copy; 2014 - nakajijapan -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

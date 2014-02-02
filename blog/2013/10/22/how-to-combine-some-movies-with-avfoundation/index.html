@@ -9,9 +9,7 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="こんにちはあのnakajijapanです。
-以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。
-心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ &hellip;">
+  <meta name="description" content="こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -86,23 +84,18 @@
   
 
 
-<time datetime="2013-10-22T23:08:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
+<time datetime="2013-10-22T19:06:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>こんにちはあのnakajijapanです。
-以前、<a href="http://owkr.info/movie/">心霊動画アプリで「もう一度ご覧いただこう」</a> というアプリをリリースしました。
-心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ
-やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理
-がてら情報をまためようと思います。</p>
+<div class="entry-content"><p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
 
 <p>今回主に利用したのが「AV Foundation」です。</p>
 
-<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の
-取得、作成、編集、再エンコードができたりできます。</p>
+<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の 取得、作成、編集、再エンコードができたりできます。</p>
 
 <p>階層的には以下のような階層に存在して、簡単に動画とか写真の処理をしたい場合は</p>
 
@@ -112,19 +105,17 @@
 </ul>
 
 
-<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御
-できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは
-いうまでもありません。</p>
+<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御 できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは いうまでもありません。</p>
 
-<p><img src="/images/posts/2013-10-22_01.png" alt="AV Foundation" />
-<a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
+<p><img src="images/posts/2013-10-22_01.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
 
 <p>では実際にどう実装していけばいいかなのですが、そのために結構なクラスを利用するのでそれぞれざっくり説明していきます。</p>
 
 <h3>AVAsset</h3>
 
-<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること
-ができます。</p>
+<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること ができます。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -135,8 +126,7 @@
 
 <h3>AVAssetTrack</h3>
 
-<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・）
-例えば、アセットから動画と音声に切り分ける。</p>
+<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・） 例えば、アセットから動画と音声に切り分ける。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -159,10 +149,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h3>AVMutableComposition</h3>
+<h3>AVMutableCompositionTrack</h3>
 
-<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり
-するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
+<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -181,9 +170,7 @@
 
 <h3>AVMutableVideoComposition</h3>
 
-<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。
-ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒
-から何秒間を何秒目に結合させるとかできたりします。</p>
+<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒 から何秒間を何秒目に結合させるとかできたりします。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -223,10 +210,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h2>AVAssetExportSession</h2>
+<hr />
 
-<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。
-例えば、mov形式、720x720サイズでファイルに保存させたりできます。</p>
+<h3>AVAssetExportSession</h3>
+
+<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。 例えば、mov形式、720x720サイズでファイルに保存させたりで</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -293,27 +281,23 @@
 
 <p>だいたいの大枠は以下の図を見ると何となくわかるかもしれませんね。</p>
 
-<p><img src="/images/posts/2013-10-22_02.png" alt="Editing" />
-<a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
+<p><img src="images/posts/2013-10-22_02.png" alt="layer" /></p>
+
+<p><a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
 
 <h2>まとめ</h2>
 
-<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり
-説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。
-あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば
-やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った
-ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
+<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり 説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。 あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
 
-<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと
-いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
+<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
 
 <h2>Reference</h2>
 
 <ul>
 <li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation &ndash; 606</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques &ndash; 509</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation &ndash; 612</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation – 606</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques – 509</a></li>
+<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation – 612</a></li>
 </ul>
 
 </div>
@@ -338,12 +322,12 @@
   
 
 
-<time datetime="2013-10-22T23:08:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
+<time datetime="2013-10-22T19:06:00+09:00" pubdate data-updated="true">Oct 22<span>nd</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/objective-c/'>objective-c</a>
+    <a class='category' href='/blog/categories/iphone/'>iphone</a>
   
 </span>
 
@@ -414,30 +398,30 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/02/02/conference-with-developers-2014/">Confrence With Developer2に参加してLTしてきた</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/01/02/happy-new-year/">Happy New Year</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/12/study-ibeacon/">iOS勉強会 iBeaconでできること　に参加してきた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/">AV Foundation Frameworkを利用して動画の結合を行う</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a>
       </li>
     
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/iphone/'>iphone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (2)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/iphone/'>iphone (2)</a></li><li><a href='/blog/categories/iphone/'>iPhone (1)</a></li><li><a href='/blog/categories/iphone/'>iPhone, (1)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/objective-c/'>objective-c (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li></ul>
 </section>
 
 <section>
@@ -480,7 +464,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - nakajijapan -
+  Copyright &copy; 2014 - nakajijapan -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

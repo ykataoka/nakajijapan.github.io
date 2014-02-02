@@ -2,80 +2,98 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/03/03/hello/</loc>
-        <lastmod>2013-06-05T03:09:47+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00/</loc>
-        <lastmod>2013-07-04T10:46:27+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/</loc>
-        <lastmod>2013-07-04T10:46:39+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba/</loc>
-        <lastmod>2013-06-05T00:52:30+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/06/09/install-bower/</loc>
-        <lastmod>2013-06-19T00:14:38+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/</loc>
-        <lastmod>2013-06-19T00:15:41+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/</loc>
-        <lastmod>2013-12-03T17:02:41+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/07/01/csrf-protection/</loc>
-        <lastmod>2013-07-01T08:35:21+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive/</loc>
-        <lastmod>2013-07-02T23:44:30+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/07/13/update-rails4/</loc>
-        <lastmod>2013-07-14T09:30:30+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/</loc>
-        <lastmod>2013-09-30T02:46:54+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton/</loc>
-        <lastmod>2013-09-19T12:02:35+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/</loc>
-        <lastmod>2013-10-01T02:38:05+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>
             http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/
         </loc>
-        <lastmod>2013-10-23T12:35:24+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/</loc>
-        <lastmod>2013-12-16T02:11:43+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/</loc>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/</loc>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/
+        </loc>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/</loc>
+        <lastmod>2014-02-03T00:43:44+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/blog/archives/</loc>
-        <lastmod>2013-12-16T02:11:43+09:00</lastmod>
+        <lastmod>2014-02-03T00:43:44+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/</loc>
-        <lastmod>2013-12-16T02:11:43+09:00</lastmod>
+        <lastmod>2014-02-03T00:43:44+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/new-page/</loc>
-        <lastmod>2013-09-05T02:47:23+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
     <url>
         <loc>http://nakajijapan.github.io/robots.txt</loc>
-        <lastmod>2013-06-03T09:29:22+09:00</lastmod>
+        <lastmod>2014-02-02T23:58:21+09:00</lastmod>
     </url>
 </urlset>
