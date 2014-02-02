@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: ci | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/ci/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2014-02-03T00:48:03+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[jenkinsでcommit statusを操作する]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/"/>
+    <updated>2013-06-24T08:02:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins</id>
+    <content type="html"><![CDATA[<p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
+自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
+
+<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
+
+<h2>監視用の親ジョブ作成</h2>
+
+<ul>
+<li><p>ソースコード管理</p>
+
+<ul>
+<li>Gitを選択</li>
+<li>Repository URL(テスト対象のものを入れる)
+
+<ul>
+<li>ex) git@github.com:paperboy-petit/user-app.git</li>
+</ul>
+</li>
+<li>Branch Specifier()
+
+<ul>
+<li><code>*/master</code>, <code>*/release</code>を記述する</li>
+<li>高度な設定のChoosing strategy
+
+<ul>
+<li><code>Inverse</code>を選択する</li>
+</ul>
+</li>
+<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ビルド環境</p>
+
+<ul>
+<li>テストに必要な環境の設定なので適宜設定する</li>
+</ul>
+</li>
+<li><p>ビルド</p>
+
+<ul>
+<li>ここでテストする処理を実行</li>
+</ul>
+</li>
+<li><p>ビルド後の処理</p>
+
+<ul>
+<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
+<li>Build Triggers 1
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>stable or unstable but not failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=success</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Build Triggers 2
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=failure</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>小ジョブ作成(CommitStatusUPdate)</h2>
+
+<ul>
+<li><p>ビルドのパラメータ化</p>
+
+<ul>
+<li>受け取るパラメータの設定
+
+<ul>
+<li>名前：commit_status</li>
+<li>デフォルト値：success</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ソースコード管理
+親ジョブと同じ設定にする</p></li>
+<li><p>シェルの実行
+コミットステータスの変更を行う</p></li>
+</ul>
+
+
+<p><code>bash
+curl -H 'Authorization: token hogehogehogehogheohogehoge' \
+  --data "{\"state\":\"${commit_status}\", \"target_url\":\"${BUILD_URL}\"}" \
+  https://api.github.com/repos/paperboy-petit/user-app/statuses/${GIT_COMMIT}
+</code></p>
+
+<ul>
+<li>ビルド後の処理
+お好みでIRCに渡します</li>
+</ul>
+
+
+<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
+
+<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
+
+<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
+
+<ul>
+<li>参考
+
+<ul>
+<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

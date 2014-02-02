@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ruby | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-03T00:44:08+09:00</updated>
+  <updated>2014-02-03T00:48:03+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -90,6 +90,31 @@ Tasks: TOP =&gt; batches:total_scores
 
 <p><img src="/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
 まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rubyhiroba]]></title>
+    <link href="http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba/"/>
+    <updated>2013-06-05T00:12:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba</id>
+    <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
+
+
+<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
+
+<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
+以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
+やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
+反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
+
+<p>perlにしろrubyにしろテストがあるのは大変心強いし、安心します。
+たとえ、最新のRailsにのせ変えたとしてもテストがない時点でもう技術的負債。前のコードと何ら変わりはない。
+まぁ作成した時点負債は負債なんだけどその劣化速度は抑えられるはず。</p>
+
+<p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
+
+<p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
 ]]></content>
   </entry>
   

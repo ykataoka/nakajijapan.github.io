@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[categories: iPhone | Nakajijapan]]></title>
+  <title><![CDATA[categories: iphone | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/iphone/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-03T00:44:08+09:00</updated>
+  <updated>2014-02-03T00:48:03+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,48 +14,27 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
-    <updated>2014-02-02T23:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
-    <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
-iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
-いろいろ収穫があり、たくさん勉強させていただきました。</p>
+    <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
+    <updated>2014-01-19T19:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
+    <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
 
-<p>そんな僕もここでLTをしてきたのでのせときます。以前は、MA9でも発表している
-ですがあくまでプロダクトとして発表だったのと今回は技術的なカンファレンス
-なので技術的側面に焦点をあてて発表させていただきました。</p>
+<h3>回転問題</h3>
 
-<p>話した内容はアプリでがんがん利用していた<code>AV Foundation</code>の話をしてきました。</p>
+<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
 
-<script async class="speakerdeck-embed" data-id="ebaab3406d820131c6665e5071095c76" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+<p>```</p>
 
+<pre><code>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
+CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
+[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];
+</code></pre>
 
-<p>(発表時にディスプレイコネクタが認識しなくて発狂していたところ<code>@tamotamago</code>さんにパソコンを貸していただき大変感謝です！)</p>
+<p>```</p>
 
-<p>自分でもいろいろとメモっていたのですが以下のサイトがよく纏められていたのでご参照ください。</p>
-
-<h3>Developers.IO</h3>
-
-<ul>
-<li><a href="http://dev.classmethod.jp/smartphone/ios-confwd2/">http://dev.classmethod.jp/smartphone/ios-confwd2/</a></li>
-</ul>
-
-
-<h3>Togetter</h3>
-
-<ul>
-<li><a href="http://togetter.com/li/623779">http://togetter.com/li/623779</a></li>
-</ul>
-
-
-<h3>Ustream録画</h3>
-
-<ul>
-<li><a href="http://www.ustream.tv/recorded/43319245">http://www.ustream.tv/recorded/43319245</a></li>
-<li><a href="http://www.ustream.tv/recorded/43323576">http://www.ustream.tv/recorded/43323576</a></li>
-</ul>
-
+<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
 ]]></content>
   </entry>
   
