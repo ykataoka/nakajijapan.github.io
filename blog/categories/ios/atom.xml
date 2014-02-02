@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ios | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-03T00:48:03+09:00</updated>
+  <updated>2014-02-03T00:50:18+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -140,6 +140,31 @@ timeDuration = CMTimeMake(3, 1);
 <h2>Ref</h2>
 
 <p><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:">https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
+    <updated>2014-01-19T19:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
+    <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
+
+<h3>回転問題</h3>
+
+<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
+
+<p>```</p>
+
+<pre><code>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
+CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
+[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];
+</code></pre>
+
+<p>```</p>
+
+<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
 ]]></content>
   </entry>
   
