@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-17T03:25:47+09:00</updated>
+  <updated>2014-02-17T03:26:24+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -226,16 +226,20 @@
 大企業もCIでやることはだいたいかわらないけど、実機数十台用意してそこにデプロイしてテストするとこは大企業だなと感じました。</p>
 
 <ul>
-<li>Frank</li>
-<li><p><a href="http://www.testingwithfrank.com/">http://www.testingwithfrank.com/</a></p></li>
-<li><p>fruitstrap</p>
+<li>Frank
+
+<ul>
+<li><a href="http://www.testingwithfrank.com/">http://www.testingwithfrank.com/</a></li>
+</ul>
+</li>
+<li>fruitstrap
 
 <ul>
 <li><a href="https://github.com/ghughes/fruitstrap">https://github.com/ghughes/fruitstrap</a></li>
 <li><code>This project is no longer maintained.</code>が気になりました。。。</li>
 </ul>
 </li>
-<li><p>Instruments</p>
+<li>Instruments
 
 <ul>
 <li>Xcodeに付属しているプロファイラツール</li>
