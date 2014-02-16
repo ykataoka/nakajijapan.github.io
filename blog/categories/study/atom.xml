@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: study | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/study/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2014-02-17T03:24:21+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Developers Summit 2014]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014/"/>
+    <updated>2014-02-15T01:51:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014</id>
+    <content type="html"><![CDATA[<p>先週ではありますが、Developers Summit 2014に参加してきました。
+サミットが平日だったので全部はみれていませんが、いくつかのステージをみること
+はできたのでそのメモを記します。</p>
+
+<ul>
+<li>Developers Summit 2014
+
+<ul>
+<li><a href="http://event.shoeisha.jp/devsumi/20140213/">http://event.shoeisha.jp/devsumi/20140213/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>iOSアプリケーションの継続的デリバリー</h2>
+
+<ul>
+<li>発表者
+
+<ul>
+<li><a href="https://event.shoeisha.jp/devsumi/20140213/session/430">https://event.shoeisha.jp/devsumi/20140213/session/430</a></li>
+</ul>
+</li>
+<li>発表資料
+
+<ul>
+<li><a href="http://sssslide.com/www.slideshare.net/numeha/ios-31199969">http://sssslide.com/www.slideshare.net/numeha/ios-31199969</a></li>
+</ul>
+</li>
+</ul>
+
+
+<h3>どのくらいスピードが必要なのか</h3>
+
+<ul>
+<li>iOS１ヶ月で約四回リリース</li>
+<li>ネックは申請降りるのに７日間必要。。。</li>
+<li>1年で１２回のリリース</li>
+<li>自分たちのリリースのリズムできてますか？
+
+<ul>
+<li>いつもリリースできる状態にしときましょう!!</li>
+</ul>
+</li>
+<li>継続的デリバリー
+
+<ul>
+<li>ビジネスの主導権を握る為にCIやるんだ!!!</li>
+</ul>
+</li>
+</ul>
+
+
+<blockquote><p>価値のあるソフトウェアをはやく継続的にリリースする</p></blockquote>
+
+<h3>徹底的に自動化してきた</h3>
+
+<h4>コード品質のパイプライン</h4>
+
+<ol>
+<li>コード取得 &ndash;> Git</li>
+<li>ビルド &ndash;> Xcode</li>
+<li>コード行数 &ndash;> SLOCCount</li>
+<li>重複コード &ndash;> DRY</li>
+<li><p>警告 &ndash;> Warnnings</p></li>
+<li><p>テストにはGHUnitを利用している</p></li>
+<li>カバレッジはgcovr</li>
+</ol>
+
+
+<h3>製品品質のパイプライン</h3>
+
+<ul>
+<li>実記でのテストが必要</li>
+<li>テストフレームワークを同封してビルドしている</li>
+<li>自動でipaファイル作成</li>
+<li>複数のデバイスに自動でインストール
+
+<ul>
+<li>fruitstrap or Instruments</li>
+</ul>
+</li>
+<li>特定の端末のピンポイントでデプロイする</li>
+<li>Frankというテストフレーム</li>
+<li>httpで外部から複数代のios端末を操作</li>
+<li>ios7からのTouch問うの操作API禁止</li>
+</ul>
+
+
+<p>どうしよう。。。</p>
+
+<ul>
+<li>解決策としてiOS6専用にしよう</li>
+<li>iOS7はInstruments経由で操作</li>
+<li>ビルドマシン一代につきiOS一代にいれよう</li>
+<li>テストフレームワークを複数いれられない
+
+<ul>
+<li>シングルプロセスでしか動作しないらしい</li>
+</ul>
+</li>
+</ul>
+
+
+<p>どうしよう。。。</p>
+
+<ul>
+<li>MacサーバでVMサーバ作って複数台での端末で実装してみたよ
+
+<ul>
+<li>実機のテストにはさまざまなシリーズ・OSバージョンのiPhone,iPadを用意してるらしい</li>
+</ul>
+</li>
+</ul>
+
+
+<p>エンタープライズすごい！</p>
+
+<h2>Tokyo MotionControl Network</h2>
+
+<ul>
+<li>Facebook
+
+<ul>
+<li><a href="https://www.facebook.com/TokyoMotioncontrolNetwork">https://www.facebook.com/TokyoMotioncontrolNetwork</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>モーションキャプチャを利用したさまざまなコンテンツの紹介をされていました。</p>
+
+<h4>VIRTUAL FASHION</h4>
+
+<ul>
+<li><code>Kinect/PrimeSence</code>で作成</li>
+<li>ボーントラッキングの技術をもちいてCGノ衣装をマッピング</li>
+<li>360度マッピングしてる</li>
+</ul>
+
+
+<h4>TRANSSHOME</h4>
+
+<ul>
+<li>ポーズをとったその陰で家を自動生成してくれる</li>
+<li>子供受けがいい</li>
+</ul>
+
+
+<h4>AIR SHODOU</h4>
+
+<ul>
+<li><code>Kinect</code>で作成</li>
+<li>書道をモーションキャプチャを通して描くシステム</li>
+</ul>
+
+
+<h4>執事力</h4>
+
+<ul>
+<li>執事のようにきれいな姿勢で入れるか検定する</li>
+<li>ボーントラッキングで検査している</li>
+</ul>
+
+
+<h4>うるしずく</h4>
+
+<h4>nt-kinesys</h4>
+
+<ul>
+<li><code>PrimeSense</code>で作成</li>
+</ul>
+
+
+<h4>ゲゲゲの鬼太郎</h4>
+
+<ul>
+<li>近づくと全身がネズミ男になるらしいです</li>
+</ul>
+
+
+<h3>メモ</h3>
+
+<p>他にもの以下のセッションが行われていました。</p>
+
+<ul>
+<li>モーションコントロールコンテンツの実装からみえてきたもの
+
+<ul>
+<li><a href="http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi">http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi</a></li>
+</ul>
+</li>
+<li>モーションセンサーの現状と2014年の予測
+
+<ul>
+<li><a href="http://www.slideshare.net/kaorun55/devsumi-201414c5">http://www.slideshare.net/kaorun55/devsumi-201414c5</a></li>
+</ul>
+</li>
+</ul>
+
+
+<h2>所感</h2>
+
+<p>今回一番勉強になったのはメインでリコーさんのiOSの発表で、いろいろ勉強させていただきました。
+そこでいくつかのツールがでてきたので今度利用してみようと思います。
+大企業もCIでやることはだいたいかわらないけど、実機数十台用意してそこにデプロイしてテストするとこは大企業だなと感じました。</p>
+
+<ul>
+<li>Frank</li>
+<li><p><a href="http://www.testingwithfrank.com/">http://www.testingwithfrank.com/</a></p></li>
+<li><p>fruitstrap</p>
+
+<ul>
+<li><a href="https://github.com/ghughes/fruitstrap">https://github.com/ghughes/fruitstrap</a></li>
+<li><code>This project is no longer maintained.</code>が気になりました。。。</li>
+</ul>
+</li>
+<li><p>Instruments</p>
+
+<ul>
+<li>Xcodeに付属しているプロファイラツール</li>
+<li>どの処理・メソッドが遅いのか、どこでメモリを消費しているのか調査する</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
