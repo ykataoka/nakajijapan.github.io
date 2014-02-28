@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: vagrant | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/vagrant/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2014-02-28T21:33:48+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
+    <updated>2014-02-28T20:34:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
+    <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
+
+<p>あるサービスのVagrant化を進めていて、エンジニアは当然のことデザイナさんでもローカルで開発できるように環境をそろえていた時に苦労したちょっとしたTipsを発表しました。まぁちょっとしたことなのですが、はまると何時間もはまるときあるのでこういう機会があると大変助かります。。。</p>
+
+<script async class="speakerdeck-embed" data-id="dc857f2082a0013107e95ea41e86eac8" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>僕の他にも公開しているメンバーがいるのでご紹介します。
+こちらのブログにもリンクがあるので他の人の資料にもたどりつけると思います。</p>
+
+<h3>うづら(udzura)さん</h3>
+
+<p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
+(アフェリエイトおじさんです。。。)</p>
+]]></content>
+  </entry>
+  
+</feed>

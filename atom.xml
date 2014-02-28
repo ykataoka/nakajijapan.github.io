@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-17T03:35:14+09:00</updated>
+  <updated>2014-02-28T21:33:48+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,28 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
+    <updated>2014-02-28T20:34:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
+    <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
+
+<p>あるサービスのVagrant化を進めていて、エンジニアは当然のことデザイナさんでもローカルで開発できるように環境をそろえていた時に苦労したちょっとしたTipsを発表しました。まぁちょっとしたことなのですが、はまると何時間もはまるときあるのでこういう機会があると大変助かります。。。</p>
+
+<script async class="speakerdeck-embed" data-id="dc857f2082a0013107e95ea41e86eac8" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>僕の他にも公開しているメンバーがいるのでご紹介します。
+こちらのブログにもリンクがあるので他の人の資料にもたどりつけると思います。</p>
+
+<h3>うづら(udzura)さん</h3>
+
+<p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
+(アフェリエイトおじさんです。。。)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Developers Summit 2014]]></title>
@@ -2344,35 +2366,6 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 <p>洋書は今月末にでるようだ。</p>
 
 <p><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank" title="Developing Backbone.js Applications"><img src="http://ecx.images-amazon.com/images/I/5171nmxXQdL._SL160_.jpg" width="114" height="150" alt="Developing Backbone.js Applications" /></a><br /><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank">Developing Backbone.js Applications</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[hello]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/03/03/hello/"/>
-    <updated>2013-03-03T10:23:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/03/03/hello</id>
-    <content type="html"><![CDATA[<p>こちらでいろいろ記述していくことにしました。</p>
-
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
-
-<h1>Title</h1>
-
-<h2>Sub</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
 ]]></content>
   </entry>
   
