@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ios | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-02-28T21:33:48+09:00</updated>
+  <updated>2014-03-02T17:02:23+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,176 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
+    <updated>2014-02-26T21:44:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
+    <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
+
+<ul>
+<li><p>ヤフーさん発表資料
+<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
+<li><p>クラスメソッドさん発表資料
+<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
+</ul>
+
+
+<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
+
+<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
+
+<h2>code snippet</h2>
+
+<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
+
+<p><img src="images/posts/2014-02-28_02.png" alt="01" /></p>
+
+<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
+
+<p><img src="images/posts/2014-02-28_01.png" alt="01" /></p>
+
+<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
+作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
+
+<p>試しにUIAlertViewをいれてみました。</p>
+
+<p>```obj-c</p>
+
+<pre><code>UIAlertView *alertView = [[UIAlertView alloc] initWithTitle : NSLocalizedString(@"Title", nil)
+                                                    message : NSLocalizedString(@"Message", nil)
+                                                   delegate : self
+                                          cancelButtonTitle : NSLocalizedString(@"OK", nil)
+                                          otherButtonTitles : nil
+                          ];
+[alertView setTag:1];
+[alertView show];
+</code></pre>
+
+<p>```</p>
+
+<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
+
+<h2>code template</h2>
+
+<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
+
+<p><code>
+mkdir -p ~/Library/Developer/Xcode/Templates/File Templates
+cd    ~/Library/Developer/Xcode/Templates/File Templates
+cp /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/* .
+</code></p>
+
+<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
+
+<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。
+```</p>
+
+<pre><code>&lt;dict&gt;
+  &lt;key&gt;Default&lt;/key&gt;
+  &lt;string&gt;false&lt;/string&gt;
+  &lt;key&gt;Identifier&lt;/key&gt;
+  &lt;string&gt;Nakajijapan&lt;/string&gt;
+  &lt;key&gt;Name&lt;/key&gt;
+  &lt;string&gt;Nakajijapan&lt;/string&gt;
+  &lt;key&gt;RequiredOptions&lt;/key&gt;
+  &lt;dict&gt;
+      &lt;key&gt;cocoaTouchSubclass&lt;/key&gt;
+      &lt;array&gt;
+        &lt;string&gt;NSObject&lt;/string&gt;
+        &lt;string&gt;UIViewController&lt;/string&gt;
+      &lt;/array&gt;
+  &lt;/dict&gt;
+  &lt;key&gt;Type&lt;/key&gt;
+  &lt;string&gt;checkbox&lt;/string&gt;
+&lt;/dict&gt;
+</code></pre>
+
+<p>```</p>
+
+<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
+
+<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
+
+<p>```
+//
+//  <strong><em>FILENAME</em></strong>
+//
+//  Created by <strong><em>FULLUSERNAME</em></strong>.
+//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
+//</p>
+
+<p><strong><em>IMPORTHEADER_cocoaTouchSubclass</em></strong></p>
+
+<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> : <strong><em>VARIABLE_cocoaTouchSubclass</em></strong></p>
+
+<p>@end
+```</p>
+
+<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
+
+<p>```
+//
+//  <strong><em>FILENAME</em></strong>
+//
+//  Created by <strong><em>FULLUSERNAME</em></strong>.
+//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
+//</p>
+
+<h1>import &ldquo;<strong><em>FILEBASENAME</em></strong>.h&rdquo;</h1>
+
+<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> ()</p>
+
+<p>@end</p>
+
+<p>@implementation <strong><em>FILEBASENAMEASIDENTIFIER</em></strong></p>
+
+<ul>
+<li><p>(id)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil
+{
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
+      // Custom initialization
+  }
+  return self;
+}</p></li>
+<li><p>(void)viewDidLoad
+{
+  [super viewDidLoad];
+// Do any additional setup after loading the view.
+}</p></li>
+<li><p>(void)didReceiveMemoryWarning
+{
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
+}</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>これで自分好みの設定にできました。</p>
+
+<h3>参加してみて</h3>
+
+<p>吉田 一星さんの発表が印象的で</p>
+
+<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+
+
+<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
+
+<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
+Appleが未だ実現されていない機能を先に作れ</p></blockquote>
+
+<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
+まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
+
+<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
@@ -394,169 +564,6 @@ $ uuidgen
 
 <p><a href="http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007">http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007</a>
 <a href="http://www.slideshare.net/yuki0211s/i-beacon-29135560">http://www.slideshare.net/yuki0211s/i-beacon-29135560</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AV Foundation Frameworkを利用して動画の結合を行う]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/"/>
-    <updated>2013-10-22T19:06:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation</id>
-    <content type="html"><![CDATA[<p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
-
-<p>今回主に利用したのが「AV Foundation」です。</p>
-
-<p>ざっくりいうとメディア情報（動画）を細かく制御できるようにしたフレームワークで、メタ情報の 取得、作成、編集、再エンコードができたりできます。</p>
-
-<p>階層的には以下のような階層に存在して、簡単に動画とか写真の処理をしたい場合は</p>
-
-<ul>
-<li>Media Player Framework(MPMoviePlayerController, MPMoviePlayerViewController)</li>
-<li>UIKit(UIIMagePickerController)</li>
-</ul>
-
-
-<p>を実装すれば難なく実装できちゃいます。ただ、今回は動画にいろんなエフェクトをいれたいのでもっと細かく制御 できる下の階層のフレームワークを使いました。感覚的に細かい制御できるようになるのでそのぶん面倒くさいのは いうまでもありません。</p>
-
-<p><img src="/images/posts/2013-10-22_01.png" alt="layer" /></p>
-
-<p><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html">https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/Articles/00_Introduction.html</a></p>
-
-<p>では実際にどう実装していけばいいかなのですが、そのために結構なクラスを利用するのでそれぞれざっくり説明していきます。</p>
-
-<h3>AVAsset</h3>
-
-<p>iPodや写真ライブラリのメディア情報をオブジェクトとして保持することができ、これからいろんなの情報を切り出して取得すること ができます。</p>
-
-<p><code>obj-c
-AVAsset*                   videoAsset;
-videoAsset = [[AVURLAsset alloc] initWithURL:movieUrl options:nil];
-</code></p>
-
-<h3>AVAssetTrack</h3>
-
-<p>アセットの情報からトラックレベルで切り出した情報。（うまく翻訳できなかった・・・） 例えば、アセットから動画と音声に切り分ける。</p>
-
-<p>```obj-c
-AVAsset<em>                   videoAsset;
-AVAssetTrack</em>              videoTrack;
-AVAssetTrack*              audioTrack;</p>
-
-<p>videoAsset = [[AVURLAsset alloc] initWithURL:movieUrl options:nil];</p>
-
-<p>// アセットからトラックを取得
-videoTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-audioTrack = [[videoAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0];
-```</p>
-
-<h3>AVMutableCompositionTrack</h3>
-
-<p>様々なメディア情報を結合したものです。このクラスで様々に編集された動画や音声を結合したり、時間の制御をしたり するクラスです。最終的にAVAssetExportSessionに渡してエキスポート処理（実際にファイルに保存する）します。</p>
-
-<p>```obj-c
-AVMutableComposition<em>      mixComposition;
-AVMutableCompositionTrack</em> compositionVideoTrack;</p>
-
-<p>// コンポジション作成
-mixComposition = [AVMutableComposition composition];
-compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-```</p>
-
-<h3>AVMutableVideoComposition</h3>
-
-<p>AVMutableCompositionで新しいトラックを追加したときに返り値としてとれるもです。追加されたオブジェクトの参照で空のトラックって感じなんでしょうか。 ここに実際のメディア情報を入れていきます。メディアタイプで動画とか音声とか格納することができます。あと、この動画の何秒 から何秒間を何秒目に結合させるとかできたりします。</p>
-
-<p>```obj-c
-compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];</p>
-
-<p>[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, timeDuration)</p>
-
-<pre><code>                           ofTrack:_videoTrack
-                            atTime:kCMTimeZero
-                             error:nil];
-</code></pre>
-
-<p>[compositionVideoTrack setPreferredTransform:[videoTrack preferredTransform]];
-```</p>
-
-<h3>AVMutableVideoCompositionLayerInstruction</h3>
-
-<p>アセットのトラックに対して回転、透過度、クロッピングができます。</p>
-
-<p>```obj-c
-// ここでは動画を小さくして指定の位置へ移動させてます。
-CGAffineTransform scale      = CGAffineTransformMakeScale(0.30f, 0.30f);
-CGAffineTransform trnsration = CGAffineTransformMakeTranslation(30, 406);</p>
-
-<p>AVMutableVideoCompositionLayerInstruction* <em>layerInstruction;
-</em>layerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:<em>compositionVideoTrack];
-[</em>layerInstruction setTransform:CGAffineTransformConcat(scale, trnsration) atTime:kCMTimeZero];
-```</p>
-
-<hr />
-
-<h3>AVAssetExportSession</h3>
-
-<p>さまざまなアセット情報を利用して指定されたフォーマットに変換したり動画のトリミングを行います。 例えば、mov形式、720x720サイズでファイルに保存させたりで</p>
-
-<p>```obj-c
-videoComp = [AVMutableVideoComposition videoComposition];
-videoComp.renderSize    = CGSizeMake(720, 720);
-videoComp.frameDuration = CMTimeMake(1, 24); // framerate</p>
-
-<p>// AVCompositionをベースにAVAssetExportを生成
-assetExportSession = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPreset1280x720];</p>
-
-<p>// 合成用のVideoCompositionを設定
-assetExportSession.videoComposition = videoComp;</p>
-
-<p>// エクスポートファイルの設定
-NSURL *composedMovieUrl = [NSURL fileURLWithPath:composedMoviePath];
-assetExportSession.outputFileType = AVFileTypeQuickTimeMovie;
-assetExportSession.outputURL = composedMovieUrl;
-assetExportSession.shouldOptimizeForNetworkUse = YES;</p>
-
-<p>// エキスポート処理
-[assetExportSession exportAsynchronouslyWithCompletionHandler:^{</p>
-
-<pre><code>switch ([exportSession status]) {
-    case AVAssetExportSessionStatusFailed:
-        NSLog(@"Export failed: %@", [[exportSession error] localizedDescription]);
-        break;
-    case AVAssetExportSessionStatusCancelled:
-        NSLog(@"Export canceled");
-        break;
-    default:
-        break;
-}
-</code></pre>
-
-<p>}];
-```</p>
-
-<p>主に利用するクラスを説明しました。これらを駆使して実装すれば簡単な動画の結合ができるようになります。</p>
-
-<p>だいたいの大枠は以下の図を見ると何となくわかるかもしれませんね。</p>
-
-<p><img src="/images/posts/2013-10-22_02.png" alt="layer" /></p>
-
-<p><a href="https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html">https://developer.apple.com/library/ios/DOCUMENTATION/AudioVideo/Conceptual/AVFoundationPG/Articles/03_Editing.html</a></p>
-
-<h2>まとめ</h2>
-
-<p>どうでしょう。ざっくりとですが動画を結合するのに必要なクラスの説明とどのように実装されていくのかをざっくり 説明しました。本当に最初の方は？？？となってしまうと思いますが実装していくうちに分かってくるようになります。 あとこれ系の情報はあんまりネット上にはないのでしっかりと学びたいもっと動画カスタマイズしたという人がいれば やはり<code>AV Foundation Programming Guide</code>をじっくり読むのが最短だししっかり理解できるとおもいました。あと困った ことがあったら <a href="http://stackoverflow.com/">http://stackoverflow.com/</a> で同じ人が困っているかもしれないのでみるといいです。</p>
-
-<p>応用編としては動画をスローモーションにさせたり、ワイプのような動画を作成したり、画像をアニメーションさせたりと いろいろありますが説明していこうと思います。というか時間がたったら忘れそうな知識なのでやります。。。</p>
-
-<h2>Reference</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Moving to AV Kit and AV Foundation – 606</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Core Image Effects and Techniques – 509</a></li>
-<li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation – 612</a></li>
-</ul>
-
 ]]></content>
   </entry>
   

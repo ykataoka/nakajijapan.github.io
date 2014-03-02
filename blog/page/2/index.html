@@ -9,9 +9,10 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="明けましておめでとうございます。 時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
-３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。 いかがおすごしでしょうか。
-nakajijapanです。 去年を振り返ってみると、 &hellip;">
+  <meta name="description" content="以前の記事でも書いたのですが、心霊動画アプリ「もう一度ご覧いただこう」というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。 回転問題 そのまま動画を保存すると270度になってしまっているので回転する必要があった 1
+2
+3
+4 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +68,58 @@ nakajijapanです。 去年を振り返ってみると、 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-19T19:32:00+09:00" pubdate data-updated="true">Jan 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
+
+<h3>回転問題</h3>
+
+<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+</span><span class='line'>CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
+</span><span class='line'>CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
+</span><span class='line'>[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -731,148 +784,6 @@ iOS7でテストして仮に問題が発生したときにその対応でリリ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-18T20:19:00+09:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
-UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
-しないといけないようです。</p>
-
-<p>なので自分なりにそれっぽいのを実装してみました。
-（とりあえず手動でon/offで切り替えるUIにしてます）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ライトが利用できたら表示</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">torchAvailable</span> <span class="o">==</span> <span class="n">YES</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">UIButton</span><span class="o">*</span> <span class="n">toggleLightButton</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">55</span><span class="p">)];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setTitle:</span><span class="s">@&quot;ON&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 画像を左側に埋め込む</span>
-</span><span class='line'>    <span class="n">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;light.png&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">CALayer</span><span class="o">*</span> <span class="n">imgLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="n">layer</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">CFBridgingRelease</span><span class="p">([</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">frame</span>    <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">imgLayer</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">toggleLightButton</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際できたのがこんな感じ。
-なんかそれっぽくできました。（アイコンは当てなのであしからず）</p>
-
-<p><img src="/images/posts/2013-09-18_01.png" alt="ss" /></p>
-
-<p>基本は<code>CALayer</code>でデザインの修正をおこなう。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>画像を組み込んだ場合は文字と被るといけないので文字の表示位置をずらします。
-XIBの場合はIBの左側のメニューで設定できるのですが、それを実装で行うときは<code>UIEdgeInsets</code>クラスを
-利用します。CSSのイメージでいうとpaddingをイメージして設定すると想像できます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
-そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -925,6 +836,10 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
       </li>
     
       <li class="post">
+        <a href="/blog/2014/02/26/yxcm-epilogue/">【iOS勉強会】ヤフー vs クラスメソッド に参加してきた</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/15/developers-summit-2014/">Developers Summit 2014</a>
       </li>
     
@@ -936,15 +851,11 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
         <a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>ios (6)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>ios (7)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
 </section>
 
 <section>
