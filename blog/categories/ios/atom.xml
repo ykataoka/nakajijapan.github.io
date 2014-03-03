@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ios | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-02T17:02:23+09:00</updated>
+  <updated>2014-03-03T14:15:35+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -36,11 +36,11 @@
 
 <h3><code>Code Snippet Library</code>を開いた状態にする</h3>
 
-<p><img src="images/posts/2014-02-28_02.png" alt="01" /></p>
+<p><img src="/images/posts/2014-02-28_02.png" alt="01" /></p>
 
 <h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
 
-<p><img src="images/posts/2014-02-28_01.png" alt="01" /></p>
+<p><img src="/images/posts/2014-02-28_01.png" alt="01" /></p>
 
 <p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
 作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
