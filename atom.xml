@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-03T14:15:35+09:00</updated>
+  <updated>2014-03-21T18:32:01+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
+    <updated>2014-03-17T03:37:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
+    <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
+持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
+本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
+いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
+内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
+
+<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
+
+<p>インストール方法は至って簡単で</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod "NKJMovieComposer"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
+
+<p>機能としては以下の機能が実装できます。</p>
+
+<ul>
+<li>動画結合</li>
+<li>ワイプ</li>
+<li>フェードイン・アウト</li>
+</ul>
+
+
+<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
+まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
+
+<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
@@ -2415,110 +2455,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
 <p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
 
 <p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第１章 続き]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/"/>
-    <updated>2013-05-30T00:12:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01</id>
-    <content type="html"><![CDATA[<p>第１章の続き</p>
-
-<p>Eventsあたりのところから</p>
-
-<blockquote><p>Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている</p></blockquote>
-
-<p>と記述されている。</p>
-
-<h2>オブザーバパターンとは</h2>
-
-<p>購読者と発行者と呼ばれるオブジェクトが存在する。
-発行者が購読者のメソッドを直接呼び出す代わりに、購読者は発行者
-のイベントを購読する。イベントが発生したらそれを購読している
-オブジェクトに通知される。</p>
-
-<p>発行者はだれが購読してるのか知らずに済む。</p>
-
-<p>イベント駆動開発の技法。</p>
-
-<p>詳細はここが分かりやすい。
-<a href="http://www.techscore.com/tech/DesignPattern/Observer.html/">http://www.techscore.com/tech/DesignPattern/Observer.html/</a></p>
-
-<h3>Backbone.jsでいう購読者と発行者</h3>
-
-<p>これを以下のようにして考えるとわかりやすい</p>
-
-<ul>
-<li>購読者: View</li>
-<li>発行者 : Model</li>
-</ul>
-
-
-<p>Modelはだれが購読してるかしらなくていい、イベントを通知してあげればいいんです。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># viewの中で
-</span><span class='line'>var entry = new Entry();
-</span><span class='line'>entry.on('change', this.render());</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>メディエータパターン</h2>
-
-<blockquote><p>複数オブジェクトの間を取り持つ仲介者と鳴るオブジェクトを用意し、オブジェクト間の連動の詳細をその仲介者に持たせる
-個々のオブジェクトの独自性を高める</p></blockquote>
-
-<p>内容は理解できたけど、使いどころまだピンときていない。</p>
-
-<p>ここに詳しく記述されていた。
-<a href="http://www.techscore.com/tech/DesignPattern/Mediator.html/">http://www.techscore.com/tech/DesignPattern/Mediator.html/</a></p>
-
-<h2>コラムでのまめ知識</h2>
-
-<p>メモリーリークの問題から<code>on() off()</code>ではなくて <code>listenTo() stopListening()</code>を利用するといい
-v1.0からはView#remove()内部でstopListening() ViewではlistenToしてるので大丈夫！</p>
-
-<h2>Underscore.js</h2>
-
-<p>便利関数の紹介だった。</p>
-
-<ul>
-<li>_.debounce()
-
-<ul>
-<li>一定時間イベントが発生しなかったときに処理を実行する</li>
-</ul>
-</li>
-<li>_.throtte()
-
-<ul>
-<li>コールバックの実行頻度をさげる</li>
-</ul>
-</li>
-<li>_.delay()
-
-<ul>
-<li>処理を遅らせる</li>
-</ul>
-</li>
-<li>_.defer()
-
-<ul>
-<li>コールバック関数の中で最後に実行されることを保証する</li>
-</ul>
-</li>
-</ul>
-
-
-<p>上記二つの関数は今にも使えそうな便利関数だったので導入していきたいな。</p>
-
-<p><a href="http://underscorejs.org/">http://underscorejs.org/</a></p>
-
-<p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
-
-<p>さて来週からは第二章ですよ。</p>
 ]]></content>
   </entry>
   

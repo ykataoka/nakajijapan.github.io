@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ios | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-03T14:15:35+09:00</updated>
+  <updated>2014-03-21T18:32:01+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,46 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
+    <updated>2014-03-17T03:37:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
+    <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
+持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
+本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
+いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
+内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
+
+<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
+
+<p>インストール方法は至って簡単で</p>
+
+<p><code>
+pod "NKJMovieComposer"
+</code></p>
+
+<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
+
+<p>機能としては以下の機能が実装できます。</p>
+
+<ul>
+<li>動画結合</li>
+<li>ワイプ</li>
+<li>フェードイン・アウト</li>
+</ul>
+
+
+<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
+まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
+
+<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
@@ -335,235 +375,6 @@ CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVid
 <p>```</p>
 
 <p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[iOS勉強会 iBeaconでできること　に参加してきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/"/>
-    <updated>2013-12-12T19:06:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon</id>
-    <content type="html"><![CDATA[<p>Developer&rsquo;s IOさんが主催する勉強会に参加してきました。
-<a href="http://connpass.com/event/4225/">http://connpass.com/event/4225/</a></p>
-
-<p>iOS7の発表がでてから<code>iBeacon</code>に興味を持ち出して、このにゅ〜てくのろじ〜を面白いことにつかえないかと調査していたのですが、今回もっと知識を深めるべく勉強会にさんかしてきました。そのメモを残しておこうと思います。</p>
-
-<h1>【初級】iBeaconの基礎のキ</h1>
-
-<p>開発者以外にひとでも分かるようにiBeaconというものをざっくり説明してました。</p>
-
-<h2>iBeaconとは</h2>
-
-<ul>
-<li>BLEを利用している</li>
-<li>Bluetooth onにしないといけない</li>
-<li>CoreLocation.framework</li>
-<li>iOS7がインストールされるからってBLEが利用されるわけではない
-
-<ul>
-<li>iOS7 + BLEが利用できるっていうのが重要</li>
-</ul>
-</li>
-</ul>
-
-
-<p>ざっくり定義すると</p>
-
-<p><code>BLEを利用したAppleの距離と領域観測のサービス</code></p>
-
-<p>です。</p>
-
-<h2>利用したサービス</h2>
-
-<ul>
-<li>AppleStore
-
-<ul>
-<li>テーブルに近づくとiPhoneの紹介や下取りの情報が表示される</li>
-</ul>
-</li>
-<li>Macy&rsquo;s
-
-<ul>
-<li>入店検知してクーポンの取得、おすすめ商品の紹介</li>
-<li>O2O施策としてだいぶ確率されているようです</li>
-</ul>
-</li>
-<li>スマポ
-
-<ul>
-<li>来店ポイントがたまる</li>
-<li>日本でしっかりベジネスにしているサービスですね</li>
-</ul>
-</li>
-<li>MLB
-
-<ul>
-<li>入場用のバーコード</li>
-<li>point</li>
-<li>クーポン</li>
-<li>本日の対戦情報を表示してくれる</li>
-<li>自分の座席情報を教えてくれる</li>
-<li>とはいえ、現在まだベータ運用しているらしく、本番運用はまだのようですね</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>よく利用される用語</h2>
-
-<ul>
-<li>Beacon
-
-<ul>
-<li>電子情報を受信して現在情報を知る電子機器のことをいうらしい
-
-<ul>
-<li><a href="http://e-words.jp/w/E38393E383BCE382B3E383B3.html">http://e-words.jp/w/E38393E383BCE382B3E383B3.html</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>BLE
-
-<ul>
-<li>2.4GHz の無線を使った近距離無線通信規格</li>
-<li>少ない電池でもいままでよりも長くバッテリーが持つようにつくられている</li>
-</ul>
-</li>
-<li>Advertise
-
-<ul>
-<li>アドバタイズ：ある機器が別の機器に管理情報を伝達すること</li>
-<li>proximity UUID（企業）</li>
-<li>major（建物）</li>
-<li>minor（フロア）</li>
-</ul>
-</li>
-<li>リージョン監視
-
-<ul>
-<li>領域の入出チェック（虜域観測）</li>
-<li>リージョン=UUID</li>
-<li>出るイベントはドキュメント情報は２０秒っぽいが実際は３０秒かかるっぽい</li>
-</ul>
-</li>
-<li>Ranging
-
-<ul>
-<li>エリア内のBeaconの情報を取得（距離推定）</li>
-<li>Beacon距離
-
-<ul>
-<li>proximity
-
-<ul>
-<li>距離判定は４つとれる</li>
-<li>相対的に変わる</li>
-</ul>
-</li>
-<li>accuracy
-
-<ul>
-<li>位置情報取得の精度を指定</li>
-<li>もちろん精度が良いほど正確だが電池の量も多い</li>
-<li>領域はだいたいのもの</li>
-</ul>
-</li>
-<li>rssi
-
-<ul>
-<li>Received Signal Strength Indication</li>
-<li>無線通信機器が受信する信号の強度を測定するための回路または信号</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>電波法！！！！
-
-<ul>
-<li>技適マークがついていない無線機は電波法違反らしい</li>
-<li>estimoteのビーコン端末は日本実運用すると電波法違反になるぽいですね</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>iBeaconを使ってみよう</h2>
-
-<p>iBeaconアプリの作り方を二つのキーワードで説明しています。
-以下の二つをもとに実装を行っていく</p>
-
-<ul>
-<li>距離観測（Ranging）
-
-<ul>
-<li>各Beaconとの距離を約１秒おきに監視する</li>
-<li>それぞれの領域をみる</li>
-</ul>
-</li>
-<li><p>領域観測のた仕様</p>
-
-<ul>
-<li>Beaconグループで作成される領域</li>
-</ul>
-</li>
-<li><p>uuidgen
-ビーコン端末に固有のID振らないといけないのでコマンドを利用して生成したりできます
-<code>
-$ uuidgen
-8649794A-0C6C-4D82-99F2-7084D6C231B1
-</code></p></li>
-</ul>
-
-
-<h1>Beaconアプリの作り方</h1>
-
-<p>具体的にコードレベルでどんな風に作成されるのか、ハマりどころを説明していただきました。</p>
-
-<ul>
-<li>具体的に実装がでてきたコード
-
-<ul>
-<li><a href="https://github.com/suwa-yuki/BeaconSample">https://github.com/suwa-yuki/BeaconSample</a></li>
-</ul>
-</li>
-<li>ハマりどころ
-
-<ul>
-<li>startMonitoringForRegionはバックグラウンドおk</li>
-</ul>
-</li>
-</ul>
-
-
-<h1>LTで話されたことメモ</h1>
-
-<ul>
-<li>Androidでの確認はほぼできない
-
-<ul>
-<li>Nexus5だと大丈夫</li>
-<li>あとは海外の端末を輸入する</li>
-<li>iPhoneは無論OK</li>
-</ul>
-</li>
-</ul>
-
-
-<h1>まとめ</h1>
-
-<p>今回はiBeaconを使って開発する為の基本知識をベースとした勉強会でたくさん学ばしていいただきました。
-まだまだ勉強不足なところはあるけれど、今回の勉強会でだいぶもやもやしていたところが解消したので次の開発に活かそうと思います。
-しかし、つい先日estimoteのbeacon端末を購入したのですが技適マークがついていないのは残念です。。。ビジネスで
-利用するとしたらまた別の端末（日本の電波法に準拠したハード製品）を購入してやらないとだめですね。。。</p>
-
-<h1>参考スライド</h1>
-
-<p><a href="http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007">http://www.slideshare.net/RikitakeOohashi/i-beacon-29135007</a>
-<a href="http://www.slideshare.net/yuki0211s/i-beacon-29135560">http://www.slideshare.net/yuki0211s/i-beacon-29135560</a></p>
 ]]></content>
   </entry>
   

@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Backbone.jsガイドブック読書会 第１章 続き - Nakajijapan</title>
+  <title>第５回 #potatotips に参加してきた。 - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="第１章の続き Eventsあたりのところから Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている と記述されている。 オブザーバパターンとは 購読者と発行者と呼ばれるオブジェクトが存在する。 &hellip;">
+  <meta name="description" content="先日ですが、#potatetips　（第五回）に参加させていただきました。
+持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -68,7 +69,7 @@
   
   <header>
     
-      <h1 class="entry-title">Backbone.jsガイドブック読書会 第１章 続き</h1>
+      <h1 class="entry-title">第５回 #potatotips に参加してきた。</h1>
     
     
       <p class="meta">
@@ -84,109 +85,45 @@
   
 
 
-<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+<time datetime="2014-03-17T03:37:00+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>第１章の続き</p>
+<div class="entry-content"><p>先日ですが、#potatetips　（第五回）に参加させていただきました。
+持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
+本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
+いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
+内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
 
-<p>Eventsあたりのところから</p>
-
-<blockquote><p>Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている</p></blockquote>
-
-<p>と記述されている。</p>
-
-<h2>オブザーバパターンとは</h2>
-
-<p>購読者と発行者と呼ばれるオブジェクトが存在する。
-発行者が購読者のメソッドを直接呼び出す代わりに、購読者は発行者
-のイベントを購読する。イベントが発生したらそれを購読している
-オブジェクトに通知される。</p>
-
-<p>発行者はだれが購読してるのか知らずに済む。</p>
-
-<p>イベント駆動開発の技法。</p>
-
-<p>詳細はここが分かりやすい。
-<a href="http://www.techscore.com/tech/DesignPattern/Observer.html/">http://www.techscore.com/tech/DesignPattern/Observer.html/</a></p>
-
-<h3>Backbone.jsでいう購読者と発行者</h3>
-
-<p>これを以下のようにして考えるとわかりやすい</p>
-
-<ul>
-<li>購読者: View</li>
-<li>発行者 : Model</li>
-</ul>
+<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
 
 
-<p>Modelはだれが購読してるかしらなくていい、イベントを通知してあげればいいんです。</p>
+<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
+
+<p>インストール方法は至って簡単で</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># viewの中で
-</span><span class='line'>var entry = new Entry();
-</span><span class='line'>entry.on('change', this.render());</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pod "NKJMovieComposer"</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>メディエータパターン</h2>
+<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
 
-<blockquote><p>複数オブジェクトの間を取り持つ仲介者と鳴るオブジェクトを用意し、オブジェクト間の連動の詳細をその仲介者に持たせる
-個々のオブジェクトの独自性を高める</p></blockquote>
-
-<p>内容は理解できたけど、使いどころまだピンときていない。</p>
-
-<p>ここに詳しく記述されていた。
-<a href="http://www.techscore.com/tech/DesignPattern/Mediator.html/">http://www.techscore.com/tech/DesignPattern/Mediator.html/</a></p>
-
-<h2>コラムでのまめ知識</h2>
-
-<p>メモリーリークの問題から<code>on() off()</code>ではなくて <code>listenTo() stopListening()</code>を利用するといい
-v1.0からはView#remove()内部でstopListening() ViewではlistenToしてるので大丈夫！</p>
-
-<h2>Underscore.js</h2>
-
-<p>便利関数の紹介だった。</p>
+<p>機能としては以下の機能が実装できます。</p>
 
 <ul>
-<li>_.debounce()
-
-<ul>
-<li>一定時間イベントが発生しなかったときに処理を実行する</li>
-</ul>
-</li>
-<li>_.throtte()
-
-<ul>
-<li>コールバックの実行頻度をさげる</li>
-</ul>
-</li>
-<li>_.delay()
-
-<ul>
-<li>処理を遅らせる</li>
-</ul>
-</li>
-<li>_.defer()
-
-<ul>
-<li>コールバック関数の中で最後に実行されることを保証する</li>
-</ul>
-</li>
+<li>動画結合</li>
+<li>ワイプ</li>
+<li>フェードイン・アウト</li>
 </ul>
 
 
-<p>上記二つの関数は今にも使えそうな便利関数だったので導入していきたいな。</p>
+<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
+まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
 
-<p><a href="http://underscorejs.org/">http://underscorejs.org/</a></p>
-
-<p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
-
-<p>さて来週からは第二章ですよ。</p>
+<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
 </div>
 
 
@@ -209,12 +146,12 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   
 
 
-<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+<time datetime="2014-03-17T03:37:00+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/backbonejs/'>backbonejs</a>
+    <a class='category' href='/blog/categories/ios/'>ios</a>
   
 </span>
 
@@ -223,7 +160,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -236,10 +173,8 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/05/23/backbone-guidebook00/" title="Previous Post: Backbone.jsガイドブック読書会 第１章 続き">&laquo; Backbone.jsガイドブック読書会 第１章 続き</a>
+        <a class="basic-alignment left" href="/blog/2014/02/28/vagrant-tips/" title="Previous Post: Vagrant勉強会でLTした">&laquo; Vagrant勉強会でLTした</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/06/05/rubyhiroba/" title="Next Post: rubyhiroba">rubyhiroba &raquo;</a>
       
     </p>
   </footer>

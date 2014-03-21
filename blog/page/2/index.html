@@ -9,10 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="以前の記事でも書いたのですが、心霊動画アプリ「もう一度ご覧いただこう」というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。 回転問題 そのまま動画を保存すると270度になってしまっているので回転する必要があった 1
-2
-3
-4 &hellip;">
+  <meta name="description" content="ビデオ用のAVMutableCompositionTrackにレイヤーを持たせることができます。
+それがAVMutableVideoCompositionLayerInstructionなんですがこれが意外と
+簡単に動画に対してCGAffineTransformを指定することで動画の移動・回転・ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -68,6 +67,136 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-19T19:32:00+09:00" pubdate data-updated="true">Jan 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
+それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
+簡単に動画に対して<code>CGAffineTransform</code>を指定することで動画の移動・回転・拡大縮小
+ができたりフェードイン・アウトの設定ができたのでメモ。</p>
+
+<p>まずは対象のトラックをもとにして、レイヤーをインスタンス化します。</p>
+
+<p><code>+ (AVMutableVideoCompositionLayerInstruction *)videoCompositionLayerInstructionWithAssetTrack:(AVAssetTrack *)track</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableVideoCompositionLayerInstruction</span> <span class="o">*</span><span class="n">layerInstruction</span><span class="p">;</span>
+</span><span class='line'><span class="n">layerInstruction</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoCompositionLayerInstruction</span>
+</span><span class='line'>                    <span class="nl">videoCompositionLayerInstructionWithAssetTrack:</span><span class="n">compositionVideoTrack</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>TransForm</h3>
+
+<p><code>- (void)setTransformRampFromStartTransform:(CGAffineTransform)startTransform toEndTransform:(CGAffineTransform)endTransform timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと、３秒間左から動画が移動してきます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// transition</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">rotateStart</span><span class="p">,</span> <span class="n">rotateEnd</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeTranslation</span><span class="p">(</span><span class="o">-</span><span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateEnd</span>    <span class="o">=</span> <span class="n">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rotateStart</span><span class="p">,</span> <span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setTransformRampFromStartTransform:</span><span class="n">rotateStart</span>
+</span><span class='line'>                                      <span class="nl">toEndTransform:</span><span class="n">rotateEnd</span>
+</span><span class='line'>                                           <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Opacity</h3>
+
+<p><code>- (void)setOpacityRampFromStartOpacity:(float)startOpacity toEndOpacity:(float)endOpacity timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと最初から３秒間動画がフェードインしてきて最後の３秒間動画をフェードアウトします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// fade in</span>
+</span><span class='line'><span class="n">CMTime</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// fade out</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">CMTimeSubtract</span><span class="p">(</span><span class="n">videoComposition</span><span class="p">.</span><span class="n">currentTimeDuration</span><span class="p">,</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>Appleのドキュメントでこのクラスの説明をみると動画処理にしては結構シンプルだったので何個か試してみたのでした。
+ただ、<code>CMTime</code>関連・<code>CGAffineTransform</code>関連の知識はないと結構何がなんだかわからなくなるのであらかじめ知識として
+蓄えておくことはは必須ですね。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:">https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -676,114 +805,6 @@ nakajijapanです。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-30T02:17:00+09:00" pubdate data-updated="true">Sep 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
-
-<p><a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8" target="_blank"><img src="/images/apple_store.png" /></a></p>
-
-<p>先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
-その名も</p>
-
-<h3>心霊動画アプリ 「もう一度ご覧いただこう」</h3>
-
-<p><a href="http://owkr.info/movie">http://owkr.info/movie</a></p>
-
-<p>です。</p>
-
-<p>構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる</p>
-
-<h3>心霊写真アプリ「おわかりいただけただろうか」</h3>
-
-<p><a href="http://owkr.info">http://owkr.info</a></p>
-
-<p>を作成しました。その後時を経て、そろそろできるんじゃねという根拠ない自信がありまして
-作成するにいたった次第です。今回はそのリリースが出来ましたよっていうご報告であります！</p>
-
-<p>今回動画アプリを作成してみて、自分としてグッドっだったのは</p>
-
-<ul>
-<li>AVFoundationガリガリガリガリいじったし（未知の領域への挑戦）
-
-<ul>
-<li>動画動詞の結合</li>
-<li>動画内でのアニメーション</li>
-<li>動画のスローモーション</li>
-<li>動画内に動画をいれる（ワイプ）</li>
-</ul>
-</li>
-<li>いろんなTips学んだ
-
-<ul>
-<li>シュミレータで効率的に開発していく方法</li>
-<li>iOSのバージョンのデザインの差異（主に位置によるずれ）の直し方</li>
-</ul>
-</li>
-<li>キャンペーンの出し方
-
-<ul>
-<li>以前にリリースアプリと連携デザインに統一感をもたせた</li>
-</ul>
-</li>
-</ul>
-
-
-<p>失敗や改善した方がいいなというのも何個かあって</p>
-
-<p>iOS7でチェックしとけばよかった。しかもガンガンみんなiOS7にしてしまったのでこれはつらかった・・
-iOS7でテストして仮に問題が発生したときにその対応でリリースが遅れるのは避けたかったのでちょっと
-最後まで避けてたのが仇となりました。無念。やりかたとしては、新しいバージョンがリリース間近に
-なった場合はかならず確認を行うことをマストにしたほうがいいですね。これ勉強！</p>
-
-<p>リリースタイミングを逃しました。本当は夏にリリースすれば良かったのですが僕の技術力不足であえなく断念して
-しまいました。。。</p>
-
-<p>あとは、デザイナの確認作業についてです。デザイナにはある程度できあがらないとテストや確認出来ない状態でしたし、
-毎回自分のPCでビルドして渡すのはかなり面倒でした。（のでこの作業はほとんどやってない・・・）なので自分が修正
-したらすぐに自分の実機やシミュレータでがんがん確認出来るような状況を作ればなと思っていました。会社だとjenkins
-でビルドしてそれをダウンロードできる基盤があるのでそれ参考に個人でも作成してみようと思う。</p>
-
-<p>肝心のiOS7でのおばけが表示されないバグがありますが先日修正したものを申請しましたのでもう少しでiOS7にした人も
-使えることでしょう！！</p>
-
-<p>とりあえず、リリースできてよかったのです。</p>
-
-<p>また、いろんなことに挑戦していきたい。</p>
-
-<p>今後はもう一度の使い方なり、AVFoundationのTipsをちょこちょこ書いていこうと思います。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -832,6 +853,10 @@ iOS7でテストして仮に問題が発生したときにその対応でリリ�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/17/potetotips5-nkjmoviecomposer/">第５回 #potatotips に参加してきた。</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/02/28/vagrant-tips/">Vagrant勉強会でLTした</a>
       </li>
     
@@ -847,15 +872,11 @@ iOS7でテストして仮に問題が発生したときにその対応でリリ�
         <a href="/blog/2014/02/02/conference-with-developers-2014/">Confrence With Developer2に参加してLTしてきた</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>ios (7)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>ios (8)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>rails (1)</a></li><li><a href='/blog/categories/ruby/'>ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/uikit/'>uikit (2)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
 </section>
 
 <section>
