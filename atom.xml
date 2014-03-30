@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-30T10:47:54+09:00</updated>
+  <updated>2014-03-30T10:49:37+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -64,7 +64,7 @@
 </span><span class='line'>CoreBluetooth.framework</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>IRKit側</h2>
+<h2>IRKit</h2>
 
 <p>ここでは、IRKit SDKを利用してシグナルを登録してテーブルのセルにボタンを追加する処理を行います。</p>
 
