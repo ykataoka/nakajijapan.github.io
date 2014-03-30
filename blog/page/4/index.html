@@ -9,9 +9,7 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
-Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
-して送信させるようにしました。 &hellip;">
+  <meta name="description" content="サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +65,147 @@ Railsを利用しているときはCSRF用のtokenを発行しているのでそ
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/02/usinggoogledrive/">GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-02T22:30:00+09:00" pubdate data-updated="true">Jul 2<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
+
+<p>便利だったのが<a href="https://github.com/gimite/google-drive-ruby">google-drive-ruby</a>で、中の通信部分の処理をいい感じに抽象化してくれる便利gemです。</p>
+
+<p>実際に<a href="http://www.frustration.me/">www.frustration.me</a>のユーザ数やアイテム数を計測するために使用してみました。</p>
+
+<p>まずは、gemでインストールしてrakeでバッチ処理を実装するだけです。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;send score data to google spreadsheet&quot;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;google_drive&#39;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">namespace</span> <span class="ss">:batches</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="n">task</span> <span class="n">total_scores</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
+</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no username&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">].</span><span class="n">blank?</span>
+</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no password&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">].</span><span class="n">blank?</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">session</span> <span class="o">=</span> <span class="no">GoogleDrive</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">]</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">spreadsheet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">spreadsheet_by_key</span><span class="p">(</span><span class="s2">&quot;input key name&quot;</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">worksheet</span> <span class="o">=</span> <span class="n">spreadsheet</span><span class="o">.</span><span class="n">worksheet_by_title</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">analyze_data</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>      <span class="ss">date</span><span class="p">:</span>           <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">),</span>
+</span><span class='line'>      <span class="n">users_num</span><span class="p">:</span>      <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">items_num</span><span class="p">:</span>      <span class="no">Item</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">comments_num</span><span class="p">:</span>   <span class="no">Comment</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
+</span><span class='line'>      <span class="n">categories_num</span><span class="p">:</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">analyze_data</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで<code>rake batches:total_scores</code>で実行すると指定のスプレッドシートに情報が送信され、スプレッドシート側では</p>
+
+<p><img src="/images/posts/2013-07-02_01.png" alt="ss" /></p>
+
+<p>な感じでどんどんレコードが追加されていきます。</p>
+
+<p>便利。</p>
+
+<p>ただし、注意点があります。今回は<a href="http://sqale.jp">sqale</a>のcronで動かしているのですがログインで以下のように失敗することがあります。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake batches:total_scores
+</span><span class='line'>WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.7.8
+</span><span class='line'>rake aborted!
+</span><span class='line'>Authentication failed <span class="k">for </span>hogehoge@gmail.com: Response code 403 <span class="k">for </span>post https://www.google.com/accounts/ClientLogin: <span class="nv">Error</span><span class="o">=</span>BadAuthentication
+</span><span class='line'><span class="nv">Url</span><span class="o">=</span>https://www.google.com/accounts/ServiceLogin?service<span class="o">=</span>wise#Email<span class="o">=</span>hogehoge%40gmail.com
+</span><span class='line'><span class="nv">Info</span><span class="o">=</span>WebLoginRequired
+</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:93:in <span class="sb">`</span>rescue in login<span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:86:in `login&#39;</span>
+</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:38:in <span class="sb">`</span>login<span class="s1">&#39;</span>
+</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive.rb:18:in `login&#39;</span>
+</span><span class='line'>/home/sqale/current/lib/tasks/scores.rake:10:in <span class="sb">`</span>block <span class="o">(</span>2 levels<span class="o">)</span> in &lt;top <span class="o">(</span>required<span class="o">)</span>&gt;<span class="err">&#39;</span>
+</span><span class='line'>Tasks: <span class="nv">TOP</span> <span class="o">=</span>&gt; batches:total_scores
+</span><span class='line'><span class="o">(</span>See full trace by running task with --trace<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これはGoogleがセキュリティ強化のため、変な場所からのログインは自動的に拒否しているためです。なので、通常通りWEBでGoogleにログインしてみてそのログインが大丈夫という設定をすれば問題無く通過できます。</p>
+
+<p><img src="/images/posts/2013-07-02_02.png" alt="ss" /></p>
+
+<p>あとはグラフツール使って簡単に見やすくできるのでお手軽&amp;便利メソッドでした。</p>
+
+<p><img src="/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
+まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -749,58 +888,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/05/rubyhiroba/">Rubyhiroba</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-05T00:12:00+09:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
-
-<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
-やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
-反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
-
-<p>perlにしろrubyにしろテストがあるのは大変心強いし、安心します。
-たとえ、最新のRailsにのせ変えたとしてもテストがない時点でもう技術的負債。前のコードと何ら変わりはない。
-まぁ作成した時点負債は負債なんだけどその劣化速度は抑えられるはず。</p>
-
-<p>まだまだリニューアルは続きますが、引き続きがんばります。</p>
-
-<p>そして裏で支えていただいた@hsbt氏には感謝の意を隠しきれないであります。。。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -849,6 +936,10 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/03/29/irkit-plus-ibeacon/">IRKit + iBeacon</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/03/17/potetotips5-nkjmoviecomposer/">第５回 #potatotips に参加してきた。</a>
       </li>
     
@@ -862,10 +953,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
     
       <li class="post">
         <a href="/blog/2014/02/15/developers-summit-2014/">Developers Summit 2014</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/02/conference-with-developers-2014/">Confrence With Developer2に参加してLTしてきた</a>
       </li>
     
   </ul>
