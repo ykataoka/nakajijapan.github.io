@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-30T10:49:37+09:00</updated>
+  <updated>2014-04-07T04:42:40+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,173 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[メディアキャプチャの出力先の設定について]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput/"/>
+    <updated>2014-04-07T02:10:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput</id>
+    <content type="html"><![CDATA[<p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
+
+<p><img src="http://nakajijapan.github.io/images/posts/2014-04-06-01.png" alt="AV Foundation" /></p>
+
+<p>そんなときは<code>AVCaptureSession</code>を利用してメディアキャプチャの実装の準備をを行い、入力先・出力先はどうするかという設定を行うのですが、今回はその出力部分について何パターンか方法があったので調べてみました。</p>
+
+<h3>Video Output</h3>
+
+<ul>
+<li>AVCaptureMovieFileOutput
+
+<ul>
+<li>ムービーファイルを出力するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureVideoDataOutput
+
+<ul>
+<li>キャプチャ中のビデオフレームを処理するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureStillImageOutput
+
+<ul>
+<li>付随するメタデータを使用して静止画像をキャプチャするときに利用する</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Audio Output</h3>
+
+<ul>
+<li>AVCaptureAudioDataOutput
+
+<ul>
+<li>キャプチャ中のオーディオフレームを処理するときに利用する</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>使い方</h2>
+
+<h3>AVCaptureMovieFileOutput</h3>
+
+<p>ムービーファイルを保存するのに必要な処理を提供してくれるクラス。</p>
+
+<p>録画するときは</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//録画開始</span>
+</span><span class='line'><span class="p">[</span><span class="n">captureMovieFileOutput</span> <span class="nl">startRecordingToOutputFileURL:</span><span class="n">outputURL</span> <span class="nl">recordingDelegate:</span><span class="n">self</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>のように始めることができます。</p>
+
+<p>必要に応じて<code>AVCaptureFileOutputRecordingDelegate</code>オプションを利用して、各タイミングに応じた処理を行います。</p>
+
+<ul>
+<li>AVCaptureFileOutputRecordingDelegate</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didStartRecordingToOutputFileAtURL:fromConnections:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>前者は録画を開始したときに、後者は終了したときに呼び出されるメソッドです。例えば、<code>captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</code>の時に録画したムービーファイルをデバイスに保存する等の処理が行えることができます。</p>
+
+<h4>AVCaptureStillImageOutput</h4>
+
+<p>画像をキャプチャするときに利用して、出力は以下のように実装します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVCaptureConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[[</span><span class="n">captureStillImageOutput</span> <span class="n">connections</span><span class="p">]</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">captureStillImageOutput</span> <span class="nl">captureStillImageAsynchronouslyFromConnection:</span><span class="n">connection</span>
+</span><span class='line'>                                                     <span class="nl">completionHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">CMSampleBufferRef</span> <span class="n">imageDataSampleBuffer</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                                         <span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVCaptureStillImageOutput</span> <span class="nl">jpegStillImageNSDataRepresentation:</span><span class="n">imageDataSampleBuffer</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageWithData:</span><span class="n">data</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="n">ALAssetsLibrary</span> <span class="o">*</span><span class="n">library</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ALAssetsLibrary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="p">[</span><span class="n">library</span> <span class="nl">writeImageToSavedPhotosAlbum:</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span>
+</span><span class='line'>                                                                                   <span class="nl">orientation:</span><span class="n">image</span><span class="p">.</span><span class="n">imageOrientation</span>
+</span><span class='line'>                                                                               <span class="nl">completionBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="n">assetURL</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                                                                   <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;saved&quot;</span><span class="p">);</span>
+</span><span class='line'>                                                                               <span class="p">}];</span>
+</span><span class='line'>                                                     <span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVCaptureVideoDataOutput, AVCaptureAudioDataOutput</h3>
+
+<p>デリゲートメソッドを利用して非圧縮状態のビデオフレーム情報を提供します。
+そのフレーム情報は<code>CMSampleBufferRef</code>という形式で送信されてきてそれを利用して動画の保存やら編集やらを行うことができます。
+このときにビデオとオーディオは別で処理しないといけません。（デリゲートメソッドが分かれているように）
+主にビデオもオーディオも両方扱うときは<code>– captureOutput:didOutputSampleBuffer:fromConnection:</code>でどちらのメディアなのか区別して処理を行うような実装になります。
+さらに細かい処理を行っていく場合はこちらのクラスを実装しないといけないですね。例えば、リアルタイムに動画を編集したりだとか、Vineみたいにタッチしているときは動画の保存し続けるような処理でしょうか。</p>
+
+<ul>
+<li>AVCaptureVideoDataOutputSampleBufferDelegate</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Managing</span> <span class="n">Sample</span> <span class="n">Buffer</span> <span class="n">Behavior</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didDropSampleBuffer:fromConnection:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>AVCaptureAudioDataOutputSampleBufferDelegat</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>メディアキャプチャの出力先の実装について調べてみました。目的に応じてどれを使うかは選択していけばいいのですが、よりユーザにインタラクティブなインタフェースや体験をさせるにはそれ相応に細かい実装していかなければいけないこともわかりました。何度も言っているかもしれないけどメディア系の実装は大変です。。。</p>
+
+<h2>ref</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation公式ドキュメント</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureMovieFileOutput_Class/Reference/Reference.html#//apple_ref/occ/cl/AVCaptureMovieFileOutput">AVCaptureMovieFileOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureFileOutputRecordingDelegate_Protocol/Reference/Reference.html">AVCaptureFileOutputRecordingDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutput_Class/Reference/Reference.html">AVCaptureVideoDataOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/AVCaptureVideoDataOutputSampleBufferDelegate/captureOutput:didOutputSampleBuffer:fromConnection:">AVCaptureVideoDataOutputSampleBufferDelegate</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IRKit + iBeacon]]></title>
@@ -2518,252 +2685,6 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
 <h2>Router</h2>
 
 <h2>Sync</h2>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsでBowerの導入]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/06/09/install-bower/"/>
-    <updated>2013-06-09T16:07:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/06/09/install-bower</id>
-    <content type="html"><![CDATA[<p>javascriptのパッケージ管理がしたくて<code>bower</code>というパッケージ管理ツールを<a href="http://www.frustration.me">http://www.frustration.me</a> にインストールしてみました。
-(ブランチ切って試してみました・・・)</p>
-
-<p>とりあえず、バージョンが古いので最新のものにインストールします。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ node -v 
-</span><span class='line'>v0.6.19
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>$ brew install node
-</span><span class='line'>
-</span><span class='line'>==&gt; Upgrading 1 outdated package, with result:
-</span><span class='line'>node 0.10.7
-</span><span class='line'>==&gt; Upgrading node
-</span><span class='line'>Beginning with 0.8.0, this recipe now comes with npm.
-</span><span class='line'>It appears you already have npm installed at /usr/local/lib/node_modules/npm.
-</span><span class='line'>To use the npm that comes with this recipe, first uninstall npm with
-</span><span class='line'>`npm uninstall npm -g`, then run this command again.
-</span><span class='line'>
-</span><span class='line'>If you would like to keep your installation of npm instead of
-</span><span class='line'>using the one provided with homebrew, install the formula with
-</span><span class='line'>the `--without-npm` option.
-</span><span class='line'>Error: An unsatisfied requirement failed this build.</span></code></pre></td></tr></table></div></figure>
-
-
-<p>npm をまずアンインストールしてほしいとのこと</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm uninstall npm -g</span></code></pre></td></tr></table></div></figure>
-
-
-<p>再度実行します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew upgrade node
-</span><span class='line'>$ node -v
-</span><span class='line'>v0.10.7</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで最新版になった。
-次にbowerをインストール</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install -g bower</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これでインストール完了。</p>
-
-<p>とりえず、検索でどうなるか確認。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>bower search backbone
-</span><span class='line'>Search results:
-</span><span class='line'>
-</span><span class='line'>    backbone git://github.com/documentcloud/backbone.git
-</span><span class='line'>    backbone-amd git://github.com/amdjs/backbone
-</span><span class='line'>    backbone.stickit git://github.com/NYTimes/backbone.stickit.git
-</span><span class='line'>    backbone.marionette git://github.com/marionettejs/backbone.marionette
-</span><span class='line'>    backbone.wreqr git://github.com/marionettejs/backbone.wreqr.git
-</span><span class='line'>・
-</span><span class='line'>・
-</span><span class='line'>・</span></code></pre></td></tr></table></div></figure>
-
-
-<p>てな感じでbackboneに関連するプラグインがどどどっと出力される</p>
-
-<p>試しにインストールすると、ホームディレクトリに生成されてしまうので
-アプリごとに管理したいところ</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ bower install jquery
-</span><span class='line'>bower cloning git://github.com/components/jquery.git
-</span><span class='line'>bower cached git://github.com/components/jquery.git
-</span><span class='line'>bower fetching jquery
-</span><span class='line'>bower checking out jquery#2.0.2
-</span><span class='line'>bower copying /Users/pp_kupepo_gattyanmo/.bower/cache/jquery/29cb4373d29144ca260ac7c3997f4381
-</span><span class='line'>bower installing jquery#2.0.2</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ここからRaisに組み込んでいきます。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ bower init
-</span><span class='line'>name: [frustration]
-</span><span class='line'>version: [0.0.0]
-</span><span class='line'>main file: []
-</span><span class='line'>add current components as dependencies? (y/n): [y] y
-</span><span class='line'>add commonly ignored files to ignore list? (y/n): [y]</span></code></pre></td></tr></table></div></figure>
-
-
-<p>そうするとカレントディレクトリに以下のファイルが作成されます。
-このファイルでプラグインの管理を行います。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "name": "frustration",
-</span><span class='line'>  "version": "0.0.0",
-</span><span class='line'>  "dependencies": {
-</span><span class='line'>    "jquery": "~2.0.2"
-</span><span class='line'>  },
-</span><span class='line'>  "ignore": [
-</span><span class='line'>    "**/.*",
-</span><span class='line'>    "node_modules",
-</span><span class='line'>    "components"
-</span><span class='line'>  ]
-</span><span class='line'>}
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>現状の設定だとグローバルの設定なのでダウンロードがプロジェクト単位でできないので
-<code>.bowerrc</code>ファイルをプロジェクトディレクトリ直下に保存する。
-デフォルトは<code>~/.bowerrc</code>を参照するようだ。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "directory": "vendor/assets/javascripts/components",
-</span><span class='line'>  "json": "bower.json",
-</span><span class='line'>  "searchpath": [
-</span><span class='line'>    "https://bower.herokuapp.com"
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで<code>bower install</code>すると指定のディレクトリに保存される。</p>
-
-<h2>Railsの場合</h2>
-
-<p><code>application.rb</code>でパスを通るようにする</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># for bower
-</span><span class='line'>config.assets.paths &lt;&lt; Rails.root.join('vendor', 'assets', 'javascripts', 'components')</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>applicatio.js</code>でパスの再設定を行う。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>//= require components/jquery/jquery.js
-</span><span class='line'>//= require components/jquery-ui/ui/jquery-ui.js</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これでRailsの場合は完了です。</p>
-
-<h2>所感</h2>
-
-<p>jsもbundlerのように管理できるようになったのは大変便利作業です。
-version上がることごとにサイト確認して<code>wget</code>してこないといけないし、コマンド一発でプラグインの削除・検索・バージョンのアップ・ダウングレードもできてしまうのは進化であるのです。</p>
-
-<p>ですが、まだ</p>
-
-<ul>
-<li>version 管理されていないプラグインある</li>
-<li>本番環境にnodeが入っていない・bowerが使えない</li>
-</ul>
-
-
-<p>ときがあるのでそこは共存なり、一旦保留なりしたほうが良いかもしれません。。。
-また、後者のときはいけてないけどパッケージも合わせてコミットするのが良いかもしれない。</p>
-
-<h2>Ref</h2>
-
-<ul>
-<li>source
-
-<ul>
-<li><a href="https://github.com/bower/bower">https://github.com/bower/bower</a></li>
-</ul>
-</li>
-<li>Bower components
-
-<ul>
-<li><a href="http://sindresorhus.com/bower-components/">http://sindresorhus.com/bower-components/</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p>ここにパッケージが登録されています</p>
 ]]></content>
   </entry>
   

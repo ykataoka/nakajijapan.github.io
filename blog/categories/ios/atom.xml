@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[categories: ios | Nakajijapan]]></title>
+  <title><![CDATA[categories: iOS | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-03-30T10:49:37+09:00</updated>
+  <updated>2014-04-07T04:42:40+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,367 +14,149 @@
 
   
   <entry>
-    <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
-    <updated>2014-03-17T03:37:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
-    <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
-持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
-本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
-いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
-内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
+    <title type="html"><![CDATA[メディアキャプチャの出力先の設定について]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput/"/>
+    <updated>2014-04-07T02:10:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput</id>
+    <content type="html"><![CDATA[<p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
 
-<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+<p><img src="/images/posts/2014-04-06-01.png" alt="AV Foundation" /></p>
+
+<p>そんなときは<code>AVCaptureSession</code>を利用してメディアキャプチャの実装の準備をを行い、入力先・出力先はどうするかという設定を行うのですが、今回はその出力部分について何パターンか方法があったので調べてみました。</p>
+
+<h3>Video Output</h3>
+
+<ul>
+<li>AVCaptureMovieFileOutput
+
+<ul>
+<li>ムービーファイルを出力するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureVideoDataOutput
+
+<ul>
+<li>キャプチャ中のビデオフレームを処理するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureStillImageOutput
+
+<ul>
+<li>付随するメタデータを使用して静止画像をキャプチャするときに利用する</li>
+</ul>
+</li>
+</ul>
 
 
-<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
+<h3>Audio Output</h3>
 
-<p>インストール方法は至って簡単で</p>
+<ul>
+<li>AVCaptureAudioDataOutput
 
-<p><code>
-pod "NKJMovieComposer"
+<ul>
+<li>キャプチャ中のオーディオフレームを処理するときに利用する</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>使い方</h2>
+
+<h3>AVCaptureMovieFileOutput</h3>
+
+<p>ムービーファイルを保存するのに必要な処理を提供してくれるクラス。</p>
+
+<p>録画するときは</p>
+
+<p><code>obj-c
+//録画開始
+[captureMovieFileOutput startRecordingToOutputFileURL:outputURL recordingDelegate:self];
 </code></p>
 
-<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
+<p>のように始めることができます。</p>
 
-<p>機能としては以下の機能が実装できます。</p>
+<p>必要に応じて<code>AVCaptureFileOutputRecordingDelegate</code>オプションを利用して、各タイミングに応じた処理を行います。</p>
 
 <ul>
-<li>動画結合</li>
-<li>ワイプ</li>
-<li>フェードイン・アウト</li>
+<li>AVCaptureFileOutputRecordingDelegate</li>
 </ul>
 
 
-<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
-まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
+<p>```
+Delegate Methods</p>
 
-<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
-    <updated>2014-02-26T21:44:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
-    <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
+<p>– captureOutput:didStartRecordingToOutputFileAtURL:fromConnections:
+– captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:
+```</p>
 
-<ul>
-<li><p>ヤフーさん発表資料
-<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
-<li><p>クラスメソッドさん発表資料
-<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
-</ul>
+<p>前者は録画を開始したときに、後者は終了したときに呼び出されるメソッドです。例えば、<code>captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</code>の時に録画したムービーファイルをデバイスに保存する等の処理が行えることができます。</p>
 
+<h4>AVCaptureStillImageOutput</h4>
 
-<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
+<p>画像をキャプチャするときに利用して、出力は以下のように実装します。</p>
 
-<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
+<p>```
+AVCaptureConnection *connection = [[captureStillImageOutput connections] lastObject];
+[captureStillImageOutput captureStillImageAsynchronouslyFromConnection:connection</p>
 
-<h2>code snippet</h2>
-
-<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
-
-<p><img src="/images/posts/2014-02-28_02.png" alt="01" /></p>
-
-<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
-
-<p><img src="/images/posts/2014-02-28_01.png" alt="01" /></p>
-
-<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
-作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
-
-<p>試しにUIAlertViewをいれてみました。</p>
-
-<p>```obj-c</p>
-
-<pre><code>UIAlertView *alertView = [[UIAlertView alloc] initWithTitle : NSLocalizedString(@"Title", nil)
-                                                    message : NSLocalizedString(@"Message", nil)
-                                                   delegate : self
-                                          cancelButtonTitle : NSLocalizedString(@"OK", nil)
-                                          otherButtonTitles : nil
-                          ];
-[alertView setTag:1];
-[alertView show];
+<pre><code>                                                 completionHandler:^(CMSampleBufferRef imageDataSampleBuffer, NSError *error) {
+                                                     NSData *data = [AVCaptureStillImageOutput jpegStillImageNSDataRepresentation:imageDataSampleBuffer];
+                                                     UIImage *image = [UIImage imageWithData:data];
+                                                     ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+                                                     [library writeImageToSavedPhotosAlbum:image.CGImage
+                                                                               orientation:image.imageOrientation
+                                                                           completionBlock:^(NSURL *assetURL, NSError *error) {
+                                                                               NSLog(@"saved");
+                                                                           }];
+                                                 }];
 </code></pre>
 
 <p>```</p>
 
-<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
+<h3>AVCaptureVideoDataOutput, AVCaptureAudioDataOutput</h3>
 
-<h2>code template</h2>
+<p>デリゲートメソッドを利用して非圧縮状態のビデオフレーム情報を提供します。
+そのフレーム情報は<code>CMSampleBufferRef</code>という形式で送信されてきてそれを利用して動画の保存やら編集やらを行うことができます。
+このときにビデオとオーディオは別で処理しないといけません。（デリゲートメソッドが分かれているように）
+主にビデオもオーディオも両方扱うときは<code>– captureOutput:didOutputSampleBuffer:fromConnection:</code>でどちらのメディアなのか区別して処理を行うような実装になります。
+さらに細かい処理を行っていく場合はこちらのクラスを実装しないといけないですね。例えば、リアルタイムに動画を編集したりだとか、Vineみたいにタッチしているときは動画の保存し続けるような処理でしょうか。</p>
 
-<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
+<ul>
+<li>AVCaptureVideoDataOutputSampleBufferDelegate</li>
+</ul>
+
 
 <p><code>
-mkdir -p ~/Library/Developer/Xcode/Templates/File Templates
-cd    ~/Library/Developer/Xcode/Templates/File Templates
-cp /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/* .
+Managing Sample Buffer Behavior
+– captureOutput:didOutputSampleBuffer:fromConnection:
+– captureOutput:didDropSampleBuffer:fromConnection:
 </code></p>
 
-<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
-
-<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。
-```</p>
-
-<pre><code>&lt;dict&gt;
-  &lt;key&gt;Default&lt;/key&gt;
-  &lt;string&gt;false&lt;/string&gt;
-  &lt;key&gt;Identifier&lt;/key&gt;
-  &lt;string&gt;Nakajijapan&lt;/string&gt;
-  &lt;key&gt;Name&lt;/key&gt;
-  &lt;string&gt;Nakajijapan&lt;/string&gt;
-  &lt;key&gt;RequiredOptions&lt;/key&gt;
-  &lt;dict&gt;
-      &lt;key&gt;cocoaTouchSubclass&lt;/key&gt;
-      &lt;array&gt;
-        &lt;string&gt;NSObject&lt;/string&gt;
-        &lt;string&gt;UIViewController&lt;/string&gt;
-      &lt;/array&gt;
-  &lt;/dict&gt;
-  &lt;key&gt;Type&lt;/key&gt;
-  &lt;string&gt;checkbox&lt;/string&gt;
-&lt;/dict&gt;
-</code></pre>
-
-<p>```</p>
-
-<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
-
-<p>```
-//
-//  <strong><em>FILENAME</em></strong>
-//
-//  Created by <strong><em>FULLUSERNAME</em></strong>.
-//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
-//</p>
-
-<p><strong><em>IMPORTHEADER_cocoaTouchSubclass</em></strong></p>
-
-<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> : <strong><em>VARIABLE_cocoaTouchSubclass</em></strong></p>
-
-<p>@end
-```</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
-
-<p>```
-//
-//  <strong><em>FILENAME</em></strong>
-//
-//  Created by <strong><em>FULLUSERNAME</em></strong>.
-//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
-//</p>
-
-<h1>import &ldquo;<strong><em>FILEBASENAME</em></strong>.h&rdquo;</h1>
-
-<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> ()</p>
-
-<p>@end</p>
-
-<p>@implementation <strong><em>FILEBASENAMEASIDENTIFIER</em></strong></p>
-
 <ul>
-<li><p>(id)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil
-{
-  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
-      // Custom initialization
-  }
-  return self;
-}</p></li>
-<li><p>(void)viewDidLoad
-{
-  [super viewDidLoad];
-// Do any additional setup after loading the view.
-}</p></li>
-<li><p>(void)didReceiveMemoryWarning
-{
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
-}</p></li>
+<li>AVCaptureAudioDataOutputSampleBufferDelegat</li>
 </ul>
 
 
-<p>@end
-```</p>
-
-<p>これで自分好みの設定にできました。</p>
-
-<h3>参加してみて</h3>
-
-<p>吉田 一星さんの発表が印象的で</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
-
-<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
-Appleが未だ実現されていない機能を先に作れ</p></blockquote>
-
-<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
-まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
-
-<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
-    <updated>2014-02-02T23:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
-    <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
-iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
-いろいろ収穫があり、たくさん勉強させていただきました。</p>
-
-<p>そんな僕もここでLTをしてきたのでのせときます。以前は、MA9でも発表している
-ですがあくまでプロダクトとして発表だったのと今回は技術的なカンファレンス
-なので技術的側面に焦点をあてて発表させていただきました。</p>
-
-<p>話した内容はアプリでがんがん利用していた<code>AV Foundation</code>の話をしてきました。</p>
-
-<script async class="speakerdeck-embed" data-id="ebaab3406d820131c6665e5071095c76" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>(発表時にディスプレイコネクタが認識しなくて発狂していたところ<code>@tamotamago</code>さんにパソコンを貸していただき大変感謝です！)</p>
-
-<p>自分でもいろいろとメモっていたのですが以下のサイトがよく纏められていたのでご参照ください。</p>
-
-<h3>Developers.IO</h3>
-
-<ul>
-<li><a href="http://dev.classmethod.jp/smartphone/ios-confwd2/">http://dev.classmethod.jp/smartphone/ios-confwd2/</a></li>
-</ul>
-
-
-<h3>Togetter</h3>
-
-<ul>
-<li><a href="http://togetter.com/li/623779">http://togetter.com/li/623779</a></li>
-</ul>
-
-
-<h3>Ustream録画</h3>
-
-<ul>
-<li><a href="http://www.ustream.tv/recorded/43319245">http://www.ustream.tv/recorded/43319245</a></li>
-<li><a href="http://www.ustream.tv/recorded/43323576">http://www.ustream.tv/recorded/43323576</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AVMutableVideoCompositionLayerInstructionの使い方]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/"/>
-    <updated>2014-01-19T19:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction</id>
-    <content type="html"><![CDATA[<p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
-それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
-簡単に動画に対して<code>CGAffineTransform</code>を指定することで動画の移動・回転・拡大縮小
-ができたりフェードイン・アウトの設定ができたのでメモ。</p>
-
-<p>まずは対象のトラックをもとにして、レイヤーをインスタンス化します。</p>
-
-<p><code>+ (AVMutableVideoCompositionLayerInstruction *)videoCompositionLayerInstructionWithAssetTrack:(AVAssetTrack *)track</code></p>
-
-<p>```obj-c</p>
-
-<pre><code>AVMutableVideoCompositionLayerInstruction *layerInstruction;
-layerInstruction = [AVMutableVideoCompositionLayerInstruction
-                    videoCompositionLayerInstructionWithAssetTrack:compositionVideoTrack];
-</code></pre>
-
-<p>```</p>
-
-<h3>TransForm</h3>
-
-<p><code>- (void)setTransformRampFromStartTransform:(CGAffineTransform)startTransform toEndTransform:(CGAffineTransform)endTransform timeRange:(CMTimeRange)timeRange</code></p>
-
-<p>この例だと、３秒間左から動画が移動してきます。</p>
-
-<p>```obj-c</p>
-
-<pre><code>// transition
-CGAffineTransform rotateStart, rotateEnd;
-startTime    = kCMTimeZero;
-timeDuration = CMTimeMake(3, 1);
-rotateStart  = CGAffineTransformMakeScale(1, 1);
-rotateStart  = CGAffineTransformMakeTranslation(-720, 0);
-rotateEnd    = CGAffineTransformTranslate(rotateStart, 720, 0);
-[layerInstruction setTransformRampFromStartTransform:rotateStart
-                                      toEndTransform:rotateEnd
-                                           timeRange:CMTimeRangeMake(startTime, timeDuration)];
-</code></pre>
-
-<p>```</p>
-
-<h3>Opacity</h3>
-
-<p><code>- (void)setOpacityRampFromStartOpacity:(float)startOpacity toEndOpacity:(float)endOpacity timeRange:(CMTimeRange)timeRange</code></p>
-
-<p>この例だと最初から３秒間動画がフェードインしてきて最後の３秒間動画をフェードアウトします。</p>
-
-<p>```obj-c</p>
-
-<pre><code>// fade in
-CMTime startTime, timeDuration;
-startTime    = kCMTimeZero;
-timeDuration = CMTimeMake(3, 1);
-[layerInstruction setOpacityRampFromStartOpacity:0.0
-                                    toEndOpacity:1.0
-                                       timeRange:CMTimeRangeMake(startTime, timeDuration)];
-
-
-// fade out
-startTime    = CMTimeSubtract(videoComposition.currentTimeDuration, CMTimeMake(3, 1));
-timeDuration = CMTimeMake(3, 1);
-[layerInstruction setOpacityRampFromStartOpacity:1.0
-                                    toEndOpacity:0.0
-                                       timeRange:CMTimeRangeMake(startTime, timeDuration)];
-</code></pre>
-
-<p>```</p>
+<p><code>
+Delegate Methods
+– captureOutput:didOutputSampleBuffer:fromConnection:
+</code></p>
 
 <h2>まとめ</h2>
 
-<p>Appleのドキュメントでこのクラスの説明をみると動画処理にしては結構シンプルだったので何個か試してみたのでした。
-ただ、<code>CMTime</code>関連・<code>CGAffineTransform</code>関連の知識はないと結構何がなんだかわからなくなるのであらかじめ知識として
-蓄えておくことはは必須ですね。</p>
+<p>メディアキャプチャの出力先の実装について調べてみました。目的に応じてどれを使うかは選択していけばいいのですが、よりユーザにインタラクティブなインタフェースや体験をさせるにはそれ相応に細かい実装していかなければいけないこともわかりました。何度も言っているかもしれないけどメディア系の実装は大変です。。。</p>
 
-<h2>Ref</h2>
+<h2>ref</h2>
 
-<p><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:">https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
-    <updated>2014-01-19T19:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
-    <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation公式ドキュメント</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureMovieFileOutput_Class/Reference/Reference.html#//apple_ref/occ/cl/AVCaptureMovieFileOutput">AVCaptureMovieFileOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureFileOutputRecordingDelegate_Protocol/Reference/Reference.html">AVCaptureFileOutputRecordingDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutput_Class/Reference/Reference.html">AVCaptureVideoDataOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/AVCaptureVideoDataOutputSampleBufferDelegate/captureOutput:didOutputSampleBuffer:fromConnection:">AVCaptureVideoDataOutputSampleBufferDelegate</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
+</ul>
 
-<h3>回転問題</h3>
-
-<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
-
-<p>```</p>
-
-<pre><code>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
-CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
-CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
-[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];
-</code></pre>
-
-<p>```</p>
-
-<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
 ]]></content>
   </entry>
   
