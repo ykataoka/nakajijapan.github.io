@@ -5,17 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>hello - Nakajijapan</title>
+  <title>AVCompositionDebugVieweriOS使ってみた - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="こちらでいろいろ記述していくことにしました。 mkdownはなによりたのもしいです。
-さよならwordpress&hellip; Title Sub 1
-2
-3
-4
-5
-class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
+  <meta name="description" content="先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 app道場 #2に参加して、LTしてきました。 今回は、WWDC 2013 Session VideosのAdvanced Editing with AV Foundationをみていたときにまだ試していないサンプルがあったのと、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +18,7 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io/blog/2013/03/03/hello">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -74,7 +68,7 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Hello</h1>
+      <h1 class="entry-title">AVCompositionDebugVieweriOS使ってみた</h1>
     
     
       <p class="meta">
@@ -90,34 +84,26 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
   
 
 
-<time datetime="2013-03-03T10:23:00+09:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+<time datetime="2014-04-23T10:50:00+09:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>こちらでいろいろ記述していくことにしました。</p>
+<div class="entry-content"><script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
 
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
 
-<h1>Title</h1>
+<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
 
-<h2>Sub</h2>
+<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
+「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
+普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
 
+<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
+mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
 </div>
 
 
@@ -140,7 +126,7 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
   
 
 
-<time datetime="2013-03-03T10:23:00+09:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
+<time datetime="2014-04-23T10:50:00+09:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
       
 
 
@@ -148,7 +134,7 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2013/03/03/hello/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2013/03/03/hello/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -161,8 +147,8 @@ class Hoge def hello { message: &#39;hello world nakajijapan&#39 &hellip;">
     
     <p class="meta">
       
+        <a class="basic-alignment left" href="/blog/2014/04/07/about-avcaptureinput/" title="Previous Post: メディアキャプチャの出力先の実装について">&laquo; メディアキャプチャの出力先の実装について</a>
       
-        <a class="basic-alignment right" href="/blog/2013/05/23/backbone-guidebook00/" title="Next Post: Backbone.jsガイドブック読書会 第１章 続き">Backbone.jsガイドブック読書会 第１章 続き &raquo;</a>
       
     </p>
   </footer>

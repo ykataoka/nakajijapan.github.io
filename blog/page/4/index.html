@@ -9,9 +9,8 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="自分のサービスのRailsのversionがまだ3.2だったので地道にRails4にアップデートしました。
-その際に必要になった作業をメモっときます。 attr_accessible is extracted out of Rails into a gem. 1
-E, [2013-07-04T09 &hellip;">
+  <meta name="description" content="お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
+人魂でもいれてみようじゃないかと思い立って作ってみました。 iOS5からCore &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +66,180 @@ E, [2013-07-04T09 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/07/create-hitodama-with-uikit/">UIKitで人魂つくってみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-07T07:42:00+09:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
+人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
+
+<p>iOS5からCore AnimationなるものがサポートされていてパーティクルエフェクトがUIKitでも作成できるようになったので実装してみました。
+以前はCocos2Dのフレームワーク情報で作成していたのですがそれを利用しないのは初めて。</p>
+
+<p>まずはフレームワークをインポートする</p>
+
+<h2>1</h2>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#import &lt;QuartzCore/QuartzCore.h&gt;</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>2</h2>
+
+<p>あとは表現したものを想像して実装するのみ！！！！っていってもパラメータが沢山あるので
+感覚的にGUIで設定できてその状態のパラメータをみれるツールをつかいました。</p>
+
+<ul>
+<li>UIEffectDesigner
+
+<ul>
+<li><a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>これにfire ballっていのがあったのでそれを参考にしつつ自分なりに調整してみました。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterLayer</span><span class="o">*</span> <span class="n">fireEmitter</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterLayer</span> <span class="n">layer</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterPosition</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">renderMode</span> <span class="o">=</span> <span class="n">kCAEmitterLayerAdditive</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CAEmitterCell</span><span class="o">*</span> <span class="n">fire</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterCell</span> <span class="n">emitterCell</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">birthRate</span>     <span class="o">=</span> <span class="mi">250</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetime</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetimeRange</span> <span class="o">=</span> <span class="mf">2.06</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocity</span>      <span class="o">=</span> <span class="mi">26</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocityRange</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">color</span>         <span class="o">=</span> <span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">0.0</span> <span class="nl">green:</span><span class="mf">0.0</span> <span class="nl">blue:</span><span class="mf">0.05</span> <span class="nl">alpha:</span><span class="mf">1.0</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">redRange</span>      <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">greenRange</span>    <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">blueRange</span>     <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">contents</span>      <span class="o">=</span> <span class="p">(</span><span class="kt">id</span><span class="p">)[[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;particle.png&quot;</span><span class="p">]</span> <span class="n">CGImage</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">fire</span> <span class="nl">setName:</span><span class="s">@&quot;fire&quot;</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaRange</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scale</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleRange</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spin</span>       <span class="o">=</span> <span class="mf">1.56</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spinRange</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.33</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionRange</span>     <span class="o">=</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLongitude</span> <span class="o">=</span> <span class="mf">1.57</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLatitude</span>  <span class="o">=</span> <span class="mf">2.33</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">xAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">yAcceleration</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">zAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterCells</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObject:</span><span class="n">fire</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">fireEmitter</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>とりあえずこれで自分なりの人魂作成に成功しました。
+パラメータをいろいろ覚えなければいけないものが沢山あるのでちょっと覚えるの大変だなという印象。
+今回その煩雑さをUIEffectDesignerで補完しましたが、それでもパラメータがどのような効果があるのかはある程度理解しておく必要があるようです。</p>
+
+<p><img src="/images/posts/2013-09-08_01.png" alt="ss" /></p>
+
+<h3>参照</h3>
+
+<p>iOS Developer Library
+<a href="https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html">https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html</a></p>
+
+<p>UIEffectDesigner
+<a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -702,148 +875,6 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/13/backbone-guidebook03/">Bbackbone.js 読書会 第２章</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
-
-<p>概要と話題になったことをメモろうと思います。</p>
-
-<h2>Model</h2>
-
-<p>データを扱う方法を提供するもの。
-View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
-これがjavascriptで使えちゃう。</p>
-
-<h3>提供するもの</h3>
-
-<ul>
-<li>保持</li>
-<li>検証</li>
-<li>アクセス制御</li>
-<li>保存</li>
-</ul>
-
-
-<h3>Validationをどうするか</h3>
-
-<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
-場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
-その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
-とかはクライアント側でも利用するよねーという話をした。</p>
-
-<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
-それを継承して処理が動作するようになっている。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
-</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Collecation</h2>
-
-<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
-Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
-each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
-
-<h2>View</h2>
-
-<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
-
-<ul>
-<li>Viewとして、「適切にDOMツリーを構築する」</li>
-<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
-</ul>
-
-
-<p>前者でいうと</p>
-
-<ul>
-<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
-</ul>
-
-
-<p>後者でいうと</p>
-
-<ul>
-<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
-</ul>
-
-
-<p>なのかなと感じた。</p>
-
-<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
-
-<h2>Router</h2>
-
-<h2>Sync</h2>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -892,6 +923,10 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/04/23/debug-of-a-video-editing/">AVCompositionDebugVieweriOS使ってみた</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/04/07/about-avcaptureinput/">メディアキャプチャの出力先の実装について</a>
       </li>
     
@@ -905,10 +940,6 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
     
       <li class="post">
         <a href="/blog/2014/02/28/vagrant-tips/">Vagrant勉強会でLTした</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/02/26/yxcm-epilogue/">【iOS勉強会】ヤフー vs クラスメソッド に参加してきた</a>
       </li>
     
   </ul>

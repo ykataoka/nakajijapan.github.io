@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-04-07T04:43:04+09:00</updated>
+  <updated>2014-04-29T11:42:16+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
+    <updated>2014-04-23T10:50:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
+    <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
+
+<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
+「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
+
+<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
+普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
+
+<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
+mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[メディアキャプチャの出力先の実装について]]></title>
@@ -2570,121 +2591,6 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
 </li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Bbackbone.js 読書会 第２章]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/"/>
-    <updated>2013-06-13T10:56:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03</id>
-    <content type="html"><![CDATA[<p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
-
-<p>概要と話題になったことをメモろうと思います。</p>
-
-<h2>Model</h2>
-
-<p>データを扱う方法を提供するもの。
-View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
-これがjavascriptで使えちゃう。</p>
-
-<h3>提供するもの</h3>
-
-<ul>
-<li>保持</li>
-<li>検証</li>
-<li>アクセス制御</li>
-<li>保存</li>
-</ul>
-
-
-<h3>Validationをどうするか</h3>
-
-<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
-場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
-その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
-とかはクライアント側でも利用するよねーという話をした。</p>
-
-<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
-それを継承して処理が動作するようになっている。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
-</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
-</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
-</span><span class='line'>
-</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
-</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
-</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Collecation</h2>
-
-<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
-Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
-each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
-
-<h2>View</h2>
-
-<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
-
-<ul>
-<li>Viewとして、「適切にDOMツリーを構築する」</li>
-<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
-</ul>
-
-
-<p>前者でいうと</p>
-
-<ul>
-<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
-</ul>
-
-
-<p>後者でいうと</p>
-
-<ul>
-<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
-</ul>
-
-
-<p>なのかなと感じた。</p>
-
-<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
-
-<h2>Router</h2>
-
-<h2>Sync</h2>
 ]]></content>
   </entry>
   
