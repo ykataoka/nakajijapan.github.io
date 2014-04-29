@@ -4,7 +4,7 @@
   <title><![CDATA[categories: uikit | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/uikit/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-04-29T11:42:16+09:00</updated>
+  <updated>2014-04-29T11:44:45+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -95,112 +95,6 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
 
 <p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
 そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[UIKitで人魂つくってみた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/"/>
-    <updated>2013-09-07T07:42:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit</id>
-    <content type="html"><![CDATA[<p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
-人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
-
-<p>iOS5からCore AnimationなるものがサポートされていてパーティクルエフェクトがUIKitでも作成できるようになったので実装してみました。
-以前はCocos2Dのフレームワーク情報で作成していたのですがそれを利用しないのは初めて。</p>
-
-<p>まずはフレームワークをインポートする</p>
-
-<h2>1</h2>
-
-<p>```</p>
-
-<h1>import &lt;QuartzCore/QuartzCore.h></h1>
-
-<p>```</p>
-
-<h2>2</h2>
-
-<p>あとは表現したものを想像して実装するのみ！！！！っていってもパラメータが沢山あるので
-感覚的にGUIで設定できてその状態のパラメータをみれるツールをつかいました。</p>
-
-<ul>
-<li>UIEffectDesigner
-
-<ul>
-<li><a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p>これにfire ballっていのがあったのでそれを参考にしつつ自分なりに調整してみました。</p>
-
-<p>```objective-c
-&ndash; (void)viewDidLoad
-{</p>
-
-<pre><code>[super viewDidLoad];
-
-CAEmitterLayer* fireEmitter = [CAEmitterLayer layer];
-fireEmitter.emitterPosition = CGPointMake(200, 200);
-fireEmitter.emitterSize = CGSizeMake(40, 40);
-fireEmitter.renderMode = kCAEmitterLayerAdditive;
-
-CAEmitterCell* fire = [CAEmitterCell emitterCell];
-
-fire.birthRate     = 250;
-fire.lifetime      = 2.0;
-fire.lifetimeRange = 2.06;
-fire.velocity      = 26;
-fire.velocityRange = 40;
-
-fire.color         = [[UIColor colorWithRed:0.0 green:0.0 blue:0.05 alpha:1.0] CGColor];
-fire.redRange      = 0.12;
-fire.greenRange    = 0.12;
-fire.blueRange     = 0.12;
-fire.contents      = (id)[[UIImage imageNamed:@"particle.png"] CGImage];
-[fire setName:@"fire"];
-
-fire.alphaRange = 0;
-fire.scale      = 2.0;
-fire.scaleRange = 2.0;
-fire.spin       = 1.56;
-fire.spinRange  = 0;
-
-fire.alphaSpeed = -0.33;
-fire.scaleSpeed = -0.1;
-
-fire.emissionRange     = M_PI / 2;
-fire.emissionLongitude = 1.57;
-fire.emissionLatitude  = 2.33;
-
-fire.xAcceleration = 0;
-fire.yAcceleration = -80;
-fire.zAcceleration = 0;
-
-fireEmitter.emitterCells = [NSArray arrayWithObject:fire];
-
-[self.view.layer addSublayer:fireEmitter];
-</code></pre>
-
-<p>}</p>
-
-<p>```</p>
-
-<p>とりあえずこれで自分なりの人魂作成に成功しました。
-パラメータをいろいろ覚えなければいけないものが沢山あるのでちょっと覚えるの大変だなという印象。
-今回その煩雑さをUIEffectDesignerで補完しましたが、それでもパラメータがどのような効果があるのかはある程度理解しておく必要があるようです。</p>
-
-<p><img src="/images/posts/2013-09-08_01.png" alt="ss" /></p>
-
-<h3>参照</h3>
-
-<p>iOS Developer Library
-<a href="https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html">https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html</a></p>
-
-<p>UIEffectDesigner
-<a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></p>
 ]]></content>
   </entry>
   

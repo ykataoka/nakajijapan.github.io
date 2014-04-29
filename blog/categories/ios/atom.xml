@@ -4,7 +4,7 @@
   <title><![CDATA[categories: iOS | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-04-29T11:42:16+09:00</updated>
+  <updated>2014-04-29T11:44:45+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
+    <updated>2014-04-23T10:50:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
+    <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
+
+<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
+「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
+
+<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
+普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
+
+<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
+mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[メディアキャプチャの出力先の実装について]]></title>
@@ -157,6 +178,449 @@ Delegate Methods
 <li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
 </ul>
 
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[IRKit + iBeacon]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon/"/>
+    <updated>2014-03-29T16:32:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon</id>
+    <content type="html"><![CDATA[<p>先日IRKitとEstimote Beaconsを購入しまして、せっかくなんでこの二つ合わせてなにかできないかなーと思いまして
+自宅で活用できるものを作ってみました。</p>
+
+<h4>IRKit</h4>
+
+<p><a href="http://www.amazon.co.jp/IRKit-001-IRKit-iPhone-iPad%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E5%A4%96%E5%87%BA%E5%85%88%E3%81%8B%E3%82%89%E3%82%A8%E3%82%A2%E3%82%B3%E3%83%B3%E7%AD%89%E3%81%AE%E5%AE%B6%E9%9B%BB%E3%82%92%E6%93%8D%E4%BD%9C%E3%81%A7%E3%81%8D%E3%82%8B%E5%AD%A6%E7%BF%92%E3%83%AA%E3%83%A2%E3%82%B3%E3%83%B3/dp/B00H91KK26%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00H91KK26" target="_blank" title="IRKit - iPhone,iPadを使って外出先からエアコン等の家電を操作できる学習リモコン"><img src="http://ecx.images-amazon.com/images/I/31HuSy3ACXL.jpg" width="500" height="356" alt="IRKit - iPhone,iPadを使って外出先からエアコン等の家電を操作できる学習リモコン" /></a></p>
+
+<h4>Estimote Beacons</h4>
+
+<iframe src="http://nakajijapan.github.io//instagram.com/p/iDTqkYMR1I/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+
+
+<p>仕様としては、</p>
+
+<ul>
+<li>beaconに近づいたら（家に帰ってきたら）テレビをつける</li>
+<li>beaconから離れたら（外出したら）テレビを消す</li>
+</ul>
+
+
+<p>ってことを試してみました。</p>
+
+<h2>下準備</h2>
+
+<p>まずはそれぞれのライブラリを追加して<code>pod install</code>する。</p>
+
+<p>SDKのインストール。</p>
+
+<p><code>
+target "irkit_ibeacon" do
+  pod 'IRKit', :git =&gt; 'https://github.com/irkit/ios-sdk.git'
+  pod 'EstimoteSDK'
+end
+</code></p>
+
+<p>frameworkの追加。</p>
+
+<p><code>
+CoreLocation.framework
+CoreBluetooth.framework
+</code></p>
+
+<h2>IRKit</h2>
+
+<p>ここでは、IRKit SDKを利用してシグナルを登録してテーブルのセルにボタンを追加する処理を行います。</p>
+
+<p>```obj-c
+&ndash; (void)viewDidLoad
+{</p>
+
+<p>(snip..)</p>
+
+<pre><code>// find IRKit
+if ([IRKit sharedInstance].countOfReadyPeripherals == 0) {
+    IRNewPeripheralViewController *vc = [[IRNewPeripheralViewController alloc] init];
+    vc.delegate = self;
+    [self presentViewController:vc
+                       animated:YES
+                     completion:^{
+                         NSLog(@"presented");
+                     }];
+
+
+}
+
+IRSignals *tmpSignals = [[IRSignals alloc] init];
+
+// and add a signal to the collection
+[tmpSignals loadFromStandardUserDefaultsKey:@"xxxxxxxxxxxxxxxxxxxxxx"];
+
+for (int i = 0; i &lt; [[tmpSignals signals] count]; i++) {
+    NSLog(@"%@", [[tmpSignals signals] objectAtIndex:i]);
+}
+</code></pre>
+
+<p>}
+```</p>
+
+<p><code>IRNewPeripheralViewControllerDelegate</code>で信号の登録が終了したときに呼ばれるメソッドの実装を行います。
+ここでは、ハード側で学習が完了した信号を<code>NSUserDefault</code>側でも保存させるようにしておきます。（実際にはそのシグナルを識別できるようにするためのハッシュ値のようなもの）</p>
+
+<p>```obj-c</p>
+
+<h1>pragma mark &ndash; IRNewPeripheralViewControllerDelegate</h1>
+
+<ul>
+<li><p>(void)newSignalViewController:(IRNewSignalViewController <em>)viewController
+          didFinishWithSignal:(IRSignal </em>)signal {
+  NSLog( @&ldquo;signal: %@&rdquo;, signal );</p>
+
+<p>  if (signal) {
+      [<em>datasource addSignalsObject:signal];
+      [</em>datasource.signals saveToStandardUserDefaultsWithKey:@&ldquo;SIGNALS&rdquo;];
+      [self.tableView reloadData];
+  }
+  [self dismissViewControllerAnimated:YES
+                           completion:^{
+                               NSLog(@&ldquo;dismissed&rdquo;);
+                           }];
+}</p></li>
+</ul>
+
+
+<h1>pragma mark &ndash; IRNewSignalViewControllerDelegate</h1>
+
+<ul>
+<li><p>(void)newPeripheralViewController:(IRNewPeripheralViewController <em>)viewController
+          didFinishWithPeripheral:(IRPeripheral </em>)peripheral {
+  NSLog( @&ldquo;peripheral: %@&rdquo;, peripheral );</p>
+
+<p>  [self dismissViewControllerAnimated:YES
+                           completion:^{
+                               NSLog(@&ldquo;dismissed&rdquo;);
+                           }];
+}
+```</p></li>
+</ul>
+
+
+<p>登録した信号を実行するときは以下のような実装で呼び出せるようになります。</p>
+
+<p>```obj-c
+&ndash; (void)tableView:(UITableView <em>)tableView didSelectRowAtIndexPath:(NSIndexPath </em>)indexPath {</p>
+
+<pre><code>NSLog(@"indexPath: %@", indexPath);
+[tableView deselectRowAtIndexPath:indexPath
+                         animated:YES];
+
+IRSignal *signal = [_datasource objectAtIndex:indexPath.row];
+
+[signal sendWithCompletion:^(NSError *error) {
+    NSLog(@"sent error: %@", error);
+}];
+</code></pre>
+
+<p>}
+```</p>
+
+<h2>iBeacon</h2>
+
+<p>ここでは、ビーコンで領域を観測し出たか入ったかを監視して、IRKitに信号を送る処理を行います。</p>
+
+<p>まず、<code>ESTBeaconManager</code>をインスタンス化して<code>startMonitoringForRegion:</code> で監視を開始します。
+<code>startRangingBeaconsInRegion:</code>で距離の観測を開始します。</p>
+
+<p>```obj-c
+&ndash; (void)viewDidLoad
+{</p>
+
+<p>(snip&hellip;)</p>
+
+<pre><code>self.beaconManager = [[ESTBeaconManager alloc] init];
+self.beaconManager.delegate = self;
+
+ESTBeaconRegion *region = [[ESTBeaconRegion alloc] initWithProximityUUID:MY_ESTIMOTE_PROXIMITY_UUID
+                                                                   major:36605
+                                                                   minor:43679
+                                                              identifier:@"EstimoteSampleRegion"];
+
+
+[self.beaconManager startMonitoringForRegion:region];
+[self.beaconManager startRangingBeaconsInRegion:region];
+</code></pre>
+
+<p>}
+```</p>
+
+<p>位置情報を利用した領域観測の方法と同様に、ビーコン領域の出入りのイベントをハンドリングします。その処理内でIRKitへ信号の送信する処理を実行します。
+メソッドとしては、<code>locationManager:didEnterRegion:</code>と、<code>locationManager:didExitRegion:</code>をハンドリングして処理を行います。</p>
+
+<p>```obj-c
+&ndash;(void)beaconManager:(ESTBeaconManager <em>)manager didEnterRegion:(ESTBeaconRegion </em>)region
+{</p>
+
+<pre><code>IRSignals *signals = [[IRSignals alloc] init];
+[signals loadFromStandardUserDefaultsKey:@"SIGNALS"];
+IRSignal *signal = [signals objectAtIndex:0];
+
+if (signal) {
+    [signal sendWithCompletion:^(NSError *error) {
+        [self say:[NSString  stringWithFormat:@"%@を実行しました。", signal.name]];
+    }];
+}
+
+NSLog(@"beaconの近くに入りました。");
+</code></pre>
+
+<p>}</p>
+
+<p>&ndash;(void)beaconManager:(ESTBeaconManager <em>)manager didExitRegion:(ESTBeaconRegion </em>)region
+{</p>
+
+<pre><code>IRSignals *signals = [[IRSignals alloc] init];
+[signals loadFromStandardUserDefaultsKey:@"SIGNALS"];
+IRSignal *signal = [signals objectAtIndex:1];
+
+if (signal) {
+    [signal sendWithCompletion:^(NSError *error) {
+        [self say:[NSString  stringWithFormat:@"%@を実行しました。", signal.name]];
+    }];
+}
+
+NSLog(@"beaconから離れました。");
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<h2>まとめ</h2>
+
+<p>これで上記の仕様が実現できます。
+今回の実装はまだIRKitにしてもEstimote Beaconsにしてもさわりの部分しか実装していないのですが、他の仕様も合わせたりするとまだまだ面白いことでできるかと思います。
+最近、生活が変わるような技術がどんどんでてきていて楽しいですね♪（ただハードを購入しなきゃいけないのでお金がかかってしまいますがw）
+まだまだこれからも、生活を変えるような技術がでてくると思うのでそれキャッチアップして試せるものは試していこうと思います！！</p>
+
+<p>Enjoy Technology!!!</p>
+
+<h2>Ref</h2>
+
+<ul>
+<li><a href="http://getirkit.com/">IRKit</a></li>
+<li><a href="http://estimote.com/">Estimote Beacons</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
+    <updated>2014-03-17T03:37:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
+    <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
+持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
+本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
+いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
+内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
+
+<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
+
+<p>インストール方法は至って簡単で</p>
+
+<p><code>
+pod "NKJMovieComposer"
+</code></p>
+
+<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
+
+<p>機能としては以下の機能が実装できます。</p>
+
+<ul>
+<li>動画結合</li>
+<li>ワイプ</li>
+<li>フェードイン・アウト</li>
+</ul>
+
+
+<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
+まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
+
+<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
+    <updated>2014-02-26T21:44:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
+    <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
+
+<ul>
+<li><p>ヤフーさん発表資料
+<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
+<li><p>クラスメソッドさん発表資料
+<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
+</ul>
+
+
+<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
+
+<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
+
+<h2>code snippet</h2>
+
+<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
+
+<p><img src="/images/posts/2014-02-28_02.png" alt="01" /></p>
+
+<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
+
+<p><img src="/images/posts/2014-02-28_01.png" alt="01" /></p>
+
+<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
+作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
+
+<p>試しにUIAlertViewをいれてみました。</p>
+
+<p>```obj-c</p>
+
+<pre><code>UIAlertView *alertView = [[UIAlertView alloc] initWithTitle : NSLocalizedString(@"Title", nil)
+                                                    message : NSLocalizedString(@"Message", nil)
+                                                   delegate : self
+                                          cancelButtonTitle : NSLocalizedString(@"OK", nil)
+                                          otherButtonTitles : nil
+                          ];
+[alertView setTag:1];
+[alertView show];
+</code></pre>
+
+<p>```</p>
+
+<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
+
+<h2>code template</h2>
+
+<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
+
+<p><code>
+mkdir -p ~/Library/Developer/Xcode/Templates/File Templates
+cd    ~/Library/Developer/Xcode/Templates/File Templates
+cp /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/* .
+</code></p>
+
+<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
+
+<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。
+```</p>
+
+<pre><code>&lt;dict&gt;
+  &lt;key&gt;Default&lt;/key&gt;
+  &lt;string&gt;false&lt;/string&gt;
+  &lt;key&gt;Identifier&lt;/key&gt;
+  &lt;string&gt;Nakajijapan&lt;/string&gt;
+  &lt;key&gt;Name&lt;/key&gt;
+  &lt;string&gt;Nakajijapan&lt;/string&gt;
+  &lt;key&gt;RequiredOptions&lt;/key&gt;
+  &lt;dict&gt;
+      &lt;key&gt;cocoaTouchSubclass&lt;/key&gt;
+      &lt;array&gt;
+        &lt;string&gt;NSObject&lt;/string&gt;
+        &lt;string&gt;UIViewController&lt;/string&gt;
+      &lt;/array&gt;
+  &lt;/dict&gt;
+  &lt;key&gt;Type&lt;/key&gt;
+  &lt;string&gt;checkbox&lt;/string&gt;
+&lt;/dict&gt;
+</code></pre>
+
+<p>```</p>
+
+<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
+
+<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
+
+<p>```
+//
+//  <strong><em>FILENAME</em></strong>
+//
+//  Created by <strong><em>FULLUSERNAME</em></strong>.
+//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
+//</p>
+
+<p><strong><em>IMPORTHEADER_cocoaTouchSubclass</em></strong></p>
+
+<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> : <strong><em>VARIABLE_cocoaTouchSubclass</em></strong></p>
+
+<p>@end
+```</p>
+
+<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
+
+<p>```
+//
+//  <strong><em>FILENAME</em></strong>
+//
+//  Created by <strong><em>FULLUSERNAME</em></strong>.
+//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
+//</p>
+
+<h1>import &ldquo;<strong><em>FILEBASENAME</em></strong>.h&rdquo;</h1>
+
+<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> ()</p>
+
+<p>@end</p>
+
+<p>@implementation <strong><em>FILEBASENAMEASIDENTIFIER</em></strong></p>
+
+<ul>
+<li><p>(id)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil
+{
+  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
+      // Custom initialization
+  }
+  return self;
+}</p></li>
+<li><p>(void)viewDidLoad
+{
+  [super viewDidLoad];
+// Do any additional setup after loading the view.
+}</p></li>
+<li><p>(void)didReceiveMemoryWarning
+{
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
+}</p></li>
+</ul>
+
+
+<p>@end
+```</p>
+
+<p>これで自分好みの設定にできました。</p>
+
+<h3>参加してみて</h3>
+
+<p>吉田 一星さんの発表が印象的で</p>
+
+<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+
+
+<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
+
+<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
+Appleが未だ実現されていない機能を先に作れ</p></blockquote>
+
+<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
+まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
+
+<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
 ]]></content>
   </entry>
   
