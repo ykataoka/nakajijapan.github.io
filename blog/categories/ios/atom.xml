@@ -4,7 +4,7 @@
   <title><![CDATA[categories: iOS | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-04-29T11:47:25+09:00</updated>
+  <updated>2014-05-04T21:30:57+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,73 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[AVAudioMixでオーディオの調節を行う]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/05/01/about-audiomix/"/>
+    <updated>2014-05-01T11:56:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/05/01/about-audiomix</id>
+    <content type="html"><![CDATA[<p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
+その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
+対策としては、ナレーションの音声はそのままにして録画した動画の音声を小さくするように調整すること。<code>AVAudioMix</code>、<code>AVMutableAudioMixInputParameters</code>をうまく利用することで解決しました。</p>
+
+<h2>実装</h2>
+
+<p>基本的には対象のメディア情報に対して、オーディオを制御する用の<code>AVMutableAudioMixInputParameters</code>を利用します。</p>
+
+<p>```obj-c
+AVMutableComposition avComposition;</p>
+
+<p>(snip)</p>
+
+<p>// movie sound
+AVMutableCompositionTrack* compositionAudioTrack = [avComposition addMutableTrackWithMediaType:AVMediaTypeAudio</p>
+
+<pre><code>                                                                          preferredTrackID:kCMPersistentTrackID_Invalid];
+</code></pre>
+
+<p>// オーディオのメディア情報をもとにオーディオミックス用のパラメータを生成する
+AVMutableAudioMixInputParameters *mixInputParameters = [AVMutableAudioMixInputParameters</p>
+
+<pre><code>                                                    audioMixInputParametersWithTrack:audioTrack];
+</code></pre>
+
+<p>// 音量の調整
+[mixInputParameters setVolumeRampFromStartVolume:0.2f toEndVolume:0.2f</p>
+
+<pre><code>                              timeRange:CMTimeRangeMake(kCMTimeZero, videoAsset.duration)];
+</code></pre>
+
+<p>// 入力パラメータをオーディオミックスに渡す。
+mutableAudioMix = [AVMutableAudioMix audioMix];
+mutableAudioMix.inputParameters = @[mixInputParameters];
+```</p>
+
+<h4>&ndash; (BOOL)getVolumeRampForTime:(CMTime)time startVolume:(float <em>)startVolume endVolume:(float </em>)endVolume timeRange:(CMTimeRange *)timeRange</h4>
+
+<p>これでどの時間からどのくらいの間、音量をどのくらいにするのかの設定を行えるので、ここでその制御を行います。自分の場合はずっと音量を低くできればよかったので上記のような設定になっています。</p>
+
+<p>```obj-c
+AVAssetExportSession *assetExportSession;</p>
+
+<p>(snip)</p>
+
+<p>// 音声の制御
+assetExportSession.audioMix = mutableAudioMix;
+```</p>
+
+<p>設定が終われば、<code>AVAssetExportSession</code>の<code>audioMix</code>に格納すれば、設定が反映されているはずです。
+これでナレーションが動画がうるさくてもしっかり聞こえるようになったので、よりテレビ番組のような感じに近づけられたかと思います！！！</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableAudioMix_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40009740">AVMutableAudioMix Class</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioMixInputParameters_Class/Reference/Reference.html#//apple_ref/occ/cl/AVAudioMixInputParameters">AVAudioMixInputParameters Class</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
@@ -451,176 +518,6 @@ pod "NKJMovieComposer"
 まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
 
 <p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
-    <updated>2014-02-26T21:44:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
-    <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
-
-<ul>
-<li><p>ヤフーさん発表資料
-<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
-<li><p>クラスメソッドさん発表資料
-<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
-</ul>
-
-
-<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
-
-<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
-
-<h2>code snippet</h2>
-
-<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
-
-<p><img src="/images/posts/2014-02-28_02.png" alt="01" /></p>
-
-<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
-
-<p><img src="/images/posts/2014-02-28_01.png" alt="01" /></p>
-
-<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
-作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
-
-<p>試しにUIAlertViewをいれてみました。</p>
-
-<p>```obj-c</p>
-
-<pre><code>UIAlertView *alertView = [[UIAlertView alloc] initWithTitle : NSLocalizedString(@"Title", nil)
-                                                    message : NSLocalizedString(@"Message", nil)
-                                                   delegate : self
-                                          cancelButtonTitle : NSLocalizedString(@"OK", nil)
-                                          otherButtonTitles : nil
-                          ];
-[alertView setTag:1];
-[alertView show];
-</code></pre>
-
-<p>```</p>
-
-<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
-
-<h2>code template</h2>
-
-<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
-
-<p><code>
-mkdir -p ~/Library/Developer/Xcode/Templates/File Templates
-cd    ~/Library/Developer/Xcode/Templates/File Templates
-cp /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates/* .
-</code></p>
-
-<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
-
-<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。
-```</p>
-
-<pre><code>&lt;dict&gt;
-  &lt;key&gt;Default&lt;/key&gt;
-  &lt;string&gt;false&lt;/string&gt;
-  &lt;key&gt;Identifier&lt;/key&gt;
-  &lt;string&gt;Nakajijapan&lt;/string&gt;
-  &lt;key&gt;Name&lt;/key&gt;
-  &lt;string&gt;Nakajijapan&lt;/string&gt;
-  &lt;key&gt;RequiredOptions&lt;/key&gt;
-  &lt;dict&gt;
-      &lt;key&gt;cocoaTouchSubclass&lt;/key&gt;
-      &lt;array&gt;
-        &lt;string&gt;NSObject&lt;/string&gt;
-        &lt;string&gt;UIViewController&lt;/string&gt;
-      &lt;/array&gt;
-  &lt;/dict&gt;
-  &lt;key&gt;Type&lt;/key&gt;
-  &lt;string&gt;checkbox&lt;/string&gt;
-&lt;/dict&gt;
-</code></pre>
-
-<p>```</p>
-
-<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
-
-<p>```
-//
-//  <strong><em>FILENAME</em></strong>
-//
-//  Created by <strong><em>FULLUSERNAME</em></strong>.
-//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
-//</p>
-
-<p><strong><em>IMPORTHEADER_cocoaTouchSubclass</em></strong></p>
-
-<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> : <strong><em>VARIABLE_cocoaTouchSubclass</em></strong></p>
-
-<p>@end
-```</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
-
-<p>```
-//
-//  <strong><em>FILENAME</em></strong>
-//
-//  Created by <strong><em>FULLUSERNAME</em></strong>.
-//  Copyright <strong><em>YEAR</em></strong> <strong><em>FULLUSERNAME</em></strong>. All rights reserved.
-//</p>
-
-<h1>import &ldquo;<strong><em>FILEBASENAME</em></strong>.h&rdquo;</h1>
-
-<p>@interface <strong><em>FILEBASENAMEASIDENTIFIER</em></strong> ()</p>
-
-<p>@end</p>
-
-<p>@implementation <strong><em>FILEBASENAMEASIDENTIFIER</em></strong></p>
-
-<ul>
-<li><p>(id)initWithNibName:(NSString <em>)nibNameOrNil bundle:(NSBundle </em>)nibBundleOrNil
-{
-  self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
-      // Custom initialization
-  }
-  return self;
-}</p></li>
-<li><p>(void)viewDidLoad
-{
-  [super viewDidLoad];
-// Do any additional setup after loading the view.
-}</p></li>
-<li><p>(void)didReceiveMemoryWarning
-{
-  [super didReceiveMemoryWarning];
-  // Dispose of any resources that can be recreated.
-}</p></li>
-</ul>
-
-
-<p>@end
-```</p>
-
-<p>これで自分好みの設定にできました。</p>
-
-<h3>参加してみて</h3>
-
-<p>吉田 一星さんの発表が印象的で</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
-
-<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
-Appleが未だ実現されていない機能を先に作れ</p></blockquote>
-
-<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
-まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
-
-<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
 ]]></content>
   </entry>
   
