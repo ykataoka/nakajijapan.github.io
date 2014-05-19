@@ -4,7 +4,7 @@
   <title><![CDATA[categories: backbonejs | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/backbonejs/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-05-05T11:44:49+09:00</updated>
+  <updated>2014-05-19T23:48:55+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -173,10 +173,6 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
 <p>なのかなと感じた。</p>
 
 <p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
-
-<h2>Router</h2>
-
-<h2>Sync</h2>
 ]]></content>
   </entry>
   

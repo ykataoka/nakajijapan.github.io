@@ -4,7 +4,7 @@
   <title><![CDATA[categories: Ruby | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-05-05T11:44:49+09:00</updated>
+  <updated>2014-05-19T23:48:55+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -94,7 +94,7 @@ Tasks: TOP =&gt; batches:total_scores
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[rubyhiroba]]></title>
+    <title type="html"><![CDATA[RubyHiroba]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba/"/>
     <updated>2013-06-05T00:12:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba</id>
@@ -103,7 +103,7 @@ Tasks: TOP =&gt; batches:total_scores
 
 <p> <div style="margin-bottom:5px"> <strong> <a href="http://www.slideshare.net/nakajijapan/2013-lt" title="サービスをRailsにした話" target="_blank">サービスをRailsにした話</a> </strong> from <strong><a href="http://www.slideshare.net/nakajijapan" target="_blank">Daichi Nakajima</a></strong> </div></p>
 
-<p>rubyhirobaでLTに参加してきまして自分のサービスのことについて話してきました。
+<p><a href="http://rubyhiroba.org/2013/">RubyHiroba</a>でLTに参加してきまして自分のサービスのことについて話してきました。
 以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。
 やはり５分で話すにはちょっと時間が足りなかったように思います。薄い話になってしまったのが
 反省点であります。しかし、今回のリニューアルにはいろいろする理由はあると思うけども（そもそもCGIてどうよてなところから）</p>
