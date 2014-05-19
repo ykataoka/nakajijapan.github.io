@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ci | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ci/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-05-19T23:48:55+09:00</updated>
+  <updated>2014-05-19T23:50:20+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[jenkinsでcommit statusを操作する]]></title>
+    <title type="html"><![CDATA[Jenkinsでcommit statusを操作する]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/"/>
     <updated>2013-06-24T08:02:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins</id>
