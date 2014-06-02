@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Happy New Year - Nakajijapan</title>
+  <title>creating-thumbnailimage-from-the-movie - Nakajijapan</title>
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="明けましておめでとうございます。 時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
-３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。 いかがおすごしでしょうか。
-nakajijapanです。 去年を振り返ってみると、 &hellip;">
+  <meta name="description" content="動画のある一部分を画像として取り出したいときがあったので調べてみたら、ドキュメントにそれっぽい記述があったので実装してみました。 方法としては、以下のメソッドを利用してCMTimeを利用して指定された時間に対する画像を生成します。 copyCGImageAtTime:actualTime: &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ nakajijapanです。 去年を振り返ってみると、 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year">
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
@@ -70,7 +68,7 @@ nakajijapanです。 去年を振り返ってみると、 &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Happy New Year</h1>
+      <h1 class="entry-title">Creating-thumbnailimage-from-the-movie</h1>
     
     
       <p class="meta">
@@ -86,31 +84,86 @@ nakajijapanです。 去年を振り返ってみると、 &hellip;">
   
 
 
-<time datetime="2014-01-02T20:22:00+09:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2014</time>
+<time datetime="2014-05-25T22:02:00+09:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>明けましておめでとうございます。</p>
+<div class="entry-content"><p>動画のある一部分を画像として取り出したいときがあったので調べてみたら、ドキュメントにそれっぽい記述があったので実装してみました。</p>
 
-<p>時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
-３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。</p>
+<p>方法としては、以下のメソッドを利用してCMTimeを利用して指定された時間に対する画像を生成します。</p>
 
-<p>いかがおすごしでしょうか。
-nakajijapanです。</p>
+<blockquote><p>copyCGImageAtTime:actualTime:error:</p></blockquote>
 
-<p>去年を振り返ってみると、とにかく自分の可能性を信じつつ自分が未開拓な領域
-をガンガン攻めた年ではありました。しかし、まだスタート地点に立ったところ
-というか物足りないと感じてる次第です。もっとイケル！</p>
+<p>実際に、メソッドにして動くようにしました。</p>
 
-<p>殻を打ち破る日はまだ分からないですが、あきらめず自分のケツを叩きながら
-一歩づつ前に突き進んでいこうと思います。</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIImage*)createThumbnailImageWithURL:(NSURL *)movieURL
+</span><span class='line'>{
+</span><span class='line'>    AVAsset *asset = [[AVURLAsset alloc] initWithURL:[movieURL objectAtIndex:index] options:nil];
+</span><span class='line'>
+</span><span class='line'>    if ([asset tracksWithMediaCharacteristic:AVMediaTypeVideo]) {
+</span><span class='line'>        AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+</span><span class='line'>
+</span><span class='line'>        Float64 durationSeconds = CMTimeGetSeconds([asset duration]);
+</span><span class='line'>        CMTime midpoint         = CMTimeMakeWithSeconds(durationSeconds/2.0, 600);
+</span><span class='line'>        NSError* error          = nil;
+</span><span class='line'>        CMTime actualTime;
+</span><span class='line'>
+</span><span class='line'>        CGImageRef halfWayImageRef = [imageGenerator copyCGImageAtTime:midpoint actualTime:&actualTime error:&error];
+</span><span class='line'>
+</span><span class='line'>        if (halfWayImageRef != NULL) {
+</span><span class='line'>            UIImage* image = [[UIImage alloc]initWithCGImage:halfWayImageRef];
+</span><span class='line'>
+</span><span class='line'>            // 明示的にリリースしておきます
+</span><span class='line'>            CGImageRelease(halfWayImageRef);
+</span><span class='line'>            return image;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    return nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
-<p>今年も仕事にプライベートにがんばるぞ！</p>
 
-<p>今年もよろしくお願いします。</p>
+<p>動画を取り終わった後に、一時的に一覧として残しておきたいときなどに利用できますね。</p>
+
+<h3>p.s.</h3>
+
+<p>これは試していないのですが、以下のメソッドがあってブロックの中で複数の画像が生成できるようです。</p>
+
+<blockquote><p>generateCGImagesAsynchronouslyForTimes:completionHandler::^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError
+*error)</p></blockquote>
+
+<h2>ref</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
+</ul>
+
 </div>
 
 
@@ -134,12 +187,12 @@ nakajijapanです。</p>
   
 
 
-<time datetime="2014-01-02T20:22:00+09:00" pubdate data-updated="true">Jan 2<span>nd</span>, 2014</time>
+<time datetime="2014-05-25T22:02:00+09:00" pubdate data-updated="true">May 25<span>th</span>, 2014</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/diary/'>diary</a>
+    <a class='category' href='/blog/categories/ios/'>iOS</a>
   
 </span>
 
@@ -149,7 +202,7 @@ nakajijapanです。</p>
       <div class="sharing">
   
   <div class="twitter">
-    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/" >Tweet</a>
+    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/" >Tweet</a>
   </div>
   
   
@@ -159,14 +212,14 @@ nakajijapanです。</p>
   
 
   <div class="hatena">
-    <a href="http://b.hatena.ne.jp/entry/http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/" class="hatena-bookmark-button" data-hatena-bookmark-title="nakajijapan" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    <a href="http://b.hatena.ne.jp/entry/http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/" class="hatena-bookmark-button" data-hatena-bookmark-title="nakajijapan" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
   </div>
 
   
     <!--
     <div class="fb-like" data-send="true" data-width="400" data-show-faces="false"></div>
     -->
-    <div class="fb-like" data-href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/" data-layout="button_count" data-send="false" data-show-faces="false"></div>
+    <div class="fb-like" data-href="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/" data-layout="button_count" data-send="false" data-show-faces="false"></div>
 
   
 
@@ -176,10 +229,10 @@ nakajijapanです。</p>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2013/12/12/study-ibeacon/" title="Previous Post: iOS勉強会 iBeaconでできること　に参加してきた">&laquo; iOS勉強会 iBeaconでできること　に参加してきた</a>
+        <a class="basic-alignment left" href="/blog/2014/05/01/about-audiomix/" title="Previous Post: AVAudioMixでオーディオの調節を行う">&laquo; AVAudioMixでオーディオの調節を行う</a>
       
       
-        <a class="basic-alignment right" href="/blog/2014/01/19/avfoundation-checkpoint/" title="Next Post: 動画関連の処理をする上で注意すること">動画関連の処理をする上で注意すること &raquo;</a>
+        <a class="basic-alignment right" href="/blog/2014/06/01/app-doujou3/" title="Next Post: app道場#3 Vineのような動画の作り方を発表した">app道場#3 Vineのような動画の作り方を発表した &raquo;</a>
       
     </p>
   </footer>

@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-05-19T23:51:05+09:00</updated>
+  <updated>2014-06-02T12:51:13+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,169 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[app道場#3 Vineのような動画の作り方を発表した]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/01/app-doujou3/"/>
+    <updated>2014-06-01T20:05:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/01/app-doujou3</id>
+    <content type="html"><![CDATA[<p>２回目の参加となるiPhone and Android勉強会の<a href="http://atnd.org/events/50499">「app道場#3」</a>に参加してきました。</p>
+
+<p>今回は、自分が酔った勢いで以下のような発言をしてしまい、大変誤解を招くような発言をしてしまいました。この場を借りて陳謝したいと思います。
+そんなこんながありまして、弊社で勉強会を開催する運びとなりました。</p>
+
+<blockquote class="twitter-tweet" lang="ja"><p>mixiさんに喧嘩売ってきた。</p>&mdash; nakajijapan (@nakajijapan) <a href="https://twitter.com/nakajijapan/statuses/458961908943446016">2014, 4月 23</a></blockquote>
+
+
+<script async src="http://nakajijapan.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<p>詳細は<a href="http://www.vagrantup.jp/entry/2014/05/31/234116">「喧嘩を売る」</a>を参照すると良いでしょう。</p>
+
+<blockquote><p>お分かりの通り、ここでいう「喧嘩を売る」は「次の勉強会を企画・開催する」と解釈されます。
+「app道場」という字面的に少し物騒ではありますが「喧嘩」というフレーズは意外にも正鵠を射ているのではないかと思う次第です。（さすが、@nakajijapan）</p></blockquote>
+
+<p>いいこといっています。</p>
+
+<h2>本題</h2>
+
+<p>さて、今回は「よくある動画アプリのあれを実装したい」というタイトルで、またもやAV Foundationの話になります。自分も動画周りの勉強してる身として、VineとかInstagramとかの動画のインターフェースの実装ってどうやるんだろうなと疑問に思っていました。
+気になって気になってしょうがなかったのでちょっと実装してみようかなという想い、自分なりに考えて実装してみました。</p>
+
+<script async class="speakerdeck-embed" data-id="52a36f80c901013130852e590c444dc4" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>仕様自体は以下のようになっています。</p>
+
+<ul>
+<li>タッチが開始したら動画の保存を開始する</li>
+<li>タッチが終了したら動画の保存を終了する</li>
+<li>動画はファイルに保存する</li>
+<li>それぞれ保存した動画を結合して一つの動画ファイルに結合する。</li>
+</ul>
+
+
+<p>詳細はスライドを見ていただくことにして、実際にいい感じにできたのでCocoaPodsに登録しました。</p>
+
+<p><a href="https//github.com/nakajijapan/NKJMultiMovieCaptureView.git">NKJMultiMovieCaptureView</a></p>
+
+<p>これが今回公開したpodで、SessionCaptureView部分にタッチして動画を保存するところまでの処理を提供しています。
+実際の保存処理は前回作成したpod, <a href="https//github.com/nakajijapan/NKJMovieComposer.git">NKJMovieComposer</a>を利用することで簡単に実装することができます。</p>
+
+<p>しかし、まだまだまだまだ汎用性に欠ける部分が多々あるので粛々と時間を見つけて改善していこうと思います。</p>
+
+<h4>課題</h4>
+
+<ul>
+<li>現在は正方形のビデオサイズを主にテスト対象にしているのでいろんなサイズに対応できるようにする</li>
+<li>動画を結合したときに最初の0.1?0.2?だけ真っ黒になる部分がでてしまう。</li>
+</ul>
+
+
+<h2>まとめ</h2>
+
+<p>今回の勉強会にSlideStoryさんの中の人が来てくださって、動画周りのことでやんややんやお話を聞くとができたので大変勉強なりやした。
+実装してみてやはり同じ課題にぶつかっていたそうです。あと何個か動画関連のpodを紹介してもらえたので時間を見つけて実装して見ようと思います。</p>
+
+<ul>
+<li><a href="https://github.com/rFlex/SCRecorder">SCRecorder</a></li>
+<li><a href="https://github.com/BradLarson/GPUImage">GPUImage</a></li>
+</ul>
+
+
+<p>また、今回の勉強会の裏側で違う勉強会が開催されていた模様で自分と同じような内容の発表があり、大変シンクロを感じましたので紹介させていただきます。かなり驚きました！！！！w</p>
+
+<iframe src="http://www.slideshare.net/slideshow/embed_code/35199041" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+
+
+<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/himaratsu/6-vine" title="6秒動画アプリ Vineの作り方" target="_blank">6秒動画アプリ Vineの作り方</a> </strong> from <strong><a href="http://www.slideshare.net/himaratsu" target="_blank">Hiramatsu Ryosuke</a></strong> </div></p>
+
+<p>最後に、勉強会準備で手伝ってくださったみなさん、app道場関係者のみなさん、本当にお疲れ様でした。また次も参加します！！</p>
+
+<p>だれかに喧嘩売らねば！！！！！（売りません買わないでださい）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[creating-thumbnailimage-from-the-movie]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/"/>
+    <updated>2014-05-25T22:02:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie</id>
+    <content type="html"><![CDATA[<p>動画のある一部分を画像として取り出したいときがあったので調べてみたら、ドキュメントにそれっぽい記述があったので実装してみました。</p>
+
+<p>方法としては、以下のメソッドを利用してCMTimeを利用して指定された時間に対する画像を生成します。</p>
+
+<blockquote><p>copyCGImageAtTime:actualTime:error:</p></blockquote>
+
+<p>実際に、メソッドにして動くようにしました。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>- (UIImage*)createThumbnailImageWithURL:(NSURL *)movieURL
+</span><span class='line'>{
+</span><span class='line'>    AVAsset *asset = [[AVURLAsset alloc] initWithURL:[movieURL objectAtIndex:index] options:nil];
+</span><span class='line'>
+</span><span class='line'>    if ([asset tracksWithMediaCharacteristic:AVMediaTypeVideo]) {
+</span><span class='line'>        AVAssetImageGenerator *imageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+</span><span class='line'>
+</span><span class='line'>        Float64 durationSeconds = CMTimeGetSeconds([asset duration]);
+</span><span class='line'>        CMTime midpoint         = CMTimeMakeWithSeconds(durationSeconds/2.0, 600);
+</span><span class='line'>        NSError* error          = nil;
+</span><span class='line'>        CMTime actualTime;
+</span><span class='line'>
+</span><span class='line'>        CGImageRef halfWayImageRef = [imageGenerator copyCGImageAtTime:midpoint actualTime:&actualTime error:&error];
+</span><span class='line'>
+</span><span class='line'>        if (halfWayImageRef != NULL) {
+</span><span class='line'>            UIImage* image = [[UIImage alloc]initWithCGImage:halfWayImageRef];
+</span><span class='line'>
+</span><span class='line'>            // 明示的にリリースしておきます
+</span><span class='line'>            CGImageRelease(halfWayImageRef);
+</span><span class='line'>            return image;
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>    return nil;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>動画を取り終わった後に、一時的に一覧として残しておきたいときなどに利用できますね。</p>
+
+<h3>p.s.</h3>
+
+<p>これは試していないのですが、以下のメソッドがあってブロックの中で複数の画像が生成できるようです。</p>
+
+<blockquote><p>generateCGImagesAsynchronouslyForTimes:completionHandler::^(CMTime requestedTime, CGImageRef image, CMTime actualTime, AVAssetImageGeneratorResult result, NSError
+*error)</p></blockquote>
+
+<h2>ref</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[AVAudioMixでオーディオの調節を行う]]></title>
@@ -2357,192 +2520,6 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
 
 <p><a href="http://www.upgradingtorails4.com/">http://www.upgradingtorails4.com/</a>
 <a href="http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast">http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive/"/>
-    <updated>2013-07-02T22:30:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive</id>
-    <content type="html"><![CDATA[<p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
-
-<p>便利だったのが<a href="https://github.com/gimite/google-drive-ruby">google-drive-ruby</a>で、中の通信部分の処理をいい感じに抽象化してくれる便利gemです。</p>
-
-<p>実際に<a href="http://www.frustration.me/">www.frustration.me</a>のユーザ数やアイテム数を計測するために使用してみました。</p>
-
-<p>まずは、gemでインストールしてrakeでバッチ処理を実装するだけです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">desc</span> <span class="s2">&quot;send score data to google spreadsheet&quot;</span>
-</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;google_drive&#39;</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">namespace</span> <span class="ss">:batches</span> <span class="k">do</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="n">task</span> <span class="n">total_scores</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="p">,</span> <span class="n">args</span><span class="o">|</span>
-</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no username&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">].</span><span class="n">blank?</span>
-</span><span class='line'>    <span class="nb">fail</span> <span class="s1">&#39;no password&#39;</span> <span class="k">if</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">].</span><span class="n">blank?</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">session</span> <span class="o">=</span> <span class="no">GoogleDrive</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_USERNAME&#39;</span><span class="o">]</span><span class="p">,</span> <span class="no">ENV</span><span class="o">[</span><span class="s1">&#39;GOOGLE_PASSWORD&#39;</span><span class="o">]</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">spreadsheet</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">spreadsheet_by_key</span><span class="p">(</span><span class="s2">&quot;input key name&quot;</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">worksheet</span> <span class="o">=</span> <span class="n">spreadsheet</span><span class="o">.</span><span class="n">worksheet_by_title</span><span class="p">(</span><span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">analyze_data</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>      <span class="ss">date</span><span class="p">:</span>           <span class="no">Time</span><span class="o">.</span><span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-%d&quot;</span><span class="p">),</span>
-</span><span class='line'>      <span class="n">users_num</span><span class="p">:</span>      <span class="no">User</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">items_num</span><span class="p">:</span>      <span class="no">Item</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">comments_num</span><span class="p">:</span>   <span class="no">Comment</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-</span><span class='line'>      <span class="n">categories_num</span><span class="p">:</span> <span class="no">Category</span><span class="o">.</span><span class="n">all</span><span class="o">.</span><span class="n">count</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">analyze_data</span><span class="p">)</span>
-</span><span class='line'>    <span class="n">worksheet</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで<code>rake batches:total_scores</code>で実行すると指定のスプレッドシートに情報が送信され、スプレッドシート側では</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2013-07-02_01.png" alt="ss" /></p>
-
-<p>な感じでどんどんレコードが追加されていきます。</p>
-
-<p>便利。</p>
-
-<p>ただし、注意点があります。今回は<a href="http://sqale.jp">sqale</a>のcronで動かしているのですがログインで以下のように失敗することがあります。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rake batches:total_scores
-</span><span class='line'>WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.7.8
-</span><span class='line'>rake aborted!
-</span><span class='line'>Authentication failed <span class="k">for </span>hogehoge@gmail.com: Response code 403 <span class="k">for </span>post https://www.google.com/accounts/ClientLogin: <span class="nv">Error</span><span class="o">=</span>BadAuthentication
-</span><span class='line'><span class="nv">Url</span><span class="o">=</span>https://www.google.com/accounts/ServiceLogin?service<span class="o">=</span>wise#Email<span class="o">=</span>hogehoge%40gmail.com
-</span><span class='line'><span class="nv">Info</span><span class="o">=</span>WebLoginRequired
-</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:93:in <span class="sb">`</span>rescue in login<span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:86:in `login&#39;</span>
-</span><span class='line'>/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive/session.rb:38:in <span class="sb">`</span>login<span class="s1">&#39;</span>
-</span><span class='line'><span class="s1">/home/sqale/current/vendor/bundle/ruby/2.0.0/gems/google_drive-0.3.6/lib/google_drive.rb:18:in `login&#39;</span>
-</span><span class='line'>/home/sqale/current/lib/tasks/scores.rake:10:in <span class="sb">`</span>block <span class="o">(</span>2 levels<span class="o">)</span> in &lt;top <span class="o">(</span>required<span class="o">)</span>&gt;<span class="err">&#39;</span>
-</span><span class='line'>Tasks: <span class="nv">TOP</span> <span class="o">=</span>&gt; batches:total_scores
-</span><span class='line'><span class="o">(</span>See full trace by running task with --trace<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これはGoogleがセキュリティ強化のため、変な場所からのログインは自動的に拒否しているためです。なので、通常通りWEBでGoogleにログインしてみてそのログインが大丈夫という設定をすれば問題無く通過できます。</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2013-07-02_02.png" alt="ss" /></p>
-
-<p>あとはグラフツール使って簡単に見やすくできるのでお手軽&amp;便利メソッドでした。</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2013-07-02_03.png" alt="まだ情報はすくないのであれです" />
-まだ情報は少ないのであれですがどんどん勝手にグラフ化されていくはず！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[CSRF Protection for Rails and Backbone.js]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/07/01/csrf-protection/"/>
-    <updated>2013-07-01T07:53:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/07/01/csrf-protection</id>
-    <content type="html"><![CDATA[<p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
-Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
-して送信させるようにしました。</p>
-
-<p>ちなみに以前はModelに<code>toJSON</code>メソッドでtokenを付加させていたのですがPOST,PUTのみの対応だったので
-DELETE用にも対応できるよう実装してみた。（<code>Model.destroy</code>時には<code>toJSON()</code>を仲介しない）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="err">#</span> <span class="nx">Sync</span>
-</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span>
-</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span> <span class="o">=</span> <span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
-</span><span class='line'>  <span class="k">if</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;update&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;delete&#39;</span>
-</span><span class='line'>    <span class="nx">options_csrf</span> <span class="o">=</span>
-</span><span class='line'>      <span class="nx">headers</span><span class="o">:</span>
-</span><span class='line'>        <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="o">:</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">csrf_token</span><span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>      <span class="nx">options</span><span class="p">,</span>
-</span><span class='line'>      <span class="nx">options_csrf</span>
-</span><span class='line'>    <span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>メソッドをオーバーライドしてHEADERに<code>X−CSRF-Token</code>を付加して親処理に渡す。<code>BackboneFrustration.Model.csrf_token()</code>は
-単純にフォームからCSRF用のtokenを取得しているだけです。これでajax通信のときはtokenを無視して処理をするようなその場しのぎな実装をせずになりました。</p>
-
-<p>以下のような処理撲滅です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">protect_from_forgery</span> <span class="ss">except</span><span class="p">:</span> <span class="ss">:craete</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>この修正で問題なく動作しているので適用させました。</p>
-
-<p>ところでRails用のgemで<code>backbone-rails</code>なんてものがありましてそこのコードを
-見ていたらだいたい同じことをしていたのであらかじめこれを参考にして勉強すれば良かったと思いました。とほほ。。</p>
-
-<p><a href="https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js">https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js</a></p>
-
-<p>とりあえず、これで一安心。</p>
-
-<h2>実際の修正箇所</h2>
-
-<p><a href="https://github.com/nakajijapan/frustrationme_app/pull/25/files">https://github.com/nakajijapan/frustrationme_app/pull/25/files</a></p>
 ]]></content>
   </entry>
   
