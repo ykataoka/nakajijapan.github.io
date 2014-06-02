@@ -4,7 +4,7 @@
   <title><![CDATA[categories: backbonejs | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/backbonejs/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-02T12:51:13+09:00</updated>
+  <updated>2014-06-01T23:51:16-07:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[CSRF Protection for Rails and Backbone.js]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/07/01/csrf-protection/"/>
-    <updated>2013-07-01T07:53:00+09:00</updated>
+    <updated>2013-07-01T07:53:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/07/01/csrf-protection</id>
     <content type="html"><![CDATA[<p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
 Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
@@ -77,7 +77,7 @@ protect_from_forgery except: :craete
   <entry>
     <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第２章]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03/"/>
-    <updated>2013-06-13T10:56:00+09:00</updated>
+    <updated>2013-06-13T10:56:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/13/backbone-guidebook03</id>
     <content type="html"><![CDATA[<p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
 Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
@@ -179,7 +179,7 @@ each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介が
   <entry>
     <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第１章 続き]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01/"/>
-    <updated>2013-05-30T00:12:00+09:00</updated>
+    <updated>2013-05-30T00:12:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/05/30/backbone-guidebook01</id>
     <content type="html"><![CDATA[<p>第１章の続き</p>
 
@@ -283,7 +283,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   <entry>
     <title type="html"><![CDATA[Backbone.jsガイドブック読書会 第１章 続き]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00/"/>
-    <updated>2013-05-23T00:12:00+09:00</updated>
+    <updated>2013-05-23T00:12:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/05/23/backbone-guidebook00</id>
     <content type="html"><![CDATA[<h2>Backbone.js読書会１日目</h2>
 

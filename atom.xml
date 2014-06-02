@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-02T12:51:13+09:00</updated>
+  <updated>2014-06-01T23:51:16-07:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,9 +14,9 @@
 
   
   <entry>
-    <title type="html"><![CDATA[app道場#3 Vineのような動画の作り方を発表した]]></title>
+    <title type="html"><![CDATA[app道場#3 「よくある動画アプリのあれを実装したい」を発表した]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/06/01/app-doujou3/"/>
-    <updated>2014-06-01T20:05:00+09:00</updated>
+    <updated>2014-06-01T20:05:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/06/01/app-doujou3</id>
     <content type="html"><![CDATA[<p>２回目の参加となるiPhone and Android勉強会の<a href="http://atnd.org/events/50499">「app道場#3」</a>に参加してきました。</p>
 
@@ -71,7 +71,7 @@
 </ul>
 
 
-<h2>まとめ</h2>
+<h2>懇親会</h2>
 
 <p>今回の勉強会にSlideStoryさんの中の人が来てくださって、動画周りのことでやんややんやお話を聞くとができたので大変勉強なりやした。
 実装してみてやはり同じ課題にぶつかっていたそうです。あと何個か動画関連のpodを紹介してもらえたので時間を見つけて実装して見ようと思います。</p>
@@ -92,13 +92,25 @@
 <p>最後に、勉強会準備で手伝ってくださったみなさん、app道場関係者のみなさん、本当にお疲れ様でした。また次も参加します！！</p>
 
 <p>だれかに喧嘩売らねば！！！！！（売りません買わないでださい）</p>
+
+<h2>Ref</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutput_Class/Reference/Reference.html">AVCaptureVideoDataOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/AVCaptureVideoDataOutputSampleBufferDelegate/captureOutput:didOutputSampleBuffer:fromConnection:">AVCaptureVideoDataOutputSampleBufferDelegate</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAssetWriter_Class/Reference/Reference.html">AVAssetWriter</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVAssetWriterInput_Class/Reference/Reference.html">AVAssetWriterInput</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/CoreMedia/Reference/CMSampleBuffer/Reference/reference.html">CMSampleBuffer</a></li>
+</ul>
+
 ]]></content>
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[creating-thumbnailimage-from-the-movie]]></title>
+    <title type="html"><![CDATA[動画からサムネイル画像を生成する]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/"/>
-    <updated>2014-05-25T22:02:00+09:00</updated>
+    <updated>2014-05-25T22:02:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie</id>
     <content type="html"><![CDATA[<p>動画のある一部分を画像として取り出したいときがあったので調べてみたら、ドキュメントにそれっぽい記述があったので実装してみました。</p>
 
@@ -160,7 +172,7 @@
 
 <p>動画を取り終わった後に、一時的に一覧として残しておきたいときなどに利用できますね。</p>
 
-<h3>p.s.</h3>
+<h2>p.s.</h2>
 
 <p>これは試していないのですが、以下のメソッドがあってブロックの中で複数の画像が生成できるようです。</p>
 
@@ -179,7 +191,7 @@
   <entry>
     <title type="html"><![CDATA[AVAudioMixでオーディオの調節を行う]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/05/01/about-audiomix/"/>
-    <updated>2014-05-01T11:56:00+09:00</updated>
+    <updated>2014-05-01T11:56:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/05/01/about-audiomix</id>
     <content type="html"><![CDATA[<p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
 その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
@@ -271,7 +283,7 @@
   <entry>
     <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
-    <updated>2014-04-23T10:50:00+09:00</updated>
+    <updated>2014-04-23T10:50:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
     <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
 
@@ -292,7 +304,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[メディアキャプチャの出力先の実装について]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput/"/>
-    <updated>2014-04-07T02:10:00+09:00</updated>
+    <updated>2014-04-07T02:10:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput</id>
     <content type="html"><![CDATA[<p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
 
@@ -459,7 +471,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[IRKit + iBeacon]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon/"/>
-    <updated>2014-03-29T16:32:00+09:00</updated>
+    <updated>2014-03-29T16:32:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon</id>
     <content type="html"><![CDATA[<p>先日IRKitとEstimote Beaconsを購入しまして、せっかくなんでこの二つ合わせてなにかできないかなーと思いまして
 自宅で活用できるものを作ってみました。</p>
@@ -793,7 +805,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
-    <updated>2014-03-17T03:37:00+09:00</updated>
+    <updated>2014-03-17T03:37:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
     <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
 持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
@@ -833,7 +845,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
-    <updated>2014-02-28T20:34:00+09:00</updated>
+    <updated>2014-02-28T20:34:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
     <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
 
@@ -855,7 +867,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
-    <updated>2014-02-26T21:44:00+09:00</updated>
+    <updated>2014-02-26T21:44:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
     <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
 
@@ -1097,7 +1109,7 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
   <entry>
     <title type="html"><![CDATA[Developers Summit 2014]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014/"/>
-    <updated>2014-02-15T01:51:00+09:00</updated>
+    <updated>2014-02-15T01:51:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014</id>
     <content type="html"><![CDATA[<p>先週ではありますが、Developers Summit 2014に参加してきました。
 サミットが平日だったので全部はみれていませんが、いくつかのステージをみること
@@ -1335,7 +1347,7 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
   <entry>
     <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
-    <updated>2014-02-02T23:32:00+09:00</updated>
+    <updated>2014-02-02T23:32:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
     <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
 iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
@@ -1381,7 +1393,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[AVMutableVideoCompositionLayerInstructionの使い方]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/"/>
-    <updated>2014-01-19T19:32:00+09:00</updated>
+    <updated>2014-01-19T19:32:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction</id>
     <content type="html"><![CDATA[<p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
 それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
@@ -1484,7 +1496,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
-    <updated>2014-01-19T19:32:00+09:00</updated>
+    <updated>2014-01-19T19:32:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
     <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
 
@@ -1509,7 +1521,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[Happy New Year]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/"/>
-    <updated>2014-01-02T20:22:00+09:00</updated>
+    <updated>2014-01-02T20:22:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/02/happy-new-year</id>
     <content type="html"><![CDATA[<p>明けましておめでとうございます。</p>
 
@@ -1535,7 +1547,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[iOS勉強会 iBeaconでできること　に参加してきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/"/>
-    <updated>2013-12-12T19:06:00+09:00</updated>
+    <updated>2013-12-12T19:06:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon</id>
     <content type="html"><![CDATA[<p>Developer&rsquo;s IOさんが主催する勉強会に参加してきました。
 <a href="http://connpass.com/event/4225/">http://connpass.com/event/4225/</a></p>
@@ -1766,7 +1778,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[AV Foundation Frameworkを利用して動画の結合を行う]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/"/>
-    <updated>2013-10-22T19:06:00+09:00</updated>
+    <updated>2013-10-22T19:06:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation</id>
     <content type="html"><![CDATA[<p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
 
@@ -1983,7 +1995,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/"/>
-    <updated>2013-09-30T02:17:00+09:00</updated>
+    <updated>2013-09-30T02:17:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie</id>
     <content type="html"><![CDATA[<p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
 
@@ -2064,7 +2076,7 @@ iOS7でテストして仮に問題が発生したときにその対応でリリ�
   <entry>
     <title type="html"><![CDATA[UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton/"/>
-    <updated>2013-09-18T20:19:00+09:00</updated>
+    <updated>2013-09-18T20:19:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton</id>
     <content type="html"><![CDATA[<p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
 UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
@@ -2179,7 +2191,7 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
   <entry>
     <title type="html"><![CDATA[UIKitで人魂つくってみた]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/"/>
-    <updated>2013-09-07T07:42:00+09:00</updated>
+    <updated>2013-09-07T07:42:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit</id>
     <content type="html"><![CDATA[<p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
 人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
@@ -2326,7 +2338,7 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
   <entry>
     <title type="html"><![CDATA[Update To Rails4]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/07/13/update-rails4/"/>
-    <updated>2013-07-13T15:13:00+09:00</updated>
+    <updated>2013-07-13T15:13:00-07:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/07/13/update-rails4</id>
     <content type="html"><![CDATA[<p>自分のサービスのRailsのversionがまだ<code>3.2</code>だったので地道にRails4にアップデートしました。
 その際に必要になった作業をメモっときます。</p>

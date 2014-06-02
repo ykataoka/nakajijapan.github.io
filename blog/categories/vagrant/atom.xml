@@ -4,7 +4,7 @@
   <title><![CDATA[categories: vagrant | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-02T12:51:13+09:00</updated>
+  <updated>2014-06-01T23:51:16-07:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
-    <updated>2014-02-28T20:34:00+09:00</updated>
+    <updated>2014-02-28T20:34:00-08:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
     <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
 
