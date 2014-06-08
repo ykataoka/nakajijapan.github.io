@@ -4,7 +4,7 @@
   <title><![CDATA[categories: ci | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ci/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-01T23:51:16-07:00</updated>
+  <updated>2014-06-09T08:40:47+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Jenkinsでcommit statusを操作する]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins/"/>
-    <updated>2013-06-24T08:02:00-07:00</updated>
+    <updated>2013-06-24T08:02:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/24/use-commitstatus-at-jenkins</id>
     <content type="html"><![CDATA[<p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
 自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>

@@ -4,7 +4,7 @@
   <title><![CDATA[categories: Ruby | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-01T23:51:16-07:00</updated>
+  <updated>2014-06-09T08:40:47+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[GoogleDocsのスプレッドシートを利用してスコアデータを蓄積させる]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive/"/>
-    <updated>2013-07-02T22:30:00-07:00</updated>
+    <updated>2013-07-02T22:30:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/07/02/usinggoogledrive</id>
     <content type="html"><![CDATA[<p>サービスの日々の情報を解析するために、普段はDBに解析用のテーブル作成してそこで毎日もしくは毎月バッチを走らせてレコードを追加なんてことするだろうけど、スモールスタートしてる内とか個人のサービスとかはそこまで大げさにしなくてももっと気軽にデータを収集したいなと思いまして日々のデータをGoogleDocsのスプレッドシートにレコードを追加いくことにしました。これならいつでもやめれるし気軽にカラムも増やせるので便利。</p>
 
@@ -96,7 +96,7 @@ Tasks: TOP =&gt; batches:total_scores
   <entry>
     <title type="html"><![CDATA[RubyHiroba]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba/"/>
-    <updated>2013-06-05T00:12:00-07:00</updated>
+    <updated>2013-06-05T00:12:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/05/rubyhiroba</id>
     <content type="html"><![CDATA[<iframe src="http://www.slideshare.net/slideshow/embed_code/22314337" width="427" height="356" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC;border-width:1px 1px 0;margin-bottom:5px" allowfullscreen webkitallowfullscreen mozallowfullscreen> </iframe>
 

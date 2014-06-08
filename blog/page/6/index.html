@@ -9,8 +9,8 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="サービスをRailsにした話 from Daichi Nakajima RubyHirobaでLTに参加してきまして自分のサービスのことについて話してきました。
-以前はCGIだったものをせっせせっせとRailsにリニューアルしていっていますよ。という内容です。 &hellip;">
+  <meta name="description" content="前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
+Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。 概要と話題になったことをメモろうと思います。 Model &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +72,419 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/06/13/backbone-guidebook03/">Backbone.jsガイドブック読書会 第２章</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T10:56:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
+Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。</p>
+
+<p>概要と話題になったことをメモろうと思います。</p>
+
+<h2>Model</h2>
+
+<p>データを扱う方法を提供するもの。
+View側で実際にデータがどう扱われているかは気にしない。 &ndash;> viewとの分離
+これがjavascriptで使えちゃう。</p>
+
+<h3>提供するもの</h3>
+
+<ul>
+<li>保持</li>
+<li>検証</li>
+<li>アクセス制御</li>
+<li>保存</li>
+</ul>
+
+
+<h3>Validationをどうするか</h3>
+
+<p>サーバサイドでもクライアントサイドでも実装しなくちゃいけなくなるのは大変だよね。って話をした。
+場合によりけりだろうけど。そこまでのアクセスを気にしなきゃ。検証はサーバサイドで全て任せて
+その結果を画面に表示。は二重管理せずに済むよね。ユーザにリアルタイムに検証結果を表示させたいとき
+とかはクライアント側でも利用するよねーという話をした。</p>
+
+<p>ちなみに欲求不満(<a href="http://www.frustration.me">http://www.frustration.me</a>)ではサーバサイドでもチェックできるようクラスを用意して
+それを継承して処理が動作するようになっている。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="err">#</span> <span class="nx">Model</span>
+</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="kr">class</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span> <span class="kr">extends</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">Model</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">initialize</span><span class="o">:</span> <span class="p">(</span><span class="nx">attributes</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>   <span class="err">@</span><span class="nx">defaultErrorHandler</span>
+</span><span class='line'>    <span class="err">@</span><span class="nx">on</span> <span class="s1">&#39;invalid&#39;</span><span class="p">,</span> <span class="err">@</span><span class="nx">defaultErrorHandler</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">defaultErrorHandler</span><span class="o">:</span> <span class="p">(</span><span class="nx">model</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;object&#39;</span>
+</span><span class='line'>      <span class="k">if</span> <span class="nx">error</span><span class="p">.</span><span class="nx">statusText</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>        <span class="nx">alert</span> <span class="s1">&#39;Intal Server Error&#39;</span>
+</span><span class='line'>        <span class="nx">console</span><span class="p">.</span><span class="nx">error</span> <span class="nx">error</span>
+</span><span class='line'>
+</span><span class='line'>     <span class="k">else</span> <span class="k">if</span> <span class="k">typeof</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span>
+</span><span class='line'>       <span class="k">if</span> <span class="nx">error</span><span class="o">?</span> <span class="nx">or</span> <span class="nx">error</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span>
+</span><span class='line'>         <span class="nx">alert</span> <span class="nx">error</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Collecation</h2>
+
+<p>複数のモデルを管理するためのオブジェクト。それ自体にデータはない。
+Underscoreの配列操作に由来した関数群があるのでそれ使うと便利という話。
+each(),pluck(),invoke()等のよく使いそうな便利メソッドの紹介があった。</p>
+
+<h2>View</h2>
+
+<p>BackboneにおけるViewは二つの役割を持っているという話。</p>
+
+<ul>
+<li>Viewとして、「適切にDOMツリーを構築する」</li>
+<li>Controllerとして、「そのDOMツリーで起ったDOMイベントを処理する」</li>
+</ul>
+
+
+<p>前者でいうと</p>
+
+<ul>
+<li>Model,Collectionを利用してデータの操作して、保存を行ったり、新しいViewを構築する</li>
+</ul>
+
+
+<p>後者でいうと</p>
+
+<ul>
+<li>DOMのイベントハンドリングはView内でちゃんとやろう</li>
+</ul>
+
+
+<p>なのかなと感じた。</p>
+
+<p>あと、Underscoreのテンプレートエンジンの話が出てきて、また記法覚えるの辛かったのでERBの記法に似た<a href="http://embeddedjs.com/">EJS</a>を利用したいのですが余裕があるのでこちらに移行してみるのありだと思いました。</p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/09/install-bower/">RailsでBowerの導入</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-09T16:07:00+09:00" pubdate data-updated="true">Jun 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>javascriptのパッケージ管理がしたくて<code>bower</code>というパッケージ管理ツールを<a href="http://www.frustration.me">http://www.frustration.me</a> にインストールしてみました。
+(ブランチ切って試してみました・・・)</p>
+
+<p>とりあえず、バージョンが古いので最新のものにインストールします。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ node -v 
+</span><span class='line'>v0.6.19
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>$ brew install node
+</span><span class='line'>
+</span><span class='line'>==&gt; Upgrading 1 outdated package, with result:
+</span><span class='line'>node 0.10.7
+</span><span class='line'>==&gt; Upgrading node
+</span><span class='line'>Beginning with 0.8.0, this recipe now comes with npm.
+</span><span class='line'>It appears you already have npm installed at /usr/local/lib/node_modules/npm.
+</span><span class='line'>To use the npm that comes with this recipe, first uninstall npm with
+</span><span class='line'>`npm uninstall npm -g`, then run this command again.
+</span><span class='line'>
+</span><span class='line'>If you would like to keep your installation of npm instead of
+</span><span class='line'>using the one provided with homebrew, install the formula with
+</span><span class='line'>the `--without-npm` option.
+</span><span class='line'>Error: An unsatisfied requirement failed this build.</span></code></pre></td></tr></table></div></figure>
+
+
+<p>npm をまずアンインストールしてほしいとのこと</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm uninstall npm -g</span></code></pre></td></tr></table></div></figure>
+
+
+<p>再度実行します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ brew upgrade node
+</span><span class='line'>$ node -v
+</span><span class='line'>v0.10.7</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで最新版になった。
+次にbowerをインストール</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install -g bower</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これでインストール完了。</p>
+
+<p>とりえず、検索でどうなるか確認。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>bower search backbone
+</span><span class='line'>Search results:
+</span><span class='line'>
+</span><span class='line'>    backbone git://github.com/documentcloud/backbone.git
+</span><span class='line'>    backbone-amd git://github.com/amdjs/backbone
+</span><span class='line'>    backbone.stickit git://github.com/NYTimes/backbone.stickit.git
+</span><span class='line'>    backbone.marionette git://github.com/marionettejs/backbone.marionette
+</span><span class='line'>    backbone.wreqr git://github.com/marionettejs/backbone.wreqr.git
+</span><span class='line'>・
+</span><span class='line'>・
+</span><span class='line'>・</span></code></pre></td></tr></table></div></figure>
+
+
+<p>てな感じでbackboneに関連するプラグインがどどどっと出力される</p>
+
+<p>試しにインストールすると、ホームディレクトリに生成されてしまうので
+アプリごとに管理したいところ</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bower install jquery
+</span><span class='line'>bower cloning git://github.com/components/jquery.git
+</span><span class='line'>bower cached git://github.com/components/jquery.git
+</span><span class='line'>bower fetching jquery
+</span><span class='line'>bower checking out jquery#2.0.2
+</span><span class='line'>bower copying /Users/pp_kupepo_gattyanmo/.bower/cache/jquery/29cb4373d29144ca260ac7c3997f4381
+</span><span class='line'>bower installing jquery#2.0.2</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ここからRaisに組み込んでいきます。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ bower init
+</span><span class='line'>name: [frustration]
+</span><span class='line'>version: [0.0.0]
+</span><span class='line'>main file: []
+</span><span class='line'>add current components as dependencies? (y/n): [y] y
+</span><span class='line'>add commonly ignored files to ignore list? (y/n): [y]</span></code></pre></td></tr></table></div></figure>
+
+
+<p>そうするとカレントディレクトリに以下のファイルが作成されます。
+このファイルでプラグインの管理を行います。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "name": "frustration",
+</span><span class='line'>  "version": "0.0.0",
+</span><span class='line'>  "dependencies": {
+</span><span class='line'>    "jquery": "~2.0.2"
+</span><span class='line'>  },
+</span><span class='line'>  "ignore": [
+</span><span class='line'>    "**/.*",
+</span><span class='line'>    "node_modules",
+</span><span class='line'>    "components"
+</span><span class='line'>  ]
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>現状の設定だとグローバルの設定なのでダウンロードがプロジェクト単位でできないので
+<code>.bowerrc</code>ファイルをプロジェクトディレクトリ直下に保存する。
+デフォルトは<code>~/.bowerrc</code>を参照するようだ。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "directory": "vendor/assets/javascripts/components",
+</span><span class='line'>  "json": "bower.json",
+</span><span class='line'>  "searchpath": [
+</span><span class='line'>    "https://bower.herokuapp.com"
+</span><span class='line'>  ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで<code>bower install</code>すると指定のディレクトリに保存される。</p>
+
+<h2>Railsの場合</h2>
+
+<p><code>application.rb</code>でパスを通るようにする</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># for bower
+</span><span class='line'>config.assets.paths &lt;&lt; Rails.root.join('vendor', 'assets', 'javascripts', 'components')</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>applicatio.js</code>でパスの再設定を行う。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//= require components/jquery/jquery.js
+</span><span class='line'>//= require components/jquery-ui/ui/jquery-ui.js</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これでRailsの場合は完了です。</p>
+
+<h2>所感</h2>
+
+<p>jsもbundlerのように管理できるようになったのは大変便利作業です。
+version上がることごとにサイト確認して<code>wget</code>してこないといけないし、コマンド一発でプラグインの削除・検索・バージョンのアップ・ダウングレードもできてしまうのは進化であるのです。</p>
+
+<p>ですが、まだ</p>
+
+<ul>
+<li>version 管理されていないプラグインある</li>
+<li>本番環境にnodeが入っていない・bowerが使えない</li>
+</ul>
+
+
+<p>ときがあるのでそこは共存なり、一旦保留なりしたほうが良いかもしれません。。。
+また、後者のときはいけてないけどパッケージも合わせてコミットするのが良いかもしれない。</p>
+
+<h2>Ref</h2>
+
+<ul>
+<li>source
+
+<ul>
+<li><a href="https://github.com/bower/bower">https://github.com/bower/bower</a></li>
+</ul>
+</li>
+<li>Bower components
+
+<ul>
+<li><a href="http://sindresorhus.com/bower-components/">http://sindresorhus.com/bower-components/</a></li>
+</ul>
+</li>
+</ul>
+
+
+<p>ここにパッケージが登録されています</p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/06/05/rubyhiroba/">RubyHiroba</a></h1>
     
     
@@ -88,7 +501,7 @@
   
 
 
-<time datetime="2013-06-05T00:12:00-07:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
+<time datetime="2013-06-05T00:12:00+09:00" pubdate data-updated="true">Jun 5<span>th</span>, 2013</time>
         
       </p>
     
@@ -141,7 +554,7 @@
   
 
 
-<time datetime="2013-05-30T00:12:00-07:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
+<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
         
       </p>
     
@@ -273,7 +686,7 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   
 
 
-<time datetime="2013-05-23T00:12:00-07:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
+<time datetime="2013-05-23T00:12:00+09:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
         
       </p>
     
@@ -369,64 +782,9 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/03/03/hello/">Hello</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-03-03T10:23:00-08:00" pubdate data-updated="true">Mar 3<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>こちらでいろいろ記述していくことにしました。</p>
-
-<p>mkdownはなによりたのもしいです。
-さよならwordpress&hellip;</p>
-
-<h1>Title</h1>
-
-<h2>Sub</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Hoge</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">hello</span>
-</span><span class='line'>    <span class="p">{</span> <span class="ss">message</span><span class="p">:</span> <span class="s1">&#39;hello world nakajijapan&#39;</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/7/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -472,6 +830,14 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/09/wwdc2014-life/">WWDC2014に参加してきました - 番外編(暮らし)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/08/wwdc2014/">WWDC2014に参加してきました</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/01/app-doujou3/">App道場#3 「よくある動画アプリのあれを実装したい」を発表した</a>
       </li>
     
@@ -483,19 +849,11 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
         <a href="/blog/2014/05/01/about-audiomix/">AVAudioMixでオーディオの調節を行う</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/23/debug-of-a-video-editing/">AVCompositionDebugVieweriOS使ってみた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/about-avcaptureinput/">メディアキャプチャの出力先の実装について</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (16)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (17)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

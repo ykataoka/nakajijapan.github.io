@@ -9,8 +9,7 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="先日IRKitとEstimote Beaconsを購入しまして、せっかくなんでこの二つ合わせてなにかできないかなーと思いまして
-自宅で活用できるものを作ってみました。 IRKit Estimote Beacons 仕様としては、 beaconに近づいたら（家に帰ってきたら）テレビをつける &hellip;">
+  <meta name="description" content="先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 app道場 #2に参加して、LTしてきました。 今回は、WWDC 2013 Session VideosのAdvanced Editing with AV Foundationをみていたときにまだ試していないサンプルがあったのと、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -72,6 +71,250 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2014/04/23/debug-of-a-video-editing/">AVCompositionDebugVieweriOS使ってみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-23T10:50:00+09:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
+
+<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
+「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
+
+<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
+普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
+
+<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
+mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/04/07/about-avcaptureinput/">メディアキャプチャの出力先の実装について</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-04-07T02:10:00+09:00" pubdate data-updated="true">Apr 7<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
+
+<p><img src="/images/posts/2014-04-06-01.png" alt="AV Foundation" /></p>
+
+<p>そんなときは<code>AVCaptureSession</code>を利用してメディアキャプチャの実装の準備をを行い、入力先・出力先はどうするかという設定を行うのですが、今回はその出力部分について何パターンか方法があったので調べてみました。</p>
+
+<h3>Video Output</h3>
+
+<ul>
+<li>AVCaptureMovieFileOutput
+
+<ul>
+<li>ムービーファイルを出力するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureVideoDataOutput
+
+<ul>
+<li>キャプチャ中のビデオフレームを処理するときに利用する</li>
+</ul>
+</li>
+<li>AVCaptureStillImageOutput
+
+<ul>
+<li>付随するメタデータを使用して静止画像をキャプチャするときに利用する</li>
+</ul>
+</li>
+</ul>
+
+
+<h3>Audio Output</h3>
+
+<ul>
+<li>AVCaptureAudioDataOutput
+
+<ul>
+<li>キャプチャ中のオーディオフレームを処理するときに利用する</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>使い方</h2>
+
+<h3>AVCaptureMovieFileOutput</h3>
+
+<p>ムービーファイルを保存するのに必要な処理を提供してくれるクラス。</p>
+
+<p>録画するときは</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//録画開始</span>
+</span><span class='line'><span class="p">[</span><span class="n">captureMovieFileOutput</span> <span class="nl">startRecordingToOutputFileURL:</span><span class="n">outputURL</span> <span class="nl">recordingDelegate:</span><span class="n">self</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>のように始めることができます。</p>
+
+<p>必要に応じて<code>AVCaptureFileOutputRecordingDelegate</code>オプションを利用して、各タイミングに応じた処理を行います。</p>
+
+<ul>
+<li>AVCaptureFileOutputRecordingDelegate</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didStartRecordingToOutputFileAtURL:fromConnections:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>前者は録画を開始したときに、後者は終了したときに呼び出されるメソッドです。例えば、<code>captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</code>の時に録画したムービーファイルをデバイスに保存する等の処理が行えることができます。</p>
+
+<h4>AVCaptureStillImageOutput</h4>
+
+<p>画像をキャプチャするときに利用して、出力は以下のように実装します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVCaptureConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[[</span><span class="n">captureStillImageOutput</span> <span class="n">connections</span><span class="p">]</span> <span class="n">lastObject</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">captureStillImageOutput</span> <span class="nl">captureStillImageAsynchronouslyFromConnection:</span><span class="n">connection</span>
+</span><span class='line'>                                                     <span class="nl">completionHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">CMSampleBufferRef</span> <span class="n">imageDataSampleBuffer</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                                         <span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVCaptureStillImageOutput</span> <span class="nl">jpegStillImageNSDataRepresentation:</span><span class="n">imageDataSampleBuffer</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageWithData:</span><span class="n">data</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="n">ALAssetsLibrary</span> <span class="o">*</span><span class="n">library</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ALAssetsLibrary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
+</span><span class='line'>                                                         <span class="p">[</span><span class="n">library</span> <span class="nl">writeImageToSavedPhotosAlbum:</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span>
+</span><span class='line'>                                                                                   <span class="nl">orientation:</span><span class="n">image</span><span class="p">.</span><span class="n">imageOrientation</span>
+</span><span class='line'>                                                                               <span class="nl">completionBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="n">assetURL</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>                                                                                   <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;saved&quot;</span><span class="p">);</span>
+</span><span class='line'>                                                                               <span class="p">}];</span>
+</span><span class='line'>                                                     <span class="p">}];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>AVCaptureVideoDataOutput, AVCaptureAudioDataOutput</h3>
+
+<p>デリゲートメソッドを利用して非圧縮状態のビデオフレーム情報を提供します。
+そのフレーム情報は<code>CMSampleBufferRef</code>という形式で送信されてきてそれを利用して動画の保存やら編集やらを行うことができます。
+このときにビデオとオーディオは別で処理しないといけません。（デリゲートメソッドが分かれているように）
+主にビデオもオーディオも両方扱うときは<code>– captureOutput:didOutputSampleBuffer:fromConnection:</code>でどちらのメディアなのか区別して処理を行うような実装になります。
+さらに細かい処理を行っていく場合はこちらのクラスを実装しないといけないですね。例えば、リアルタイムに動画を編集したりだとか、Vineみたいにタッチしているときは動画の保存し続けるような処理でしょうか。</p>
+
+<ul>
+<li>AVCaptureVideoDataOutputSampleBufferDelegate</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Managing</span> <span class="n">Sample</span> <span class="n">Buffer</span> <span class="n">Behavior</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didDropSampleBuffer:fromConnection:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>AVCaptureAudioDataOutputSampleBufferDelegat</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
+</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>メディアキャプチャの出力先の実装について調べてみました。目的に応じてどれを使うかは選択していけばいいのですが、よりユーザにインタラクティブなインタフェースや体験をさせるにはそれ相応に細かい実装していかなければいけないこともわかりました。何度も言っているかもしれないけどメディア系の実装は大変です。。。</p>
+
+<h2>ref</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation公式ドキュメント</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureMovieFileOutput_Class/Reference/Reference.html#//apple_ref/occ/cl/AVCaptureMovieFileOutput">AVCaptureMovieFileOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureFileOutputRecordingDelegate_Protocol/Reference/Reference.html">AVCaptureFileOutputRecordingDelegate</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutput_Class/Reference/Reference.html">AVCaptureVideoDataOutput</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/AVCaptureVideoDataOutputSampleBufferDelegate/captureOutput:didOutputSampleBuffer:fromConnection:">AVCaptureVideoDataOutputSampleBufferDelegate</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2014/03/29/irkit-plus-ibeacon/">IRKit + iBeacon</a></h1>
     
     
@@ -88,7 +331,7 @@
   
 
 
-<time datetime="2014-03-29T16:32:00-07:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time>
+<time datetime="2014-03-29T16:32:00+09:00" pubdate data-updated="true">Mar 29<span>th</span>, 2014</time>
         
       </p>
     
@@ -450,7 +693,7 @@
   
 
 
-<time datetime="2014-03-17T03:37:00-07:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
+<time datetime="2014-03-17T03:37:00+09:00" pubdate data-updated="true">Mar 17<span>th</span>, 2014</time>
         
       </p>
     
@@ -518,7 +761,7 @@
   
 
 
-<time datetime="2014-02-28T20:34:00-08:00" pubdate data-updated="true">Feb 28<span>th</span>, 2014</time>
+<time datetime="2014-02-28T20:34:00+09:00" pubdate data-updated="true">Feb 28<span>th</span>, 2014</time>
         
       </p>
     
@@ -539,542 +782,6 @@
 
 <p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
 (アフェリエイトおじさんです。。。)</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/26/yxcm-epilogue/">【iOS勉強会】ヤフー vs クラスメソッド に参加してきた</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-26T21:44:00-08:00" pubdate data-updated="true">Feb 26<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
-
-<ul>
-<li><p>ヤフーさん発表資料
-<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
-<li><p>クラスメソッドさん発表資料
-<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
-</ul>
-
-
-<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
-
-<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
-
-<h2>code snippet</h2>
-
-<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
-
-<p><img src="/images/posts/2014-02-28_02.png" alt="01" /></p>
-
-<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
-
-<p><img src="/images/posts/2014-02-28_01.png" alt="01" /></p>
-
-<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
-作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
-
-<p>試しにUIAlertViewをいれてみました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alertView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithTitle</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;Title&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                                    <span class="n">message</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;Message&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                                   <span class="n">delegate</span> <span class="o">:</span> <span class="n">self</span>
-</span><span class='line'>                                          <span class="n">cancelButtonTitle</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;OK&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                          <span class="n">otherButtonTitles</span> <span class="o">:</span> <span class="nb">nil</span>
-</span><span class='line'>                          <span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">alertView</span> <span class="nl">setTag:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">alertView</span> <span class="n">show</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
-
-<h2>code template</h2>
-
-<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span>
-</span><span class='line'><span class="n">cd</span>    <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span>
-</span><span class='line'><span class="n">cp</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Xcode</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Platforms</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">platform</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Library</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span><span class="o">/*</span> <span class="p">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
-
-<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Default</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">false</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Identifier</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">Nakajijapan</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Name</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">Nakajijapan</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">RequiredOptions</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">cocoaTouchSubclass</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">array</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">NSObject</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">UIViewController</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;/</span><span class="n">array</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Type</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">checkbox</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  ___FILENAME___</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Created by ___FULLUSERNAME___.</span>
-</span><span class='line'><span class="c1">//  Copyright ___YEAR___ ___FULLUSERNAME___. All rights reserved.</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">___IMPORTHEADER_cocoaTouchSubclass___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span> : <span class="nc">___VARIABLE_cocoaTouchSubclass___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  ___FILENAME___</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Created by ___FULLUSERNAME___.</span>
-</span><span class='line'><span class="c1">//  Copyright ___YEAR___ ___FULLUSERNAME___. All rights reserved.</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;___FILEBASENAME___.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span> <span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithNibName:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">nibNameOrNil</span> <span class="nf">bundle:</span><span class="p">(</span><span class="n">NSBundle</span> <span class="o">*</span><span class="p">)</span><span class="nv">nibBundleOrNil</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithNibName:</span><span class="n">nibNameOrNil</span> <span class="nl">bundle:</span><span class="n">nibBundleOrNil</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Custom initialization</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>  <span class="c1">// Do any additional setup after loading the view.</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didReceiveMemoryWarning</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">didReceiveMemoryWarning</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">// Dispose of any resources that can be recreated.</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで自分好みの設定にできました。</p>
-
-<h3>参加してみて</h3>
-
-<p>吉田 一星さんの発表が印象的で</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
-
-<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
-Appleが未だ実現されていない機能を先に作れ</p></blockquote>
-
-<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
-まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
-
-<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/15/developers-summit-2014/">Developers Summit 2014</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-15T01:51:00-08:00" pubdate data-updated="true">Feb 15<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>先週ではありますが、Developers Summit 2014に参加してきました。
-サミットが平日だったので全部はみれていませんが、いくつかのステージをみること
-はできたのでそのメモを記します。</p>
-
-<ul>
-<li>Developers Summit 2014
-
-<ul>
-<li><a href="http://event.shoeisha.jp/devsumi/20140213/">http://event.shoeisha.jp/devsumi/20140213/</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h2>iOSアプリケーションの継続的デリバリー</h2>
-
-<ul>
-<li>発表者
-
-<ul>
-<li><a href="https://event.shoeisha.jp/devsumi/20140213/session/430">https://event.shoeisha.jp/devsumi/20140213/session/430</a></li>
-</ul>
-</li>
-<li>発表資料
-
-<ul>
-<li><a href="http://www.slideshare.net/numeha/ios-31199969">http://www.slideshare.net/numeha/ios-31199969</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h3>どのくらいスピードが必要なのか</h3>
-
-<ul>
-<li>iOS１ヶ月で約四回リリース</li>
-<li>ネックは申請降りるのに７日間必要。。。</li>
-<li>1年で１２回のリリース</li>
-<li>自分たちのリリースのリズムできてますか？
-
-<ul>
-<li>いつもリリースできる状態にしときましょう!!</li>
-</ul>
-</li>
-<li>継続的デリバリー
-
-<ul>
-<li>ビジネスの主導権を握る為にCIやるんだ!!!</li>
-</ul>
-</li>
-</ul>
-
-
-<blockquote><p>価値のあるソフトウェアをはやく継続的にリリースする</p></blockquote>
-
-<h3>徹底的に自動化してきた</h3>
-
-<h4>コード品質のパイプライン</h4>
-
-<ol>
-<li>コード取得 &ndash;> Git</li>
-<li>ビルド &ndash;> Xcode</li>
-<li>コード行数 &ndash;> SLOCCount</li>
-<li>重複コード &ndash;> DRY</li>
-<li><p>警告 &ndash;> Warnnings</p></li>
-<li><p>テストにはGHUnitを利用している</p></li>
-<li>カバレッジはgcovr</li>
-</ol>
-
-
-<h3>製品品質のパイプライン</h3>
-
-<ul>
-<li>実記でのテストが必要</li>
-<li>テストフレームワークを同封してビルドしている</li>
-<li>自動でipaファイル作成</li>
-<li>複数のデバイスに自動でインストール
-
-<ul>
-<li>fruitstrap or Instruments</li>
-</ul>
-</li>
-<li>特定の端末のピンポイントでデプロイする</li>
-<li>Frankというテストフレーム</li>
-<li>httpで外部から複数代のios端末を操作</li>
-<li>ios7からのTouch問うの操作API禁止</li>
-</ul>
-
-
-<p>どうしよう。。。</p>
-
-<ul>
-<li>解決策としてiOS6専用にしよう</li>
-<li>iOS7はInstruments経由で操作</li>
-<li>ビルドマシン一代につきiOS一代にいれよう</li>
-<li>テストフレームワークを複数いれられない
-
-<ul>
-<li>シングルプロセスでしか動作しないらしい</li>
-</ul>
-</li>
-</ul>
-
-
-<p>どうしよう。。。</p>
-
-<ul>
-<li>MacサーバでVMサーバ作って複数台での端末で実装してみたよ
-
-<ul>
-<li>実機のテストにはさまざまなシリーズ・OSバージョンのiPhone,iPadを用意してるらしい</li>
-</ul>
-</li>
-</ul>
-
-
-<p>エンタープライズすごい！</p>
-
-<h2>Tokyo MotionControl Network</h2>
-
-<ul>
-<li>Facebook
-
-<ul>
-<li><a href="https://www.facebook.com/TokyoMotioncontrolNetwork">https://www.facebook.com/TokyoMotioncontrolNetwork</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p>モーションキャプチャを利用したさまざまなコンテンツの紹介をされていました。</p>
-
-<h4>VIRTUAL FASHION</h4>
-
-<ul>
-<li><code>Kinect/PrimeSence</code>で作成</li>
-<li>ボーントラッキングの技術をもちいてCGノ衣装をマッピング</li>
-<li>360度マッピングしてる</li>
-</ul>
-
-
-<h4>TRANSSHOME</h4>
-
-<ul>
-<li>ポーズをとったその陰で家を自動生成してくれる</li>
-<li>子供受けがいい</li>
-</ul>
-
-
-<h4>AIR SHODOU</h4>
-
-<ul>
-<li><code>Kinect</code>で作成</li>
-<li>書道をモーションキャプチャを通して描くシステム</li>
-</ul>
-
-
-<h4>執事力</h4>
-
-<ul>
-<li>執事のようにきれいな姿勢で入れるか検定する</li>
-<li>ボーントラッキングで検査している</li>
-</ul>
-
-
-<h4>うるしずく</h4>
-
-<h4>nt-kinesys</h4>
-
-<ul>
-<li><code>PrimeSense</code>で作成</li>
-</ul>
-
-
-<h4>ゲゲゲの鬼太郎</h4>
-
-<ul>
-<li>近づくと全身がネズミ男になるらしいです</li>
-</ul>
-
-
-<h3>メモ</h3>
-
-<p>他にもの以下のセッションが行われていました。</p>
-
-<ul>
-<li>モーションコントロールコンテンツの実装からみえてきたもの
-
-<ul>
-<li><a href="http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi">http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi</a></li>
-</ul>
-</li>
-<li>モーションセンサーの現状と2014年の予測
-
-<ul>
-<li><a href="http://www.slideshare.net/kaorun55/devsumi-201414c5">http://www.slideshare.net/kaorun55/devsumi-201414c5</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h2>所感</h2>
-
-<p>今回一番勉強になったのはメインでリコーさんのiOSの発表で、いろいろ勉強させていただきました。
-そこでいくつかのツールがでてきたので今度利用してみようと思います。
-大企業もCIでやることはだいたいかわらないけど、実機数十台用意してそこにデプロイしてテストするとこは大企業だなと感じました。</p>
-
-<ul>
-<li>Frank
-
-<ul>
-<li><a href="http://www.testingwithfrank.com/">http://www.testingwithfrank.com/</a></li>
-</ul>
-</li>
-<li>fruitstrap
-
-<ul>
-<li><a href="https://github.com/ghughes/fruitstrap">https://github.com/ghughes/fruitstrap</a></li>
-<li><code>This project is no longer maintained.</code>が気になりました。。。</li>
-</ul>
-</li>
-<li>Instruments
-
-<ul>
-<li>Xcodeに付属しているプロファイラツール</li>
-<li>どの処理・メソッドが遅いのか、どこでメモリを消費しているのか調査する</li>
-</ul>
-</li>
-</ul>
-
 </div>
   
   
@@ -1131,6 +838,14 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/09/wwdc2014-life/">WWDC2014に参加してきました - 番外編(暮らし)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/08/wwdc2014/">WWDC2014に参加してきました</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/01/app-doujou3/">App道場#3 「よくある動画アプリのあれを実装したい」を発表した</a>
       </li>
     
@@ -1142,19 +857,11 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
         <a href="/blog/2014/05/01/about-audiomix/">AVAudioMixでオーディオの調節を行う</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/04/23/debug-of-a-video-editing/">AVCompositionDebugVieweriOS使ってみた</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/04/07/about-avcaptureinput/">メディアキャプチャの出力先の実装について</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (16)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (17)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

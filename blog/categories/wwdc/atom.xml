@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: WWDC | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/wwdc/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2014-06-09T08:40:47+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC2014に参加してきました - 番外編(暮らし)]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/09/wwdc2014-life/"/>
+    <updated>2014-06-09T07:43:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/09/wwdc2014-life</id>
+    <content type="html"><![CDATA[<p><img src="/images/posts/2014-06-09-01.jpg" alt="サンフランシスコ" /></p>
+
+<p><a href="/blog/2014/06/08/wwdc2014/">前回の記事(WWDC2014に参加してきました)</a>の番外編です。</p>
+
+<p>初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。</p>
+
+<h2>前準備</h2>
+
+<ul>
+<li>予約
+
+<ul>
+<li>ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、飛行機当然日程が迫るにつれて高くなるのでお早めに。</li>
+</ul>
+</li>
+<li>服
+
+<ul>
+<li>会場の近くにはユニクロがあるのでパンツも靴下もパーカーも服はすべて現地調達できるので問題ありません！！！！</li>
+</ul>
+</li>
+<li>携帯
+
+<ul>
+<li>バッテリーは必ず持っていきましょう！！いじってると絶対なくなります。</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>空港＆飛行機</h2>
+
+<ul>
+<li>空港には余裕をもって３時間前に到着するといいでしょう。
+
+<ul>
+<li>40前に来たらいろいろ手続きがあるので時間がかかってしまうせいか空港の人にかなり急かされました。</li>
+</ul>
+</li>
+<li>成田空港には第一ターミナル、第二ターミナルがあって降りる場所間違うとバスか電車で移動しないといけないので時間のロスになります。</li>
+<li>飛行機は９時間ものっているのですごい暇になります。絶対暇つぶしになるものを用意しておくといいです。
+自分はだいたいMacでブログ書いていたりプログラミングしていました。
+やばそうな気流がぶつかることが何回かあって、多少ジェットコースター気分が味わえてしまいます。酔ってしまう人は注意してください。</li>
+</ul>
+
+
+<h2>電車</h2>
+
+<ul>
+<li>Moscone Centerまでは<a href="http://www.bart.gov/stations">地下鉄BART</a>を利用して行きます。電光掲示板が無いので毎回確認したほうがいいです。</li>
+<li>お金をチャージして乗る形式っぽいです。</li>
+</ul>
+
+
+<h2>生活</h2>
+
+<ul>
+<li>インターネット
+
+<ul>
+<li>自分はソフトバンクなので<a href="http://www.softbank.jp/mobile/service/global/overseas/web/packet-flat-late/">海外パケットし放題</a></li>
+</ul>
+</li>
+<li>だいたいのお店は袋が有料なので袋が必要ないのにOK!っていうと何セントかよけいに請求されます。</li>
+<li>チャージが含まれているお店とそうでないお店があるので注意
+
+<ul>
+<li>相場は15-20%の間?</li>
+<li>ベッドメイキングは<code>$1</code>が相場？</li>
+</ul>
+</li>
+<li>物価は日本とそんな変わらないのですがチップのこと考えると高いですね。</li>
+<li>タクシーは怖くて使わなかった</li>
+<li>お酒を購入するときはは写真のID見せろと言われるので忘れずに</li>
+<li>朝食・昼食はでますので食費には困らない
+
+<ul>
+<li>野菜でないのかなと思ってたらベジタリアン用の弁当がでていました。</li>
+</ul>
+</li>
+<li>よく外国は窃盗が多いからリュックは前にして、財布は後ろポケットにいれるな！っていう言い伝えのようなものがあったけど全然しなかった
+
+<ul>
+<li>会場行き来するくらいなので何も起きなかっただけなのかもしれません&hellip;</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>帰国</h2>
+
+<ul>
+<li>日本円に換金するときにコインは換金できないので使い切る必要があるといわれたのでコインは外国で使い切って帰国しましょう！！</li>
+</ul>
+
+
+<p>そんなところかな、何の問題もなく生活・帰還しました。
+　
+　</p>
+
+<p>終わり。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC2014に参加してきました]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/"/>
+    <updated>2014-06-08T23:50:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/08/wwdc2014</id>
+    <content type="html"><![CDATA[<p><a href="https://developer.apple.com/wwdc/">
+  <img src="https://devimages.apple.com.edgekey.net/wwdc/images/wwdc14-home-branding.png" width=800/>
+</a></p>
+
+<p>今回、アプリエンジニアなら一度は行ってみたいはずのWWDC2014に行くことになりました。そこで、この一週間いろんなこと起きたので何回かに分けてブログという形で記録に残しておきたいと思います。</p>
+
+<h2>経緯</h2>
+
+<p>ここ最近の２、３年はプライベートでアプリを作る時間の割合がどんどん大きくなってきて何個かアプリを出したり、CocoaPodsでプラグインを出したりと活動して来たわけですが、その成果もあってかないのか仕事でもアプリの仕事を振られるようになって徐々に仕事もプライベートもアプリの仕事の比重が高くなってくる今日このごろでした。</p>
+
+<p>そんななか同僚の<a href="https://twitter.com/misyobun">@misyobun</a> <a href="https://twitter.com/daniel0613">@daniel0613</a>と今年のWWDCはどうしようかという話になって、たしかにいち早くセッションの内容が見れたりLabで開発者の人に質問したりと魅力たっぷりなのですが予算とか有給とか上長の許可とか。。。。超えなければいけない壁あったのですが、まぁ当選に受かったらその後のことは後で考えようということで駄目もとで応募してみました。</p>
+
+<p>その後、突如何の前触れもなく当選したというメールがきたのでびっくりしました。じわじわきた感じです。とはいえ、これからどうしたものかと思いとにかく基盤の方、事業部長、上長、人事の方に相談していろいろありましたが、WWDCに行く承認がおりましてめでたく参加という形になりました。一つ奇跡がありまして僕の同僚である<a href="">@misyobun</a>も受かっていたことです。初めてのサンフランシスコで初めてのWWDCだったの一緒にいくメンバーがいたのは大変心強いものを感じました。</p>
+
+<h2>KeyNote</h2>
+
+<p>詳しい纏めは<a href="http://www.gizmodo.jp/2014/06/wwdc_2014_3.html">ギズモードさんの記事</a>を読んでもらった方がわかりやすいです。</p>
+
+<p>衝撃的だったのが新しいプログラミング「Swift」が発表されたこと。
+しかも、しれっとはじまったので驚きました。。。クレイグさんが「Xcode..」って言ったときにみんな”ざわっ”ってしてたのは忘れないです。
+今年はiPhone6やフィットネス関係のハードが出るのかなと思いきや、iOS8、Swiftとデベロッパの祭典ならではの内容だったのかなと思います。</p>
+
+<p><img src="https://devimages.apple.com.edgekey.net/swift/images/swift-hero.png" alt="Swift" /></p>
+
+<h4>Swift &ndash; Objective-C without C</h4>
+
+<p><a href="https://developer.apple.com/swift/">Introducing Swift</a></p>
+
+<ul>
+<li>安全なプログラミングパターンの提供</li>
+<li>現代の機能・技術の即したものをよりシンプルに柔軟に楽しく実装できる</li>
+<li>Python, Objective-Cより高速</li>
+</ul>
+
+
+<h3>CocoaPods MeetUp in Twillio</h3>
+
+<p>その日は、いろんな会社でWWDCにちなんだミートアップをやっていたので自分はTwillio社で開催されていたCocoaPodsのミートアップに参加してきました。英語が早くてほとんど聞き取れなかった・・・。とはいえ、なんかコミニュケーションしようと思って発表した人に挨拶しにいきました。</p>
+
+<iframe src="http://nakajijapan.github.io//instagram.com/p/ow-OKBsR0Y/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+
+
+<h2>2日目</h2>
+
+<p>せっかくなので自分の興味のある分野をみてきたのでした。</p>
+
+<ul>
+<li>Mastering Modern Media Playback</li>
+<li>Harnessing Metadata in Audiovisual Media</li>
+<li>Introducing HomeKit</li>
+</ul>
+
+
+<p>夜は二人でSwiftごにょごにょ</p>
+
+<h2>3日目</h2>
+
+<p>この日もせっかくなので自分の興味のある分野をみてきたのでした。</p>
+
+<ul>
+<li>What&rsquo;s New in Core Audio</li>
+<li>Introducing HealthKit</li>
+<li>Mastering Modern Media Playback</li>
+<li>Harnessing Metadata in Audiovisual Media</li>
+<li>Camera Capture: Manual Controls</li>
+<li>Intermediate Swift</li>
+<li>Swift Interoperability In Depth</li>
+</ul>
+
+
+<p>夜は二人でSwiftごにょごにょ</p>
+
+<h2>4日目</h2>
+
+<p>この日は、二人でSwiftのドキュメント読んだりプログラミングしているうちにわからないところがでてきたので一旦セッションにでることは中止して各分野のLabにいって担当のエンジニアに質問をしに行く業を行いました。</p>
+
+<ul>
+<li>Swift Lab
+
+<ul>
+<li>Swiftの実装の仕方もろもろ</li>
+</ul>
+</li>
+<li>Media Lab
+
+<ul>
+<li>AV Foundation関連でAVAssetWriterの処理方法</li>
+</ul>
+</li>
+</ul>
+
+
+<p>その後は、Bashというなの打ち上げが庭で開催されました。</p>
+
+<h3>5日目</h3>
+
+<ul>
+<li>Advanced Swift Debugging in LLDB</li>
+</ul>
+
+
+<p>時間があったのでSwift Labで質問。</p>
+
+<h2>Bash!!!!!!!</h2>
+
+<p>WWDCは五日間あったのですが、四日目にはBash!というなの打ち上げがあり、せっかくなので参加してきました。開会式・閉会式とかはないんですがね&hellip;これは文化の違いなのかな。あ、書いてて思ったのですが、
+参加したエンジニアと交流する名目のあれだったんだな思いました。。。。Bashのプログラムが全くなかったので同僚と話していたらおばちゃんが英語で交流しなさい！！
+っていわれたので何人かのエンジニアさんと会話してきましたのも思い出しました。アジアからきたりヨーロッパからきたりいろんな国のエンジニアさんと話させていただきました。
+みんな英語流暢でなかなか理解できなかったのですがそこはお酒の力をかりてテンションで会話できたのでした。。。</p>
+
+<p>途中からはライブが始まり、KeyNoteで流れていた曲のアーティスト、Bastilleがライブしたらしいです。KeyNoteを見直したら確かにこの曲でじわじわと会場にいたときの興奮がよみがえって来たので購入してしまいましたw</p>
+
+<p><img src="http://ecx.images-amazon.com/images/I/51IANZeQuXL.jpg" alt="Bastille - Pompeii" /></p>
+
+<p>Bad Blood &ndash; Pompeii</p>
+
+<p>あと、本当に偶然にクレイグさんが近くにいたので一緒に写真を撮らせていただいたのは貴重な思い出です。安定のスマイルでした。</p>
+
+<blockquote class="twitter-tweet" lang="ja"><p>Awesome!! はじめまして！ <a href="https://twitter.com/craig_apple">@craig_apple</a> <a href="https://twitter.com/search?q=%23WWDC&amp;src=hash">#WWDC</a> <a href="http://t.co/zjZ3LrzLFA">pic.twitter.com/zjZ3LrzLFA</a></p>&mdash; nakajijapan (@nakajijapan) <a href="https://twitter.com/nakajijapan/statuses/474827650419007488">2014, 6月 6</a></blockquote>
+
+
+<script async src="http://nakajijapan.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>WWDCに参加してみて</h2>
+
+<h3>Labにもっと行こう！！！</h3>
+
+<p>今回は初めてもありあまり用意という用意はしてこなかったのですが、実際に参加してみてセッションに躍起になって参加はしなくてもいいのかなと思いました。
+今年はセッションの発表が終了してから１、２日後にはセッションの動画アップロードされているので、あまりWWDCに参加したメリットは感じられないと思います。
+なのでセッションは適度にして、新しい機能や仕事やプライベートで解決できない問題纏めて各分野のLabで質問しまくるのがいいなと思いました。
+実際に、Appleのエンジニアさんも、皆さんがLabで質問してくるこが大変ありがたいし大歓迎だよ！改善にもつながるしね！とおっしゃっていました。
+英語もコードとサンプルプログラムで一緒に話せばなんとかなると実感しました。
+もっと、質問すれば良かったと大変反省しております。</p>
+
+<h3>沸き上がる興奮を日本に持ち帰る</h3>
+
+<p>自慢話します。（違います）
+今回参加したことを何らかの形でフィードバックして来年こそ自分が行きたい！来年も参加の許可が下りるようにする使命みたいなものは勝手にあると思っています。
+もっと盛り上げたいな。まぁ自分や近くにいる人たちが楽しんでれば、勝手に集まってくるのかな。よし、もっと楽しもう！！！！</p>
+
+<h3>戦争だ！</h3>
+
+<p>いや、ビジネスと言う名の戦争です。
+外国の方（特に英語圏）は言語の壁がないのでがんがんLabに質問していって解決したり、勝手に他のエンジニアとなかよくなって情報交換したりと圧倒されたり、
+このようなエンジニアが会場でこんな多いと感じたのに正解にはもっとたくさんいるんだなと思うと自分なんてほんの点なんだなと萎縮しています。</p>
+
+<p>そんな人と、ビジネスで闘っているとなるとなおさら。</p>
+
+<h2>最後に</h2>
+
+<p>相談に乗っていただいた<a href="https://twitter.com/kentaro">@kentaro</a>さん、<a href="https://twitter.com/mau_rin">@mau_rin</a>さん、
+仕事がまだがんがん残っているのにも関わらず許可していただいた上長、事業部長、そしてWWDCそしてサンフランシスコで一週間心の支えになった同僚の
+<a href="https://twitter.com/misyobun">@misyobun</a>には大変大変大変大変大変感謝しております。</p>
+
+<p>この恩義は業務や後輩の育成で返していこう思います！！！！</p>
+
+<p>ぼそっ(来年も参加したい。。。)
+ぼそっ(仕事が溜まってる!!!!!)</p>
+
+<p>以上、Apple信者のたわいもないブログでした。</p>
+]]></content>
+  </entry>
+  
+</feed>

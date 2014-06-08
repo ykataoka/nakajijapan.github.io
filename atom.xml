@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-01T23:51:16-07:00</updated>
+  <updated>2014-06-09T08:40:47+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,9 +14,287 @@
 
   
   <entry>
+    <title type="html"><![CDATA[WWDC2014に参加してきました - 番外編(暮らし)]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/09/wwdc2014-life/"/>
+    <updated>2014-06-09T07:43:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/09/wwdc2014-life</id>
+    <content type="html"><![CDATA[<p><img src="http://nakajijapan.github.io/images/posts/2014-06-09-01.jpg" alt="サンフランシスコ" /></p>
+
+<p><a href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/">前回の記事(WWDC2014に参加してきました)</a>の番外編です。</p>
+
+<p>初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。</p>
+
+<h2>前準備</h2>
+
+<ul>
+<li>予約
+
+<ul>
+<li>ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、飛行機当然日程が迫るにつれて高くなるのでお早めに。</li>
+</ul>
+</li>
+<li>服
+
+<ul>
+<li>会場の近くにはユニクロがあるのでパンツも靴下もパーカーも服はすべて現地調達できるので問題ありません！！！！</li>
+</ul>
+</li>
+<li>携帯
+
+<ul>
+<li>バッテリーは必ず持っていきましょう！！いじってると絶対なくなります。</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>空港＆飛行機</h2>
+
+<ul>
+<li>空港には余裕をもって３時間前に到着するといいでしょう。
+
+<ul>
+<li>40前に来たらいろいろ手続きがあるので時間がかかってしまうせいか空港の人にかなり急かされました。</li>
+</ul>
+</li>
+<li>成田空港には第一ターミナル、第二ターミナルがあって降りる場所間違うとバスか電車で移動しないといけないので時間のロスになります。</li>
+<li>飛行機は９時間ものっているのですごい暇になります。絶対暇つぶしになるものを用意しておくといいです。
+自分はだいたいMacでブログ書いていたりプログラミングしていました。
+やばそうな気流がぶつかることが何回かあって、多少ジェットコースター気分が味わえてしまいます。酔ってしまう人は注意してください。</li>
+</ul>
+
+
+<h2>電車</h2>
+
+<ul>
+<li>Moscone Centerまでは<a href="http://www.bart.gov/stations">地下鉄BART</a>を利用して行きます。電光掲示板が無いので毎回確認したほうがいいです。</li>
+<li>お金をチャージして乗る形式っぽいです。</li>
+</ul>
+
+
+<h2>生活</h2>
+
+<ul>
+<li>インターネット
+
+<ul>
+<li>自分はソフトバンクなので<a href="http://www.softbank.jp/mobile/service/global/overseas/web/packet-flat-late/">海外パケットし放題</a></li>
+</ul>
+</li>
+<li>だいたいのお店は袋が有料なので袋が必要ないのにOK!っていうと何セントかよけいに請求されます。</li>
+<li>チャージが含まれているお店とそうでないお店があるので注意
+
+<ul>
+<li>相場は15-20%の間?</li>
+<li>ベッドメイキングは<code>$1</code>が相場？</li>
+</ul>
+</li>
+<li>物価は日本とそんな変わらないのですがチップのこと考えると高いですね。</li>
+<li>タクシーは怖くて使わなかった</li>
+<li>お酒を購入するときはは写真のID見せろと言われるので忘れずに</li>
+<li>朝食・昼食はでますので食費には困らない
+
+<ul>
+<li>野菜でないのかなと思ってたらベジタリアン用の弁当がでていました。</li>
+</ul>
+</li>
+<li>よく外国は窃盗が多いからリュックは前にして、財布は後ろポケットにいれるな！っていう言い伝えのようなものがあったけど全然しなかった
+
+<ul>
+<li>会場行き来するくらいなので何も起きなかっただけなのかもしれません&hellip;</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>帰国</h2>
+
+<ul>
+<li>日本円に換金するときにコインは換金できないので使い切る必要があるといわれたのでコインは外国で使い切って帰国しましょう！！</li>
+</ul>
+
+
+<p>そんなところかな、何の問題もなく生活・帰還しました。
+　
+　</p>
+
+<p>終わり。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[WWDC2014に参加してきました]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/"/>
+    <updated>2014-06-08T23:50:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/08/wwdc2014</id>
+    <content type="html"><![CDATA[<p><a href="https://developer.apple.com/wwdc/">
+  <img src="https://devimages.apple.com.edgekey.net/wwdc/images/wwdc14-home-branding.png" width=800/>
+</a></p>
+
+<p>今回、アプリエンジニアなら一度は行ってみたいはずのWWDC2014に行くことになりました。そこで、この一週間いろんなこと起きたので何回かに分けてブログという形で記録に残しておきたいと思います。</p>
+
+<h2>経緯</h2>
+
+<p>ここ最近の２、３年はプライベートでアプリを作る時間の割合がどんどん大きくなってきて何個かアプリを出したり、CocoaPodsでプラグインを出したりと活動して来たわけですが、その成果もあってかないのか仕事でもアプリの仕事を振られるようになって徐々に仕事もプライベートもアプリの仕事の比重が高くなってくる今日このごろでした。</p>
+
+<p>そんななか同僚の<a href="https://twitter.com/misyobun">@misyobun</a> <a href="https://twitter.com/daniel0613">@daniel0613</a>と今年のWWDCはどうしようかという話になって、たしかにいち早くセッションの内容が見れたりLabで開発者の人に質問したりと魅力たっぷりなのですが予算とか有給とか上長の許可とか。。。。超えなければいけない壁あったのですが、まぁ当選に受かったらその後のことは後で考えようということで駄目もとで応募してみました。</p>
+
+<p>その後、突如何の前触れもなく当選したというメールがきたのでびっくりしました。じわじわきた感じです。とはいえ、これからどうしたものかと思いとにかく基盤の方、事業部長、上長、人事の方に相談していろいろありましたが、WWDCに行く承認がおりましてめでたく参加という形になりました。一つ奇跡がありまして僕の同僚である<a href="">@misyobun</a>も受かっていたことです。初めてのサンフランシスコで初めてのWWDCだったの一緒にいくメンバーがいたのは大変心強いものを感じました。</p>
+
+<h2>KeyNote</h2>
+
+<p>詳しい纏めは<a href="http://www.gizmodo.jp/2014/06/wwdc_2014_3.html">ギズモードさんの記事</a>を読んでもらった方がわかりやすいです。</p>
+
+<p>衝撃的だったのが新しいプログラミング「Swift」が発表されたこと。
+しかも、しれっとはじまったので驚きました。。。クレイグさんが「Xcode..」って言ったときにみんな”ざわっ”ってしてたのは忘れないです。
+今年はiPhone6やフィットネス関係のハードが出るのかなと思いきや、iOS8、Swiftとデベロッパの祭典ならではの内容だったのかなと思います。</p>
+
+<p><img src="https://devimages.apple.com.edgekey.net/swift/images/swift-hero.png" alt="Swift" /></p>
+
+<h4>Swift &ndash; Objective-C without C</h4>
+
+<p><a href="https://developer.apple.com/swift/">Introducing Swift</a></p>
+
+<ul>
+<li>安全なプログラミングパターンの提供</li>
+<li>現代の機能・技術の即したものをよりシンプルに柔軟に楽しく実装できる</li>
+<li>Python, Objective-Cより高速</li>
+</ul>
+
+
+<h3>CocoaPods MeetUp in Twillio</h3>
+
+<p>その日は、いろんな会社でWWDCにちなんだミートアップをやっていたので自分はTwillio社で開催されていたCocoaPodsのミートアップに参加してきました。英語が早くてほとんど聞き取れなかった・・・。とはいえ、なんかコミニュケーションしようと思って発表した人に挨拶しにいきました。</p>
+
+<iframe src="http://nakajijapan.github.io//instagram.com/p/ow-OKBsR0Y/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+
+
+<h2>2日目</h2>
+
+<p>せっかくなので自分の興味のある分野をみてきたのでした。</p>
+
+<ul>
+<li>Mastering Modern Media Playback</li>
+<li>Harnessing Metadata in Audiovisual Media</li>
+<li>Introducing HomeKit</li>
+</ul>
+
+
+<p>夜は二人でSwiftごにょごにょ</p>
+
+<h2>3日目</h2>
+
+<p>この日もせっかくなので自分の興味のある分野をみてきたのでした。</p>
+
+<ul>
+<li>What&rsquo;s New in Core Audio</li>
+<li>Introducing HealthKit</li>
+<li>Mastering Modern Media Playback</li>
+<li>Harnessing Metadata in Audiovisual Media</li>
+<li>Camera Capture: Manual Controls</li>
+<li>Intermediate Swift</li>
+<li>Swift Interoperability In Depth</li>
+</ul>
+
+
+<p>夜は二人でSwiftごにょごにょ</p>
+
+<h2>4日目</h2>
+
+<p>この日は、二人でSwiftのドキュメント読んだりプログラミングしているうちにわからないところがでてきたので一旦セッションにでることは中止して各分野のLabにいって担当のエンジニアに質問をしに行く業を行いました。</p>
+
+<ul>
+<li>Swift Lab
+
+<ul>
+<li>Swiftの実装の仕方もろもろ</li>
+</ul>
+</li>
+<li>Media Lab
+
+<ul>
+<li>AV Foundation関連でAVAssetWriterの処理方法</li>
+</ul>
+</li>
+</ul>
+
+
+<p>その後は、Bashというなの打ち上げが庭で開催されました。</p>
+
+<h3>5日目</h3>
+
+<ul>
+<li>Advanced Swift Debugging in LLDB</li>
+</ul>
+
+
+<p>時間があったのでSwift Labで質問。</p>
+
+<h2>Bash!!!!!!!</h2>
+
+<p>WWDCは五日間あったのですが、四日目にはBash!というなの打ち上げがあり、せっかくなので参加してきました。開会式・閉会式とかはないんですがね&hellip;これは文化の違いなのかな。あ、書いてて思ったのですが、
+参加したエンジニアと交流する名目のあれだったんだな思いました。。。。Bashのプログラムが全くなかったので同僚と話していたらおばちゃんが英語で交流しなさい！！
+っていわれたので何人かのエンジニアさんと会話してきましたのも思い出しました。アジアからきたりヨーロッパからきたりいろんな国のエンジニアさんと話させていただきました。
+みんな英語流暢でなかなか理解できなかったのですがそこはお酒の力をかりてテンションで会話できたのでした。。。</p>
+
+<p>途中からはライブが始まり、KeyNoteで流れていた曲のアーティスト、Bastilleがライブしたらしいです。KeyNoteを見直したら確かにこの曲でじわじわと会場にいたときの興奮がよみがえって来たので購入してしまいましたw</p>
+
+<p><img src="http://ecx.images-amazon.com/images/I/51IANZeQuXL.jpg" alt="Bastille - Pompeii" /></p>
+
+<p>Bad Blood &ndash; Pompeii</p>
+
+<p>あと、本当に偶然にクレイグさんが近くにいたので一緒に写真を撮らせていただいたのは貴重な思い出です。安定のスマイルでした。</p>
+
+<blockquote class="twitter-tweet" lang="ja"><p>Awesome!! はじめまして！ <a href="https://twitter.com/craig_apple">@craig_apple</a> <a href="https://twitter.com/search?q=%23WWDC&amp;src=hash">#WWDC</a> <a href="http://t.co/zjZ3LrzLFA">pic.twitter.com/zjZ3LrzLFA</a></p>&mdash; nakajijapan (@nakajijapan) <a href="https://twitter.com/nakajijapan/statuses/474827650419007488">2014, 6月 6</a></blockquote>
+
+
+<script async src="http://nakajijapan.github.io//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+<h2>WWDCに参加してみて</h2>
+
+<h3>Labにもっと行こう！！！</h3>
+
+<p>今回は初めてもありあまり用意という用意はしてこなかったのですが、実際に参加してみてセッションに躍起になって参加はしなくてもいいのかなと思いました。
+今年はセッションの発表が終了してから１、２日後にはセッションの動画アップロードされているので、あまりWWDCに参加したメリットは感じられないと思います。
+なのでセッションは適度にして、新しい機能や仕事やプライベートで解決できない問題纏めて各分野のLabで質問しまくるのがいいなと思いました。
+実際に、Appleのエンジニアさんも、皆さんがLabで質問してくるこが大変ありがたいし大歓迎だよ！改善にもつながるしね！とおっしゃっていました。
+英語もコードとサンプルプログラムで一緒に話せばなんとかなると実感しました。
+もっと、質問すれば良かったと大変反省しております。</p>
+
+<h3>沸き上がる興奮を日本に持ち帰る</h3>
+
+<p>自慢話します。（違います）
+今回参加したことを何らかの形でフィードバックして来年こそ自分が行きたい！来年も参加の許可が下りるようにする使命みたいなものは勝手にあると思っています。
+もっと盛り上げたいな。まぁ自分や近くにいる人たちが楽しんでれば、勝手に集まってくるのかな。よし、もっと楽しもう！！！！</p>
+
+<h3>戦争だ！</h3>
+
+<p>いや、ビジネスと言う名の戦争です。
+外国の方（特に英語圏）は言語の壁がないのでがんがんLabに質問していって解決したり、勝手に他のエンジニアとなかよくなって情報交換したりと圧倒されたり、
+このようなエンジニアが会場でこんな多いと感じたのに正解にはもっとたくさんいるんだなと思うと自分なんてほんの点なんだなと萎縮しています。</p>
+
+<p>そんな人と、ビジネスで闘っているとなるとなおさら。</p>
+
+<h2>最後に</h2>
+
+<p>相談に乗っていただいた<a href="https://twitter.com/kentaro">@kentaro</a>さん、<a href="https://twitter.com/mau_rin">@mau_rin</a>さん、
+仕事がまだがんがん残っているのにも関わらず許可していただいた上長、事業部長、そしてWWDCそしてサンフランシスコで一週間心の支えになった同僚の
+<a href="https://twitter.com/misyobun">@misyobun</a>には大変大変大変大変大変感謝しております。</p>
+
+<p>この恩義は業務や後輩の育成で返していこう思います！！！！</p>
+
+<p>ぼそっ(来年も参加したい。。。)
+ぼそっ(仕事が溜まってる!!!!!)</p>
+
+<p>以上、Apple信者のたわいもないブログでした。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[app道場#3 「よくある動画アプリのあれを実装したい」を発表した]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/06/01/app-doujou3/"/>
-    <updated>2014-06-01T20:05:00-07:00</updated>
+    <updated>2014-06-01T20:05:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/06/01/app-doujou3</id>
     <content type="html"><![CDATA[<p>２回目の参加となるiPhone and Android勉強会の<a href="http://atnd.org/events/50499">「app道場#3」</a>に参加してきました。</p>
 
@@ -110,7 +388,7 @@
   <entry>
     <title type="html"><![CDATA[動画からサムネイル画像を生成する]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie/"/>
-    <updated>2014-05-25T22:02:00-07:00</updated>
+    <updated>2014-05-25T22:02:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/05/25/creating-thumbnailimage-from-the-movie</id>
     <content type="html"><![CDATA[<p>動画のある一部分を画像として取り出したいときがあったので調べてみたら、ドキュメントにそれっぽい記述があったので実装してみました。</p>
 
@@ -191,7 +469,7 @@
   <entry>
     <title type="html"><![CDATA[AVAudioMixでオーディオの調節を行う]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/05/01/about-audiomix/"/>
-    <updated>2014-05-01T11:56:00-07:00</updated>
+    <updated>2014-05-01T11:56:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/05/01/about-audiomix</id>
     <content type="html"><![CDATA[<p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
 その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
@@ -283,7 +561,7 @@
   <entry>
     <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
-    <updated>2014-04-23T10:50:00-07:00</updated>
+    <updated>2014-04-23T10:50:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
     <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
 
@@ -304,7 +582,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[メディアキャプチャの出力先の実装について]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput/"/>
-    <updated>2014-04-07T02:10:00-07:00</updated>
+    <updated>2014-04-07T02:10:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput</id>
     <content type="html"><![CDATA[<p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
 
@@ -471,7 +749,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[IRKit + iBeacon]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon/"/>
-    <updated>2014-03-29T16:32:00-07:00</updated>
+    <updated>2014-03-29T16:32:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon</id>
     <content type="html"><![CDATA[<p>先日IRKitとEstimote Beaconsを購入しまして、せっかくなんでこの二つ合わせてなにかできないかなーと思いまして
 自宅で活用できるものを作ってみました。</p>
@@ -805,7 +1083,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
-    <updated>2014-03-17T03:37:00-07:00</updated>
+    <updated>2014-03-17T03:37:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
     <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
 持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
@@ -845,7 +1123,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
-    <updated>2014-02-28T20:34:00-08:00</updated>
+    <updated>2014-02-28T20:34:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
     <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
 
@@ -867,7 +1145,7 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <entry>
     <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
-    <updated>2014-02-26T21:44:00-08:00</updated>
+    <updated>2014-02-26T21:44:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
     <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
 
@@ -1109,7 +1387,7 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
   <entry>
     <title type="html"><![CDATA[Developers Summit 2014]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014/"/>
-    <updated>2014-02-15T01:51:00-08:00</updated>
+    <updated>2014-02-15T01:51:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014</id>
     <content type="html"><![CDATA[<p>先週ではありますが、Developers Summit 2014に参加してきました。
 サミットが平日だったので全部はみれていませんが、いくつかのステージをみること
@@ -1347,7 +1625,7 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
   <entry>
     <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
-    <updated>2014-02-02T23:32:00-08:00</updated>
+    <updated>2014-02-02T23:32:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
     <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
 iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
@@ -1393,7 +1671,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[AVMutableVideoCompositionLayerInstructionの使い方]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/"/>
-    <updated>2014-01-19T19:32:00-08:00</updated>
+    <updated>2014-01-19T19:32:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction</id>
     <content type="html"><![CDATA[<p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
 それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
@@ -1496,7 +1774,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[動画関連の処理をする上で注意すること]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint/"/>
-    <updated>2014-01-19T19:32:00-08:00</updated>
+    <updated>2014-01-19T19:32:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/19/avfoundation-checkpoint</id>
     <content type="html"><![CDATA[<p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
 
@@ -1521,7 +1799,7 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
   <entry>
     <title type="html"><![CDATA[Happy New Year]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/"/>
-    <updated>2014-01-02T20:22:00-08:00</updated>
+    <updated>2014-01-02T20:22:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/01/02/happy-new-year</id>
     <content type="html"><![CDATA[<p>明けましておめでとうございます。</p>
 
@@ -1547,7 +1825,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[iOS勉強会 iBeaconでできること　に参加してきた]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon/"/>
-    <updated>2013-12-12T19:06:00-08:00</updated>
+    <updated>2013-12-12T19:06:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/12/12/study-ibeacon</id>
     <content type="html"><![CDATA[<p>Developer&rsquo;s IOさんが主催する勉強会に参加してきました。
 <a href="http://connpass.com/event/4225/">http://connpass.com/event/4225/</a></p>
@@ -1778,7 +2056,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[AV Foundation Frameworkを利用して動画の結合を行う]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation/"/>
-    <updated>2013-10-22T19:06:00-07:00</updated>
+    <updated>2013-10-22T19:06:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/10/22/how-to-combine-some-movies-with-avfoundation</id>
     <content type="html"><![CDATA[<p>こんにちはあのnakajijapanです。 以前、心霊動画アプリで「もう一度ご覧いただこう」 というアプリをリリースしました。 心霊動画アプリなので動画と動画を結合したり動画の上に動画を重ねて実装したりといろいろ やるわけですが今回はじめてということもあり沢山勉強になったのでここいらで自分の頭の整理 がてら情報をまためようと思います。</p>
 
@@ -1995,7 +2273,7 @@ nakajijapanです。</p>
   <entry>
     <title type="html"><![CDATA[心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/"/>
-    <updated>2013-09-30T02:17:00-07:00</updated>
+    <updated>2013-09-30T02:17:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie</id>
     <content type="html"><![CDATA[<p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
 
@@ -2076,7 +2354,7 @@ iOS7でテストして仮に問題が発生したときにその対応でリリ�
   <entry>
     <title type="html"><![CDATA[UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton/"/>
-    <updated>2013-09-18T20:19:00-07:00</updated>
+    <updated>2013-09-18T20:19:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton</id>
     <content type="html"><![CDATA[<p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
 UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
@@ -2185,353 +2463,6 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
 
 <p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
 そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[UIKitで人魂つくってみた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit/"/>
-    <updated>2013-09-07T07:42:00-07:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/09/07/create-hitodama-with-uikit</id>
-    <content type="html"><![CDATA[<p>お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
-人魂でもいれてみようじゃないかと思い立って作ってみました。</p>
-
-<p>iOS5からCore AnimationなるものがサポートされていてパーティクルエフェクトがUIKitでも作成できるようになったので実装してみました。
-以前はCocos2Dのフレームワーク情報で作成していたのですがそれを利用しないのは初めて。</p>
-
-<p>まずはフレームワークをインポートする</p>
-
-<h2>1</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#import &lt;QuartzCore/QuartzCore.h&gt;</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>2</h2>
-
-<p>あとは表現したものを想像して実装するのみ！！！！っていってもパラメータが沢山あるので
-感覚的にGUIで設定できてその状態のパラメータをみれるツールをつかいました。</p>
-
-<ul>
-<li>UIEffectDesigner
-
-<ul>
-<li><a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p>これにfire ballっていのがあったのでそれを参考にしつつ自分なりに調整してみました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-</pre></td><td class='code'><pre><code class='objective-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">CAEmitterLayer</span><span class="o">*</span> <span class="n">fireEmitter</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterLayer</span> <span class="n">layer</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterPosition</span> <span class="o">=</span> <span class="n">CGPointMake</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterSize</span> <span class="o">=</span> <span class="n">CGSizeMake</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">40</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">renderMode</span> <span class="o">=</span> <span class="n">kCAEmitterLayerAdditive</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">CAEmitterCell</span><span class="o">*</span> <span class="n">fire</span> <span class="o">=</span> <span class="p">[</span><span class="n">CAEmitterCell</span> <span class="n">emitterCell</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">birthRate</span>     <span class="o">=</span> <span class="mi">250</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetime</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">lifetimeRange</span> <span class="o">=</span> <span class="mf">2.06</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocity</span>      <span class="o">=</span> <span class="mi">26</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">velocityRange</span> <span class="o">=</span> <span class="mi">40</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">color</span>         <span class="o">=</span> <span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">0.0</span> <span class="nl">green:</span><span class="mf">0.0</span> <span class="nl">blue:</span><span class="mf">0.05</span> <span class="nl">alpha:</span><span class="mf">1.0</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">redRange</span>      <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">greenRange</span>    <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">blueRange</span>     <span class="o">=</span> <span class="mf">0.12</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">contents</span>      <span class="o">=</span> <span class="p">(</span><span class="kt">id</span><span class="p">)[[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;particle.png&quot;</span><span class="p">]</span> <span class="n">CGImage</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">fire</span> <span class="nl">setName:</span><span class="s">@&quot;fire&quot;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaRange</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scale</span>      <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleRange</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spin</span>       <span class="o">=</span> <span class="mf">1.56</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">spinRange</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">alphaSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.33</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">scaleSpeed</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionRange</span>     <span class="o">=</span> <span class="n">M_PI</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLongitude</span> <span class="o">=</span> <span class="mf">1.57</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">emissionLatitude</span>  <span class="o">=</span> <span class="mf">2.33</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">xAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">yAcceleration</span> <span class="o">=</span> <span class="o">-</span><span class="mi">80</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">fire</span><span class="p">.</span><span class="n">zAcceleration</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">fireEmitter</span><span class="p">.</span><span class="n">emitterCells</span> <span class="o">=</span> <span class="p">[</span><span class="n">NSArray</span> <span class="nl">arrayWithObject:</span><span class="n">fire</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">fireEmitter</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>とりあえずこれで自分なりの人魂作成に成功しました。
-パラメータをいろいろ覚えなければいけないものが沢山あるのでちょっと覚えるの大変だなという印象。
-今回その煩雑さをUIEffectDesignerで補完しましたが、それでもパラメータがどのような効果があるのかはある程度理解しておく必要があるようです。</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2013-09-08_01.png" alt="ss" /></p>
-
-<h3>参照</h3>
-
-<p>iOS Developer Library
-<a href="https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html">https://developer.apple.com/library/ios/documentation/GraphicsImaging/Reference/CAEmitterLayer_class/Reference/Reference.html</a></p>
-
-<p>UIEffectDesigner
-<a href="http://www.touch-code-magazine.com/uieffectdesigner/">http://www.touch-code-magazine.com/uieffectdesigner/</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Update To Rails4]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/07/13/update-rails4/"/>
-    <updated>2013-07-13T15:13:00-07:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/07/13/update-rails4</id>
-    <content type="html"><![CDATA[<p>自分のサービスのRailsのversionがまだ<code>3.2</code>だったので地道にRails4にアップデートしました。
-その際に必要になった作業をメモっときます。</p>
-
-<h2>attr_accessible is extracted out of Rails into a gem.</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>E, [2013-07-04T09:54:39.926880 #2726] ERROR -- : `attr_accessible` is extracted out of Rails into a gem. Please use new recommended protection model for params(strong_parameters) or add `protected_attributes` to your Gemfile to use old one. (RuntimeError)</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>attr_accessible</code>はRailsから省いて<code>strong_parameters</code>を利用してとのこと。
-振るいものを利用するなら<code>protected_attributes</code>っていうGem使ってね。
-しかし、今回は<code>strong_parameters</code>を記述していきます。</p>
-
-<p>とりあえずModelからの排除を行う。</p>
-
-<h2>DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works.</h2>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>DEPRECATION WARNING: config.whiny_nils option is deprecated and no longer works. (called from block in &lt;top (required)&gt; at /private/var/www/frustration/config/environm
-</span><span class='line'>ents/development.rb:10)</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>whiny_nils
-
-<ul>
-<li>初期化されていないオブジェクトが呼び出させたときに、警告を表示する</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-  # Log error messages when you accidentally call methods on nil</span>
-</span><span class='line'><span class="gd">-  config.whiny_nils = true</span>
-</span><span class='line'><span class="gd">-</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>config.eager_load is set to nil.</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>config.eager_load is set to nil. Please update your config/environments/*.rb files accordingly:
-</span><span class='line'>
-</span><span class='line'>  * development - set it to false
-</span><span class='line'>  * test - set it to false (unless you use a tool that preloads your test environment)
-</span><span class='line'>  * production - set it to true
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>必須の設定項目増えたので<code>rails new</code>して作成された環境ファイルを眺めてみる。</p>
-
-<h2>The provided regular expression</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>E, [2013-07-04T12:00:26.429744 #7376] ERROR -- : The provided regular expression is using multiline anchors (^ or $), which may present a security risk. Did you mean to use \A and \z, or forgot to add the :multiline =&gt; true option? (ArgumentError)
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>正規表現の処理にもセキュリティが強化されていました。
-一行を考慮したデータのチェック<code>^</code>なら<code>\A</code>、<code>$</code>なら<code>\z</code>にすると意図したチェックになるよ。
-複数行を考慮してるんだよ！ってときは<code>:multiline =&gt; true</code>にしてね！</p>
-
-<p>自分のValidationは一行のデータを考慮しているので修正します。</p>
-
-<h2>You should not use the <code>match</code> method in your router without specifying an HTTP method.</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>E, [2013-07-04T12:07:42.318503 #7626] ERROR -- : You should not use the `match` method in your router without specifying an HTTP method.
-</span><span class='line'>If you want to expose your action to both GET and POST, add `via: [:get, :post]` option.
-</span><span class='line'>If you want to expose your action to GET, use `get` in the router:
-</span><span class='line'>  Instead of: match &quot;controller#action&quot;
-</span><span class='line'>  Do: get &quot;controller#action&quot; (RuntimeError)
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>match</code>の代わりにHTTPメソッドをちゃんと宣言しようぜ！っていうメッセージ。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'><span class="gd">-  match &#39;home&#39; =&gt; &#39;home#index&#39;, :via =&gt; :get</span>
-</span><span class='line'><span class="gi">+  get &#39;home&#39; =&gt; &#39;home#index&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>なかんじで修正。</p>
-
-<p>これで起動はうまくいった。strong_parameterによる警告はあるけどこれは後ほど修正することにする。
-その後は、テストを流して全部通す。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>bundle exec rspec spec
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>DEPRECATION WARNING: Calling #find(:first) is deprecated.</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>DEPRECATION WARNING: Calling #find(:first) is deprecated. Please call #first directly instead. You have also used finder options. These are also deprecated. Please build a scope instead of using finder options. (called from block in create_with_item at /private/var/www/frustration/app/services/service_fuman.rb:51)
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以下のような推奨されていない使い方をしていたので修正しました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='diff'><span class='line'>Hoge.find(:first, condition: {user_id: @user.id})
-</span><span class='line'>↓
-</span><span class='line'>Hoge.where(user_id: @user.id).first
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>strong_parameter</h2>
-
-<p>ここはひたすらcontroller側に制限の内容を記述。</p>
-
-<p>ホワイトリストとして許可するパラメータを記述していきます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>  <span class="kp">private</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">category_params</span>
-</span><span class='line'>      <span class="n">params</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="ss">:category</span><span class="p">)</span><span class="o">.</span><span class="n">permit</span><span class="p">(</span><span class="ss">:user_id</span><span class="p">,</span> <span class="ss">:name</span><span class="p">)</span>
-</span><span class='line'>    <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>DEPRECATION WARNING: You didn&rsquo;t set config.secret_key_base.</h2>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">DEPRECATION</span> <span class="ss">WARNING</span><span class="p">:</span> <span class="no">You</span> <span class="n">didn</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">set</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_key_base</span><span class="o">.</span> <span class="no">Read</span> <span class="n">the</span> <span class="n">upgrade</span> <span class="n">documentation</span> <span class="n">to</span> <span class="n">learn</span> <span class="n">more</span> <span class="n">about</span> <span class="n">this</span> <span class="kp">new</span> <span class="n">config</span> <span class="n">option</span><span class="o">.</span> <span class="p">(</span><span class="n">called</span> <span class="n">from</span> <span class="n">env_config</span> <span class="n">at</span> <span class="sr">/private/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">frustration</span><span class="o">/</span><span class="n">vendor</span><span class="o">/</span><span class="n">bundle</span><span class="o">/</span><span class="n">ruby</span><span class="o">/</span><span class="mi">2</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">gems</span><span class="o">/</span><span class="n">railties</span><span class="o">-</span><span class="mi">4</span><span class="o">.</span><span class="mi">0</span><span class="o">.</span><span class="mi">0</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">rails</span><span class="o">/</span><span class="n">application</span><span class="o">.</span><span class="n">rb</span><span class="p">:</span><span class="mi">141</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>secret_token</code>はもう推奨されていなくて<code>secret_key_base</code>に名前が変更されたようです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_key_base</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>      <span class="ss">ActiveSupport</span><span class="p">:</span><span class="ss">:Deprecation</span><span class="o">.</span><span class="n">warn</span> <span class="s2">&quot;You didn&#39;t set config.secret_key_base. &quot;</span> <span class="o">+</span>
-</span><span class='line'>        <span class="s2">&quot;Read the upgrade documentation to learn more about this new config option.&quot;</span>
-</span><span class='line'>
-</span><span class='line'>      <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">secret_token</span><span class="o">.</span><span class="n">blank?</span>
-</span><span class='line'>        <span class="k">raise</span> <span class="s2">&quot;You must set config.secret_key_base in your app&#39;s config.&quot;</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>    <span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>まとめ</h2>
-
-<p>これですべてテストがうまくいったのでPull Requestを自分に送ってfin.</p>
-
-<p><a href="https://github.com/nakajijapan/frustrationme_app/pulls">https://github.com/nakajijapan/frustrationme_app/pulls</a></p>
-
-<p>メジャーバージョンが上がってるということで、新しい機能が追加されたり、機能が廃止されたり、名前が変更されていたりと、いろいろと変更するべき点は多かったですがテストを書いていたので実行させては修正、実行させては修正の連続で効率的に修正作業ができたんじゃないかとおもいます（最終的にはWEB上での確認はしましたが）。</p>
-
-<p>あと、今回は規模が小さいし、修正箇所もそんなに多くなかったのでstrong_parametersの部分も変更させてしましましたが、</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s1">&#39;strong_parameters&#39;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>であらかじめ3系で実装しておくと細かい粒度で修正できて安心かもしれませんね。</p>
-
-<p>さてさて、アップデートできてよかった。。。</p>
-
-<h2>Ref</h2>
-
-<p><a href="http://www.upgradingtorails4.com/">http://www.upgradingtorails4.com/</a>
-<a href="http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast">http://railscasts.com/episodes/415-upgrading-to-rails-4?language=ja&amp;view=asciicast</a></p>
 ]]></content>
   </entry>
   

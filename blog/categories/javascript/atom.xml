@@ -4,7 +4,7 @@
   <title><![CDATA[categories: javascript | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-01T23:51:16-07:00</updated>
+  <updated>2014-06-09T08:40:47+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[RailsでBowerの導入]]></title>
     <link href="http://nakajijapan.github.io/blog/2013/06/09/install-bower/"/>
-    <updated>2013-06-09T16:07:00-07:00</updated>
+    <updated>2013-06-09T16:07:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2013/06/09/install-bower</id>
     <content type="html"><![CDATA[<p>javascriptのパッケージ管理がしたくて<code>bower</code>というパッケージ管理ツールを<a href="http://www.frustration.me">http://www.frustration.me</a> にインストールしてみました。
 (ブランチ切って試してみました・・・)</p>
