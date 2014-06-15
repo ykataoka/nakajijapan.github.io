@@ -9,9 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="明けましておめでとうございます。 時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
-３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。 いかがおすごしでしょうか。
-nakajijapanです。 去年を振り返ってみると、 &hellip;">
+  <meta name="description" content="ビデオ用のAVMutableCompositionTrackにレイヤーを持たせることができます。
+それがAVMutableVideoCompositionLayerInstructionなんですがこれが意外と
+簡単に動画に対してCGAffineTransformを指定することで動画の移動・回転・ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -67,6 +67,190 @@ nakajijapanです。 去年を振り返ってみると、 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/19/how-to-avmutablevideocompositionlayerinstruction/">AVMutableVideoCompositionLayerInstructionの使い方</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-19T19:32:00+09:00" pubdate data-updated="true">Jan 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>ビデオ用の<code>AVMutableCompositionTrack</code>にレイヤーを持たせることができます。
+それが<code>AVMutableVideoCompositionLayerInstruction</code>なんですがこれが意外と
+簡単に動画に対して<code>CGAffineTransform</code>を指定することで動画の移動・回転・拡大縮小
+ができたりフェードイン・アウトの設定ができたのでメモ。</p>
+
+<p>まずは対象のトラックをもとにして、レイヤーをインスタンス化します。</p>
+
+<p><code>+ (AVMutableVideoCompositionLayerInstruction *)videoCompositionLayerInstructionWithAssetTrack:(AVAssetTrack *)track</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableVideoCompositionLayerInstruction</span> <span class="o">*</span><span class="n">layerInstruction</span><span class="p">;</span>
+</span><span class='line'><span class="n">layerInstruction</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableVideoCompositionLayerInstruction</span>
+</span><span class='line'>                    <span class="nl">videoCompositionLayerInstructionWithAssetTrack:</span><span class="n">compositionVideoTrack</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>TransForm</h3>
+
+<p><code>- (void)setTransformRampFromStartTransform:(CGAffineTransform)startTransform toEndTransform:(CGAffineTransform)endTransform timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと、３秒間左から動画が移動してきます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// transition</span>
+</span><span class='line'><span class="n">CGAffineTransform</span> <span class="n">rotateStart</span><span class="p">,</span> <span class="n">rotateEnd</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeScale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateStart</span>  <span class="o">=</span> <span class="n">CGAffineTransformMakeTranslation</span><span class="p">(</span><span class="o">-</span><span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="n">rotateEnd</span>    <span class="o">=</span> <span class="n">CGAffineTransformTranslate</span><span class="p">(</span><span class="n">rotateStart</span><span class="p">,</span> <span class="mi">720</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setTransformRampFromStartTransform:</span><span class="n">rotateStart</span>
+</span><span class='line'>                                      <span class="nl">toEndTransform:</span><span class="n">rotateEnd</span>
+</span><span class='line'>                                           <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Opacity</h3>
+
+<p><code>- (void)setOpacityRampFromStartOpacity:(float)startOpacity toEndOpacity:(float)endOpacity timeRange:(CMTimeRange)timeRange</code></p>
+
+<p>この例だと最初から３秒間動画がフェードインしてきて最後の３秒間動画をフェードアウトします。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// fade in</span>
+</span><span class='line'><span class="n">CMTime</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">;</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">kCMTimeZero</span><span class="p">;</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// fade out</span>
+</span><span class='line'><span class="n">startTime</span>    <span class="o">=</span> <span class="n">CMTimeSubtract</span><span class="p">(</span><span class="n">videoComposition</span><span class="p">.</span><span class="n">currentTimeDuration</span><span class="p">,</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">));</span>
+</span><span class='line'><span class="n">timeDuration</span> <span class="o">=</span> <span class="n">CMTimeMake</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span><span class='line'><span class="p">[</span><span class="n">layerInstruction</span> <span class="nl">setOpacityRampFromStartOpacity:</span><span class="mf">1.0</span>
+</span><span class='line'>                                    <span class="nl">toEndOpacity:</span><span class="mf">0.0</span>
+</span><span class='line'>                                       <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span> <span class="n">timeDuration</span><span class="p">)];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>Appleのドキュメントでこのクラスの説明をみると動画処理にしては結構シンプルだったので何個か試してみたのでした。
+ただ、<code>CMTime</code>関連・<code>CGAffineTransform</code>関連の知識はないと結構何がなんだかわからなくなるのであらかじめ知識として
+蓄えておくことはは必須ですね。</p>
+
+<h2>Ref</h2>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:">https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableVideoCompositionLayerInstruction_Class/Reference/Reference.html#//apple_ref/occ/instm/AVMutableVideoCompositionLayerInstruction/setTransformRampFromStartTransform:toEndTransform:timeRange:</a></p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/01/19/avfoundation-checkpoint/">動画関連の処理をする上で注意すること</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-01-19T19:32:00+09:00" pubdate data-updated="true">Jan 19<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>以前の記事でも書いたのですが、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>というアプリを作成したときにいろいろと苦労したことがあったので、それを書き留めておこうと思います。</p>
+
+<h3>回転問題</h3>
+
+<p>そのまま動画を保存すると270度になってしまっているので回転する必要があった</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CGAffineTransform transformVideo       = CGAffineTransformMakeTranslation(videoTrack.naturalSize.height, 0.0);
+</span><span class='line'>CGAffineTransform transformVideoRotate = CGAffineTransformRotate(transformVideo, M_PI * 0.5);
+</span><span class='line'>CGAffineTransform transformVideoMove   = CGAffineTransformTranslate(transformVideoRotate, -300, 0);
+</span><span class='line'>[layerInstruction setTransform: transformVideoMove atTime:kCMTimeZero];</span></code></pre></td></tr></table></div></figure>
+
+
+<p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -626,258 +810,6 @@ nakajijapanです。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/30/released-iphone-app-ghost-movie/">心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-30T02:17:00+09:00" pubdate data-updated="true">Sep 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
-
-<p><a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8" target="_blank"><img src="/images/apple_store.png" /></a></p>
-
-<p>先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
-その名も</p>
-
-<h3>心霊動画アプリ 「もう一度ご覧いただこう」</h3>
-
-<p><a href="http://owkr.info/movie">http://owkr.info/movie</a></p>
-
-<p>です。</p>
-
-<p>構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる</p>
-
-<h3>心霊写真アプリ「おわかりいただけただろうか」</h3>
-
-<p><a href="http://owkr.info">http://owkr.info</a></p>
-
-<p>を作成しました。その後時を経て、そろそろできるんじゃねという根拠ない自信がありまして
-作成するにいたった次第です。今回はそのリリースが出来ましたよっていうご報告であります！</p>
-
-<p>今回動画アプリを作成してみて、自分としてグッドっだったのは</p>
-
-<ul>
-<li>AVFoundationガリガリガリガリいじったし（未知の領域への挑戦）
-
-<ul>
-<li>動画動詞の結合</li>
-<li>動画内でのアニメーション</li>
-<li>動画のスローモーション</li>
-<li>動画内に動画をいれる（ワイプ）</li>
-</ul>
-</li>
-<li>いろんなTips学んだ
-
-<ul>
-<li>シュミレータで効率的に開発していく方法</li>
-<li>iOSのバージョンのデザインの差異（主に位置によるずれ）の直し方</li>
-</ul>
-</li>
-<li>キャンペーンの出し方
-
-<ul>
-<li>以前にリリースアプリと連携デザインに統一感をもたせた</li>
-</ul>
-</li>
-</ul>
-
-
-<p>失敗や改善した方がいいなというのも何個かあって</p>
-
-<p>iOS7でチェックしとけばよかった。しかもガンガンみんなiOS7にしてしまったのでこれはつらかった・・
-iOS7でテストして仮に問題が発生したときにその対応でリリースが遅れるのは避けたかったのでちょっと
-最後まで避けてたのが仇となりました。無念。やりかたとしては、新しいバージョンがリリース間近に
-なった場合はかならず確認を行うことをマストにしたほうがいいですね。これ勉強！</p>
-
-<p>リリースタイミングを逃しました。本当は夏にリリースすれば良かったのですが僕の技術力不足であえなく断念して
-しまいました。。。</p>
-
-<p>あとは、デザイナの確認作業についてです。デザイナにはある程度できあがらないとテストや確認出来ない状態でしたし、
-毎回自分のPCでビルドして渡すのはかなり面倒でした。（のでこの作業はほとんどやってない・・・）なので自分が修正
-したらすぐに自分の実機やシミュレータでがんがん確認出来るような状況を作ればなと思っていました。会社だとjenkins
-でビルドしてそれをダウンロードできる基盤があるのでそれ参考に個人でも作成してみようと思う。</p>
-
-<p>肝心のiOS7でのおばけが表示されないバグがありますが先日修正したものを申請しましたのでもう少しでiOS7にした人も
-使えることでしょう！！</p>
-
-<p>とりあえず、リリースできてよかったのです。</p>
-
-<p>また、いろんなことに挑戦していきたい。</p>
-
-<p>今後はもう一度の使い方なり、AVFoundationのTipsをちょこちょこ書いていこうと思います。</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-18T20:19:00+09:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
-UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
-しないといけないようです。</p>
-
-<p>なので自分なりにそれっぽいのを実装してみました。
-（とりあえず手動でon/offで切り替えるUIにしてます）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ライトが利用できたら表示</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">torchAvailable</span> <span class="o">==</span> <span class="n">YES</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">UIButton</span><span class="o">*</span> <span class="n">toggleLightButton</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">55</span><span class="p">)];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setTitle:</span><span class="s">@&quot;ON&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 画像を左側に埋め込む</span>
-</span><span class='line'>    <span class="n">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;light.png&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">CALayer</span><span class="o">*</span> <span class="n">imgLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="n">layer</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">CFBridgingRelease</span><span class="p">([</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">frame</span>    <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">imgLayer</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">toggleLightButton</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際できたのがこんな感じ。
-なんかそれっぽくできました。（アイコンは当てなのであしからず）</p>
-
-<p><img src="/images/posts/2013-09-18_01.png" alt="ss" /></p>
-
-<p>基本は<code>CALayer</code>でデザインの修正をおこなう。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>画像を組み込んだ場合は文字と被るといけないので文字の表示位置をずらします。
-XIBの場合はIBの左側のメニューで設定できるのですが、それを実装で行うときは<code>UIEdgeInsets</code>クラスを
-利用します。CSSのイメージでいうとpaddingをイメージして設定すると想像できます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
-そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -926,6 +858,14 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/06/15/study-avassetwriter/">録画時にブラックシーンができてしまう問題</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/06/10/study-swift-01/">Swift勉強会をした</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/06/09/wwdc2014-life/">WWDC2014に参加してきました - 番外編(暮らし)</a>
       </li>
     
@@ -937,19 +877,11 @@ XIBの場合はIBの左側のメニューで設定できるのですが、それ
         <a href="/blog/2014/06/01/app-doujou3/">App道場#3 「よくある動画アプリのあれを実装したい」を発表した</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/05/25/creating-thumbnailimage-from-the-movie/">動画からサムネイル画像を生成する</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/05/01/about-audiomix/">AVAudioMixでオーディオの調節を行う</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (17)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (18)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

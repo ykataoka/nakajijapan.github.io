@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-09T14:16:47+09:00</updated>
+  <updated>2014-06-15T22:44:41+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,627 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[録画時にブラックシーンができてしまう問題]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/15/study-avassetwriter/"/>
+    <updated>2014-06-15T18:26:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/15/study-avassetwriter</id>
+    <content type="html"><![CDATA[<p><a href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/">WWDC2014に行って来た</a>の話になるのですが、
+プライベートでアプリ作成しているときにAV Foundation絡みでわからないところがあったのでAppleのエンジニアさんに質問してきました。</p>
+
+<h2>現象</h2>
+
+<p>問題は、自分が作成した<a href="https://github.com/nakajijapan/NKJMultiMovieCaptureView">NKJMultiMovieCaptureView</a>でその現象が発生しました。
+作成したときの話は<a href="http://nakajijapan.github.io/blog/2014/06/01/app-doujou3/">こちら</a>になります。
+Vine動画のようにタッチしたら録画し、タッチが終了したら(指を離したら)録画を終了し、録画した複数の動画を一つにする仕組みを作成したのですが、
+実際作成した動画を見てみると最初のほんの一瞬だけなぜかブラックシーンができてしまいます。</p>
+
+<p>現状の処理として以下のようなことをしています。</p>
+
+<h3>1. 録画開始</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">touchesBegan:</span><span class="p">(</span><span class="n">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">touches</span> <span class="nf">withEvent:</span><span class="p">(</span><span class="n">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="nv">event</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>タッチイベントで録画の処理を開始します。このときにファイルに対しての書き込み処理を開始します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">assetWriter</span> <span class="n">startWriting</span><span class="p">];</span>
+</span><span class='line'><span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">assetWriter</span> <span class="nl">startSessionAtSourceTime:</span><span class="n">self</span><span class="p">.</span><span class="n">recordStartTime</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>2. 録画</h3>
+
+<p><code>AVCaptureVideoDataOutputSampleBufferDelegate</code>, <code>AVCaptureAudioDataOutputSampleBufferDelegate</code>をプロトコルとして指定して、
+以下のメソッドで録画の処理を行います。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">captureOutput:</span><span class="p">(</span><span class="n">AVCaptureOutput</span> <span class="o">*</span><span class="p">)</span><span class="nv">captureOutput</span> <span class="nf">didOutputSampleBuffer:</span><span class="p">(</span><span class="n">CMSampleBufferRef</span><span class="p">)</span><span class="nv">sampleBuffer</span> <span class="nf">fromConnection:</span><span class="p">(</span><span class="n">AVCaptureConnection</span> <span class="o">*</span><span class="p">)</span><span class="nv">connection</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ざっくりですが、内部でやっていることはCMSampleBufferというフレーム情報が取得でき、それを１秒間に何回も実行されるこのメソッドで<code>AVAssetWriterInput</code>オブジェクトに
+追加処理をしています。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">CFRetain</span><span class="p">(</span><span class="n">sampleBuffer</span><span class="p">);</span>
+</span><span class='line'><span class="n">CFRetain</span><span class="p">(</span><span class="n">formatDescription</span><span class="p">);</span>
+</span><span class='line'><span class="n">dispatch_async</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">movieWritingQueue</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">_assetWriter</span><span class="p">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">AVAssetWriterStatusWriting</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="n">assetWriterInput</span><span class="p">.</span><span class="n">readyForMoreMediaData</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">[</span><span class="n">assetWriterInput</span> <span class="nl">appendSampleBuffer:</span><span class="n">sampleBuffer</span><span class="p">])</span> <span class="p">{</span>
+</span><span class='line'>                <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,[</span><span class="n">self</span><span class="p">.</span><span class="n">assetWriter</span> <span class="n">error</span><span class="p">]);</span>
+</span><span class='line'>            <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">sampleBuffer</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">CFRelease</span><span class="p">(</span><span class="n">formatDescription</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>3. 録画終了</h3>
+
+<p>タッチが終了したら録画終了の処理を行います。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">touchesEnded:</span><span class="p">(</span><span class="n">NSSet</span> <span class="o">*</span><span class="p">)</span><span class="nv">touches</span> <span class="nf">withEvent:</span><span class="p">(</span><span class="n">UIEvent</span> <span class="o">*</span><span class="p">)</span><span class="nv">event</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>問題</h2>
+
+<p>どうやらスレッドを利用しての保存方法に問題があったようです。</p>
+
+<h3>修正前</h3>
+
+<p><img src="http://nakajijapan.github.io/images/posts/2014-06-15_01_avassetwriter.jpg" alt="AVAssetWriter" /></p>
+
+<p>録画開始とフレーム情報を保存する処理が別スレッドで行われているせいで微妙にタイミングがずれたフレーム情報を取得してしまっている。
+ここっだと、開始した時間よりも一瞬だけ先のフレーム情報を取得してしまうので最初の一瞬はブラックシーンになります。</p>
+
+<h3>修正後</h3>
+
+<p><img src="http://nakajijapan.github.io/images/posts/2014-06-15_02_avassetwriter.jpg" alt="AVAssetWriter" /></p>
+
+<p>なので録画開始も同じスレッドで順次処理させるようにし、時間の誤差を最小限にしました。こうすることで無事ブラックシーンが無くなりました。</p>
+
+<p>実際には以下のように修正しています。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='diff'><span class='line'> // Record
+</span><span class='line'> NSLog(@&quot;[Starting to record]&quot;);
+</span><span class='line'><span class="gd">-    [self.assetWriter startWriting];</span>
+</span><span class='line'><span class="gd">-    [self.assetWriter startSessionAtSourceTime:self.recordStartTime];</span>
+</span><span class='line'><span class="gi">+    dispatch_async(self.movieWritingQueue, ^{</span>
+</span><span class='line'><span class="gi">+        [self.assetWriter startWriting];</span>
+</span><span class='line'><span class="gi">+        [self.assetWriter startSessionAtSourceTime:self.recordStartTime];</span>
+</span><span class='line'><span class="gi">+    });</span>
+</span><span class='line'><span class="gi">+</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>まとめ</h3>
+
+<p>とはいえ、この実装も完璧というわけではなくてタイミングがずれることはあるとおっしゃっていましたが、
+今のところ発生していないので安心しています。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAssetWriter_Class/Reference/Reference.html">AVAssetWriter Class Reference</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Multithreading/Multithreading.pdf">Threading Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008091">Concurrency Programming Guide</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Swift勉強会をした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/10/study-swift-01/"/>
+    <updated>2014-06-10T18:25:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/10/study-swift-01</id>
+    <content type="html"><![CDATA[<p>社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。</p>
+
+<h2>はじめに</h2>
+
+<p>以下の動画をみてまずざっくりどんなものか概要をつかむ</p>
+
+<p><a href="https://developer.apple.com/videos/wwdc/2014/?id=101">https://developer.apple.com/videos/wwdc/2014/?id=101</a></p>
+
+<h1>A Swift Tour</h1>
+
+<h2>About Swift</h2>
+
+<ul>
+<li>Objective-C without the C</li>
+<li>iOSとOS Xで開発するための開発言語</li>
+<li>Ccoa and Cocoa Touch</li>
+<li>Build with LLVM compiler</li>
+<li>Optimizer and Autovectorizer</li>
+<li>ARC memory management</li>
+<li>Same runtime as Objective-C</li>
+</ul>
+
+
+<h2>Simple Value</h2>
+
+<ul>
+<li><code>let</code>,<code>var</code>で宣言</li>
+<li><code>let</code>は定数、<code>var</code>は変数</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var foo = 33
+</span><span class='line'>let foo = 33</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>格納する値が明白であれば自動できに方が決定される</li>
+<li>十分でなければ明示的に指定することも可能</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let total = 30
+</span><span class='line'>let total = 30.0
+</span><span class='line'>let total:Double = 0</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>初期化に以下のような宣言ができる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let emptyArray = String[]()
+</span><span class='line'>let emptyDictionary = Dictionary&lt;String, Float&gt;()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>単純な初期化は<code>[] and [:]</code>で省略できる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>let emptyArray = []
+</span><span class='line'>let emptyDictionary = [:]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Control Flow</h3>
+
+<ul>
+<li>どこかでみたような記述でif,switch,for-in,for,while,do-whileできるよ</li>
+<li><code>..</code>で数値の範囲を決定できることができる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var total = 0;
+</span><span class='line'>for i in 0..10 {
+</span><span class='line'>    total += 2
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>total</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Functions and Closures</h2>
+
+<ul>
+<li>考え方は他の言語と同じ。引数があって返り値がある</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func greet(name: String, day: String) -&gt; String {
+</span><span class='line'>  return "Hello \(name), today is \(day)"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>greet("Bob", "Tuesday")</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Touple
+
+<ul>
+<li>複数の返り値を返す</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func getGasPrices() -&gt; (Double, Double, Double) {
+</span><span class='line'>    return (3.59, 3.69, 3.79)
+</span><span class='line'>}
+</span><span class='line'>getGasPrices()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>引数を任意で指定することもできます</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func sumOf(numbers:Int...) -&gt; Int
+</span><span class='line'>{
+</span><span class='line'>    var sum = 0
+</span><span class='line'>    for number in numbers {
+</span><span class='line'>        sum += number
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    return sum
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>sumOf()
+</span><span class='line'>
+</span><span class='line'>sumOf(10, 20, 33)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>{}</code>でクロージャを記述</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>numbers.map({
+</span><span class='line'>    (number: Int) -&gt; Int in
+</span><span class='line'>    let result = 3 * number
+</span><span class='line'>    return result
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下の記述も同じ意味</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>numbers.map({ number in 3 * number })</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Objects and Classes</h2>
+
+<ul>
+<li><code>class</code>で定義</li>
+<li><code>init()</code>はコンストラクタ</li>
+</ul>
+
+
+<p>継承は</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Squre : NamedShape {
+</span><span class='line'>
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>overrideはfuncの前に<code>override</code>を宣言する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>override func init() {
+</span><span class='line'>    super.init()
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>インスタンス変数をカスタマイズできる</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var perimeter: Double {
+</span><span class='line'>    get {
+</span><span class='line'>        return 3.0 * sideLength
+</span><span class='line'>    }
+</span><span class='line'>    set {
+</span><span class='line'>        sideLength = newValue / 3.0
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>メンバ変数に以下の記述,<code>willSet</code>,<code>didSet</code>をすることであらかじめ、前処理後処理ができるようになる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class {
+</span><span class='line'>    var triangle: EquilateralTriangle {
+</span><span class='line'>    willSet {
+</span><span class='line'>        square.sideLength = newValue.sideLength
+</span><span class='line'>    }
+</span><span class='line'>    didSet {
+</span><span class='line'>        square.sideLength *= 2
+</span><span class='line'>    }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>引数に別名を持たせられる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Counter {
+</span><span class='line'>    var count: Int = 0
+</span><span class='line'>    func incrementBy(amount: Int, numberOfTimes times: Int) {
+</span><span class='line'>        count += amount * times
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>var counter = Counter()
+</span><span class='line'>counter.incrementBy(2, numberOfTimes: 7)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Enumerations and Structures</h2>
+
+<ul>
+<li>メソッドも作成できる</li>
+<li>最初に数値を入れておかなければならない</li>
+<li>後はインクリメントされる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enum Rank: Int {
+</span><span class='line'>    case Ace = 1
+</span><span class='line'>    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+</span><span class='line'>    case Jack, Queen, King
+</span><span class='line'>    func simpleDescription() -&gt; String {
+</span><span class='line'>        switch self {
+</span><span class='line'>        case .Ace:
+</span><span class='line'>            return "ace"
+</span><span class='line'>        case .Jack:
+</span><span class='line'>            return "jack"
+</span><span class='line'>        case .Queen:
+</span><span class='line'>            return "queen"
+</span><span class='line'>        case .King:
+</span><span class='line'>            return "king"
+</span><span class='line'>        default:
+</span><span class='line'>            return String(self.toRaw())
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>let ace = Rank.Ace
+</span><span class='line'>let aceRawValue = ace.toRaw() # 1
+</span><span class='line'>let name = ace.simpleDescription() # "Ace"
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>enumの方で比較しないとだめ</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>        if ace == Rank.Ace {
+</span><span class='line'>            NSLog("-- ace!!!")
+</span><span class='line'>        }
+</span><span class='line'>// NG
+</span><span class='line'>//        else if ace == 1 {
+</span><span class='line'>//            NSLog("-- no ace...")
+</span><span class='line'>//        }
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>structure</h5>
+
+<ul>
+<li>classとほぼ同じ振る舞いをする</li>
+<li>処理するときは必ずコピーされる, クラスは参照によって処理される</li>
+</ul>
+
+
+<h2>Protocols and Extensions</h2>
+
+<ul>
+<li>基本的なところはObjective-Cと変わらない</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>protocol ExampleProtocol {
+</span><span class='line'>    var simpleDescription: String { get } # readonly
+</span><span class='line'>    mutating func adjust()
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>クラスにも構造体にも組み込める</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SimpleClass: ExampleProtocol {
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>struct SimpleStructure: ExampleProtocol {
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Generics</h2>
+
+<ul>
+<li>型に汎用性を持たせて同じロジックを処理させることができる</li>
+<li><code>classes</code>, <code>enumerations</code>, <code>structures</code>で利用できる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func repeat&lt;T&gt;(item: T, times: Int) -&gt; T[] {
+</span><span class='line'>    var result = T[]()
+</span><span class='line'>    for i in 0..times {
+</span><span class='line'>        result += item
+</span><span class='line'>    }
+</span><span class='line'>    return result
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>repeat("knock", 4)
+</span><span class='line'>repeat(333, 3)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>何よりシンプルでモダンな作りになっているのでアプリを作ることがよりいっそう楽しくなること間違い無しですな。
+ただ、いくつか説明できないところがあったので、次の会まで宿題にすることにします。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[WWDC2014に参加してきました - 番外編(暮らし)]]></title>
@@ -2267,202 +2888,6 @@ nakajijapanです。</p>
 <li><a href="https://developer.apple.com/wwdc/videos/">Advanced Editing with AV Foundation – 612</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[心霊動画アプリ 「もう一度ご覧いただこう」をリリースしました。]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie/"/>
-    <updated>2013-09-30T02:17:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/09/30/released-iphone-app-ghost-movie</id>
-    <content type="html"><![CDATA[<p><img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" alt="心霊動画アプリ もう一度ご覧いただこう" /></p>
-
-<p><a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8" target="_blank"><img src="http://nakajijapan.github.io/images/apple_store.png" /></a></p>
-
-<p>先日ではありますがnakajijapan所属するチーム「恥知らず」で次なるアプリをリリースしました。
-その名も</p>
-
-<h3>心霊動画アプリ 「もう一度ご覧いただこう」</h3>
-
-<p><a href="http://owkr.info/movie">http://owkr.info/movie</a></p>
-
-<p>です。</p>
-
-<p>構想は３年前からあったのですが僕の技術力不足で無理！とか言って、最初はその前進となる</p>
-
-<h3>心霊写真アプリ「おわかりいただけただろうか」</h3>
-
-<p><a href="http://owkr.info">http://owkr.info</a></p>
-
-<p>を作成しました。その後時を経て、そろそろできるんじゃねという根拠ない自信がありまして
-作成するにいたった次第です。今回はそのリリースが出来ましたよっていうご報告であります！</p>
-
-<p>今回動画アプリを作成してみて、自分としてグッドっだったのは</p>
-
-<ul>
-<li>AVFoundationガリガリガリガリいじったし（未知の領域への挑戦）
-
-<ul>
-<li>動画動詞の結合</li>
-<li>動画内でのアニメーション</li>
-<li>動画のスローモーション</li>
-<li>動画内に動画をいれる（ワイプ）</li>
-</ul>
-</li>
-<li>いろんなTips学んだ
-
-<ul>
-<li>シュミレータで効率的に開発していく方法</li>
-<li>iOSのバージョンのデザインの差異（主に位置によるずれ）の直し方</li>
-</ul>
-</li>
-<li>キャンペーンの出し方
-
-<ul>
-<li>以前にリリースアプリと連携デザインに統一感をもたせた</li>
-</ul>
-</li>
-</ul>
-
-
-<p>失敗や改善した方がいいなというのも何個かあって</p>
-
-<p>iOS7でチェックしとけばよかった。しかもガンガンみんなiOS7にしてしまったのでこれはつらかった・・
-iOS7でテストして仮に問題が発生したときにその対応でリリースが遅れるのは避けたかったのでちょっと
-最後まで避けてたのが仇となりました。無念。やりかたとしては、新しいバージョンがリリース間近に
-なった場合はかならず確認を行うことをマストにしたほうがいいですね。これ勉強！</p>
-
-<p>リリースタイミングを逃しました。本当は夏にリリースすれば良かったのですが僕の技術力不足であえなく断念して
-しまいました。。。</p>
-
-<p>あとは、デザイナの確認作業についてです。デザイナにはある程度できあがらないとテストや確認出来ない状態でしたし、
-毎回自分のPCでビルドして渡すのはかなり面倒でした。（のでこの作業はほとんどやってない・・・）なので自分が修正
-したらすぐに自分の実機やシミュレータでがんがん確認出来るような状況を作ればなと思っていました。会社だとjenkins
-でビルドしてそれをダウンロードできる基盤があるのでそれ参考に個人でも作成してみようと思う。</p>
-
-<p>肝心のiOS7でのおばけが表示されないバグがありますが先日修正したものを申請しましたのでもう少しでiOS7にした人も
-使えることでしょう！！</p>
-
-<p>とりあえず、リリースできてよかったのです。</p>
-
-<p>また、いろんなことに挑戦していきたい。</p>
-
-<p>今後はもう一度の使い方なり、AVFoundationのTipsをちょこちょこ書いていこうと思います。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton/"/>
-    <updated>2013-09-18T20:19:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2013/09/18/customize-uibutton</id>
-    <content type="html"><![CDATA[<p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
-UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
-しないといけないようです。</p>
-
-<p>なので自分なりにそれっぽいのを実装してみました。
-（とりあえず手動でon/offで切り替えるUIにしてます）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ライトが利用できたら表示</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">torchAvailable</span> <span class="o">==</span> <span class="n">YES</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">UIButton</span><span class="o">*</span> <span class="n">toggleLightButton</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">55</span><span class="p">)];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setTitle:</span><span class="s">@&quot;ON&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 画像を左側に埋め込む</span>
-</span><span class='line'>    <span class="n">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;light.png&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">CALayer</span><span class="o">*</span> <span class="n">imgLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="n">layer</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">CFBridgingRelease</span><span class="p">([</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
-</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">frame</span>    <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">imgLayer</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">toggleLightButton</span><span class="p">];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>実際できたのがこんな感じ。
-なんかそれっぽくできました。（アイコンは当てなのであしからず）</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2013-09-18_01.png" alt="ss" /></p>
-
-<p>基本は<code>CALayer</code>でデザインの修正をおこなう。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
-</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>画像を組み込んだ場合は文字と被るといけないので文字の表示位置をずらします。
-XIBの場合はIBの左側のメニューで設定できるのですが、それを実装で行うときは<code>UIEdgeInsets</code>クラスを
-利用します。CSSのイメージでいうとpaddingをイメージして設定すると想像できます。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
-</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
-</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
-そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
 ]]></content>
   </entry>
   

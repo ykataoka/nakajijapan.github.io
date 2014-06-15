@@ -4,7 +4,7 @@
   <title><![CDATA[categories: iOS | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-06-09T14:16:47+09:00</updated>
+  <updated>2014-06-15T22:44:41+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[録画時にブラックシーンができてしまう問題]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/15/study-avassetwriter/"/>
+    <updated>2014-06-15T18:26:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/15/study-avassetwriter</id>
+    <content type="html"><![CDATA[<p><a href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/">WWDC2014に行って来た</a>の話になるのですが、
+プライベートでアプリ作成しているときにAV Foundation絡みでわからないところがあったのでAppleのエンジニアさんに質問してきました。</p>
+
+<h2>現象</h2>
+
+<p>問題は、自分が作成した<a href="https://github.com/nakajijapan/NKJMultiMovieCaptureView">NKJMultiMovieCaptureView</a>でその現象が発生しました。
+作成したときの話は<a href="http://nakajijapan.github.io/blog/2014/06/01/app-doujou3/">こちら</a>になります。
+Vine動画のようにタッチしたら録画し、タッチが終了したら(指を離したら)録画を終了し、録画した複数の動画を一つにする仕組みを作成したのですが、
+実際作成した動画を見てみると最初のほんの一瞬だけなぜかブラックシーンができてしまいます。</p>
+
+<p>現状の処理として以下のようなことをしています。</p>
+
+<h3>1. 録画開始</h3>
+
+<p><code>obj-c
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+</code></p>
+
+<p>タッチイベントで録画の処理を開始します。このときにファイルに対しての書き込み処理を開始します。</p>
+
+<p><code>obj-c
+[self.assetWriter startWriting];
+[self.assetWriter startSessionAtSourceTime:self.recordStartTime];
+</code></p>
+
+<h3>2. 録画</h3>
+
+<p><code>AVCaptureVideoDataOutputSampleBufferDelegate</code>, <code>AVCaptureAudioDataOutputSampleBufferDelegate</code>をプロトコルとして指定して、
+以下のメソッドで録画の処理を行います。</p>
+
+<p><code>obj-c
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection
+</code></p>
+
+<p>ざっくりですが、内部でやっていることはCMSampleBufferというフレーム情報が取得でき、それを１秒間に何回も実行されるこのメソッドで<code>AVAssetWriterInput</code>オブジェクトに
+追加処理をしています。</p>
+
+<p>```obj-c</p>
+
+<pre><code>CFRetain(sampleBuffer);
+CFRetain(formatDescription);
+dispatch_async(self.movieWritingQueue, ^{
+
+    if (_assetWriter.status == AVAssetWriterStatusWriting) {
+
+        if (assetWriterInput.readyForMoreMediaData) {
+
+            if (![assetWriterInput appendSampleBuffer:sampleBuffer]) {
+                NSLog(@"%@",[self.assetWriter error]);
+            }
+
+        }
+    }
+
+    CFRelease(sampleBuffer);
+    CFRelease(formatDescription);
+});
+</code></pre>
+
+<p>```</p>
+
+<h3>3. 録画終了</h3>
+
+<p>タッチが終了したら録画終了の処理を行います。</p>
+
+<p><code>obj-c
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+</code></p>
+
+<h2>問題</h2>
+
+<p>どうやらスレッドを利用しての保存方法に問題があったようです。</p>
+
+<h3>修正前</h3>
+
+<p><img src="/images/posts/2014-06-15_01_avassetwriter.jpg" alt="AVAssetWriter" /></p>
+
+<p>録画開始とフレーム情報を保存する処理が別スレッドで行われているせいで微妙にタイミングがずれたフレーム情報を取得してしまっている。
+ここっだと、開始した時間よりも一瞬だけ先のフレーム情報を取得してしまうので最初の一瞬はブラックシーンになります。</p>
+
+<h3>修正後</h3>
+
+<p><img src="/images/posts/2014-06-15_02_avassetwriter.jpg" alt="AVAssetWriter" /></p>
+
+<p>なので録画開始も同じスレッドで順次処理させるようにし、時間の誤差を最小限にしました。こうすることで無事ブラックシーンが無くなりました。</p>
+
+<p>実際には以下のように修正しています。</p>
+
+<p>```diff</p>
+
+<pre><code> // Record
+ NSLog(@"[Starting to record]");
+</code></pre>
+
+<ul>
+<li> [self.assetWriter startWriting];</li>
+<li> [self.assetWriter startSessionAtSourceTime:self.recordStartTime];</li>
+<li> dispatch_async(self.movieWritingQueue, ^{</li>
+<li><pre><code> [self.assetWriter startWriting];
+</code></pre></li>
+<li><pre><code> [self.assetWriter startSessionAtSourceTime:self.recordStartTime];
+</code></pre></li>
+<li> });
++
+```</li>
+</ul>
+
+
+<h3>まとめ</h3>
+
+<p>とはいえ、この実装も完璧というわけではなくてタイミングがずれることはあるとおっしゃっていましたが、
+今のところ発生していないので安心しています。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAssetWriter_Class/Reference/Reference.html">AVAssetWriter Class Reference</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/Cocoa/Conceptual/Multithreading/Multithreading.pdf">Threading Programming Guide</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/ConcurrencyProgrammingGuide/Introduction/Introduction.html#//apple_ref/doc/uid/TP40008091">Concurrency Programming Guide</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[WWDC2014に参加してきました]]></title>
@@ -401,27 +530,6 @@ assetExportSession.audioMix = mutableAudioMix;
 <li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioMixInputParameters_Class/Reference/Reference.html#//apple_ref/occ/cl/AVAudioMixInputParameters">AVAudioMixInputParameters Class</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
-    <updated>2014-04-23T10:50:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
-    <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
-
-<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
-「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
-
-<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
-普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
-
-<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
-mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
 ]]></content>
   </entry>
   

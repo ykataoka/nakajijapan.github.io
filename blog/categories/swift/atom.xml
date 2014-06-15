@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: Swift | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/swift/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2014-06-15T22:44:41+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Swift勉強会をした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/06/10/study-swift-01/"/>
+    <updated>2014-06-10T18:25:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/06/10/study-swift-01</id>
+    <content type="html"><![CDATA[<p>社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。</p>
+
+<h2>はじめに</h2>
+
+<p>以下の動画をみてまずざっくりどんなものか概要をつかむ</p>
+
+<p><a href="https://developer.apple.com/videos/wwdc/2014/?id=101">https://developer.apple.com/videos/wwdc/2014/?id=101</a></p>
+
+<h1>A Swift Tour</h1>
+
+<h2>About Swift</h2>
+
+<ul>
+<li>Objective-C without the C</li>
+<li>iOSとOS Xで開発するための開発言語</li>
+<li>Ccoa and Cocoa Touch</li>
+<li>Build with LLVM compiler</li>
+<li>Optimizer and Autovectorizer</li>
+<li>ARC memory management</li>
+<li>Same runtime as Objective-C</li>
+</ul>
+
+
+<h2>Simple Value</h2>
+
+<ul>
+<li><code>let</code>,<code>var</code>で宣言</li>
+<li><code>let</code>は定数、<code>var</code>は変数</li>
+</ul>
+
+
+<p><code>
+var foo = 33
+let foo = 33
+</code></p>
+
+<ul>
+<li>格納する値が明白であれば自動できに方が決定される</li>
+<li>十分でなければ明示的に指定することも可能</li>
+</ul>
+
+
+<p><code>
+let total = 30
+let total = 30.0
+let total:Double = 0
+</code></p>
+
+<ul>
+<li>初期化に以下のような宣言ができる</li>
+</ul>
+
+
+<p>```
+let emptyArray = String<a href=""></a>
+let emptyDictionary = Dictionary&lt;String, Float>()</p>
+
+<p>```</p>
+
+<ul>
+<li>単純な初期化は<code>[] and [:]</code>で省略できる</li>
+</ul>
+
+
+<p>```</p>
+
+<p>let emptyArray = []
+let emptyDictionary = [:]
+```</p>
+
+<h3>Control Flow</h3>
+
+<ul>
+<li>どこかでみたような記述でif,switch,for-in,for,while,do-whileできるよ</li>
+<li><code>..</code>で数値の範囲を決定できることができる</li>
+</ul>
+
+
+<p>```
+var total = 0;
+for i in 0..10 {</p>
+
+<pre><code>total += 2
+</code></pre>
+
+<p>}</p>
+
+<p>total
+```</p>
+
+<h2>Functions and Closures</h2>
+
+<ul>
+<li>考え方は他の言語と同じ。引数があって返り値がある</li>
+</ul>
+
+
+<p>```
+func greet(name: String, day: String) &ndash;> String {
+  return &ldquo;Hello (name), today is (day)&rdquo;
+}</p>
+
+<p>greet(&ldquo;Bob&rdquo;, &ldquo;Tuesday&rdquo;)
+```</p>
+
+<ul>
+<li>Touple
+
+<ul>
+<li>複数の返り値を返す</li>
+</ul>
+</li>
+</ul>
+
+
+<p>```
+func getGasPrices() &ndash;> (Double, Double, Double) {</p>
+
+<pre><code>return (3.59, 3.69, 3.79)
+</code></pre>
+
+<p>}
+getGasPrices()</p>
+
+<p>```</p>
+
+<ul>
+<li>引数を任意で指定することもできます</li>
+</ul>
+
+
+<p>```
+func sumOf(numbers:Int&hellip;) &ndash;> Int
+{</p>
+
+<pre><code>var sum = 0
+for number in numbers {
+    sum += number
+}
+
+return sum
+</code></pre>
+
+<p>}</p>
+
+<p>sumOf()</p>
+
+<p>sumOf(10, 20, 33)
+```</p>
+
+<ul>
+<li><code>{}</code>でクロージャを記述</li>
+</ul>
+
+
+<p>```
+numbers.map({</p>
+
+<pre><code>(number: Int) -&gt; Int in
+let result = 3 * number
+return result
+</code></pre>
+
+<p>})
+```</p>
+
+<p>以下の記述も同じ意味</p>
+
+<p><code>
+numbers.map({ number in 3 * number })
+</code></p>
+
+<h2>Objects and Classes</h2>
+
+<ul>
+<li><code>class</code>で定義</li>
+<li><code>init()</code>はコンストラクタ</li>
+</ul>
+
+
+<p>継承は</p>
+
+<p>```
+class Squre : NamedShape {</p>
+
+<p>}
+```</p>
+
+<p>overrideはfuncの前に<code>override</code>を宣言する</p>
+
+<p>```
+override func init() {</p>
+
+<pre><code>super.init()
+</code></pre>
+
+<p>}
+```</p>
+
+<p>インスタンス変数をカスタマイズできる</p>
+
+<p>```
+var perimeter: Double {</p>
+
+<pre><code>get {
+    return 3.0 * sideLength
+}
+set {
+    sideLength = newValue / 3.0
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<ul>
+<li>メンバ変数に以下の記述,<code>willSet</code>,<code>didSet</code>をすることであらかじめ、前処理後処理ができるようになる</li>
+</ul>
+
+
+<p>```
+class {</p>
+
+<pre><code>var triangle: EquilateralTriangle {
+willSet {
+    square.sideLength = newValue.sideLength
+}
+didSet {
+    square.sideLength *= 2
+}
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<ul>
+<li>引数に別名を持たせられる</li>
+</ul>
+
+
+<p>```
+class Counter {</p>
+
+<pre><code>var count: Int = 0
+func incrementBy(amount: Int, numberOfTimes times: Int) {
+    count += amount * times
+}
+</code></pre>
+
+<p>}
+var counter = Counter()
+counter.incrementBy(2, numberOfTimes: 7)</p>
+
+<p>```</p>
+
+<h2>Enumerations and Structures</h2>
+
+<ul>
+<li>メソッドも作成できる</li>
+<li>最初に数値を入れておかなければならない</li>
+<li>後はインクリメントされる</li>
+</ul>
+
+
+<p>```
+enum Rank: Int {</p>
+
+<pre><code>case Ace = 1
+case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+case Jack, Queen, King
+func simpleDescription() -&gt; String {
+    switch self {
+    case .Ace:
+        return "ace"
+    case .Jack:
+        return "jack"
+    case .Queen:
+        return "queen"
+    case .King:
+        return "king"
+    default:
+        return String(self.toRaw())
+    }
+}
+</code></pre>
+
+<p>}</p>
+
+<p>let ace = Rank.Ace
+let aceRawValue = ace.toRaw() # 1
+let name = ace.simpleDescription() # &ldquo;Ace&rdquo;</p>
+
+<p>```</p>
+
+<p>enumの方で比較しないとだめ</p>
+
+<p>```</p>
+
+<pre><code>    if ace == Rank.Ace {
+        NSLog("-- ace!!!")
+    }
+</code></pre>
+
+<p>// NG
+//        else if ace == 1 {
+//            NSLog(&ldquo;&mdash; no ace&hellip;&rdquo;)
+//        }</p>
+
+<p>```</p>
+
+<h5>structure</h5>
+
+<ul>
+<li>classとほぼ同じ振る舞いをする</li>
+<li>処理するときは必ずコピーされる, クラスは参照によって処理される</li>
+</ul>
+
+
+<h2>Protocols and Extensions</h2>
+
+<ul>
+<li>基本的なところはObjective-Cと変わらない</li>
+</ul>
+
+
+<p>```
+protocol ExampleProtocol {</p>
+
+<pre><code>var simpleDescription: String { get } # readonly
+mutating func adjust()
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<ul>
+<li>クラスにも構造体にも組み込める</li>
+</ul>
+
+
+<p>```
+class SimpleClass: ExampleProtocol {
+}</p>
+
+<p>struct SimpleStructure: ExampleProtocol {
+}
+```</p>
+
+<h2>Generics</h2>
+
+<ul>
+<li>型に汎用性を持たせて同じロジックを処理させることができる</li>
+<li><code>classes</code>, <code>enumerations</code>, <code>structures</code>で利用できる</li>
+</ul>
+
+
+<p>```
+func repeat<T>(item: T, times: Int) &ndash;> T[] {</p>
+
+<pre><code>var result = T[]()
+for i in 0..times {
+    result += item
+}
+return result
+</code></pre>
+
+<p>}</p>
+
+<p>repeat(&ldquo;knock&rdquo;, 4)
+repeat(333, 3)</p>
+
+<p>```</p>
+
+<h2>まとめ</h2>
+
+<p>何よりシンプルでモダンな作りになっているのでアプリを作ることがよりいっそう楽しくなること間違い無しですな。
+ただ、いくつか説明できないところがあったので、次の会まで宿題にすることにします。</p>
+]]></content>
+  </entry>
+  
+</feed>
