@@ -9,7 +9,8 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="先日、小さい規模ながらSwfit勉強会を開催しました。 Swift勉強会 hosted by @nakajijapan from ペパボ そんななか、自分も「Swiftに慣れるまで行ったこと」を発表しました。 ざっくり言うSwiftに慣れるのに以下のことをしてみた献じたことを話しました。 &hellip;">
+  <meta name="description" content="AV Foundation関連のプログラムをSwiftで書き直しているときに、単純に変換できないところがあったので
+一旦でキュメントに振り返って読み直してみました。 参照先はAppleの公式ドキュメントに記載してあるのを自分なりに翻訳してみました。 Core Foundation Core &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,6 +66,127 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/07/26/core-foudation-for-swift/">About Core Foudation in Working With Cocoa Data Types</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-07-26T16:44:00+09:00" pubdate data-updated="true">Jul 26<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>AV Foundation関連のプログラムをSwiftで書き直しているときに、単純に変換できないところがあったので
+一旦でキュメントに振り返って読み直してみました。</p>
+
+<p>参照先はAppleの<a href="https://developer.apple.com/library/prerelease/mac/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html">公式ドキュメント</a>に記載してあるのを自分なりに翻訳してみました。</p>
+
+<h1>Core Foundation</h1>
+
+<p><code>Core Foundation</code>型は自動的に<code>full-fledged</code>なSwiftクラスとしてインポートされる。
+メモリ管理が提供されるときはいつでも、Swiftは自動的に<code>Core Foundation objects</code>のメモリを管理し、
+自身をインスタンス化した<code>Core Foundation objects</code>をインクルードして管理します。Swift内で、
+あなたは<code>toll-free bridged</code>な<code>Foundation</code>と<code>Core Foundation</code>の両方を相互に変換できる。
+あなたはブリッジしている<code>Foundation</code>型をキャストするならSwiftの標準ライブラリに対して<code>toll-free bridged</code>な
+<code>Core Foundation</code>型をブリッジすることができる</p>
+
+<ul>
+<li>toll-free bridged
+
+<ul>
+<li>オブジェクトを変換することなくキャストすることで相互変換可能な仕組みのことを指すらしいです</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Remapped Types</h2>
+
+<p>Swiftは<code>Core Foundation</code>型をインポートするとき、コンパイラはそれらの型名を再配置する
+コンパイラは各型の最後に記述されている<code>Ref</code>を削除する、なぜならSwiftクラスのすべては参照型、
+それゆえにサフィックスはいらない</p>
+
+<p><code>CFTypeRef</code>は<code>AnyObject</code>に再配置されるよ。<code>CFTypeRef</code>をつかうときは<code>AnyObject</code>を利用すべきだ！</p>
+
+<h2>Memory Managed Objects</h2>
+
+<p>APIから返却された<code>Core Foundation objects</code>はSwiftで自動的にメモリ管理される。
+CFRetain、CFRelease、CFAutoreleaseを自動で呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
+を返すのなら、それらを<code>CF_RETURNS_RETAINED</code>と<code>CF_RETURNS_NOT_RETAINED</code>のいずれかを使ってアノテートする。
+上記のAPIを呼び出すSwiftコードをコンパイルするとき、コンパイラは自動的ににメモリ管理用の呼び出しを行う。
+<code>Core Foundation objects</code>を返さないAPIを利用するときは、このセクションをスキップしてね。
+でないのなら<code>unmanaged Core Foundation objects</code>の操作について学んでね。</p>
+
+<h2>Unmanaged Objects</h2>
+
+<p>Swiftが提供されているAPIをimportするときに、コンパイラは自動的に返却された<code>Core Foundation Objects</code>をメモリ管理できないよ
+Swiftは<code>Unmanaged&lt;T&gt;</code>構造体内でこれらの返却された<code>Core Foundation objects</code>を内包する
+間接的に返却された<code>Core Foundation objects</code>のすべては管理されい。例えば以下のように宣言できる</p>
+
+<h3>Objective-C</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CFStringRef StringByAddingTwoStrings(CFStringRef string1, CFStringRef string2)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Swift</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func StringByAddingTwoStrings(CFString!, CFString!) -&gt; Unmanaged&lt;CFString&gt;!</span></code></pre></td></tr></table></div></figure>
+
+
+<p>非管理のオブジェクトを受け取るとき、あなたは直接メモり管理されたオブジェクトに変換すべきです、非管理のオブジェクトを受け取る前に。
+この方法でSwiftは主導でメモリ管理を行うことができる。
+Unmanaged<T>構造体は非管理オブジェクトをメモリ管理されたobjectに<code>takeUnretainedValue()</code>に変換したり、<code>takeRetainedValue()</code>に変換したりと２つの方法を提供する。
+あなたは自分が呼びだだしているAPIがunretained objectやretained objectを返すかどうかを基本に利用するためにどちらかのメソッドを選べる。</p>
+
+<h3>Swift</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let memoryManagedResult = StringByAddingTwoStrings(str1, str2).takeUnretainedValue()
+</span><span class='line'>// memoryManagedResult is a memory managed CFString</span></code></pre></td></tr></table></div></figure>
+
+
+<p>非管理のオブジェクトであるretain() release() autorelease() メソッドを呼び出すことができます、しかしこのアプローチは推奨されないよ</p>
+
+<h2>まとめ</h2>
+
+<p>どうもSwiftでもARC非対応のものがあるので<code>Unmanaged&lt;T&gt;</code>構造体を利用して<code>takeUnretainedValue()</code>、<code>takeRetainedValue()</code>経由でメモリ管理されたオブジェクトにしなければならないようだ。
+とはいえまだ完全理解というわけではないので引き続き調べていこうと思う。</p>
+
+<h2>参考文献</h2>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3-Objective-C-2-0-%E7%AC%AC3%E7%89%88-%E8%8D%BB%E5%8E%9F/dp/4797368276%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4797368276" target="_blank" title="詳解 Objective-C 2.0 第3版"><img src="http://ecx.images-amazon.com/images/I/41VdFg9YqsL._SL160_.jpg" width="115" height="150" alt="詳解 Objective-C 2.0 第3版" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3-Objective-C-2-0-%E7%AC%AC3%E7%89%88-%E8%8D%BB%E5%8E%9F/dp/4797368276%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4797368276" target="_blank">詳解 Objective-C 2.0 第3版</a></p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -881,143 +1003,6 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/09/wwdc2014-life/">WWDC2014に参加してきました - 番外編(暮らし)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-06-09T07:43:00+09:00" pubdate data-updated="true">Jun 9<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><img src="/images/posts/2014-06-09-01.jpg" alt="サンフランシスコ" /></p>
-
-<p><a href="/blog/2014/06/08/wwdc2014/">前回の記事(WWDC2014に参加してきました)</a>の番外編です。</p>
-
-<p>初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。</p>
-
-<h2>前準備</h2>
-
-<ul>
-<li>予約
-
-<ul>
-<li>ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、飛行機当然日程が迫るにつれて高くなるのでお早めに。</li>
-</ul>
-</li>
-<li>服
-
-<ul>
-<li>会場の近くにはユニクロがあるのでパンツも靴下もパーカーも服はすべて現地調達できるので問題ありません！！！！</li>
-</ul>
-</li>
-<li>携帯
-
-<ul>
-<li>バッテリーは必ず持っていきましょう！！いじってると絶対なくなります。</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>空港＆飛行機</h2>
-
-<ul>
-<li>空港には余裕をもって３時間前に到着するといいでしょう。
-
-<ul>
-<li>40前に来たらいろいろ手続きがあるので時間がかかってしまうせいか空港の人にかなり急かされました。</li>
-</ul>
-</li>
-<li>成田空港には第一ターミナル、第二ターミナルがあって降りる場所間違うとバスか電車で移動しないといけないので時間のロスになります。</li>
-<li>飛行機は９時間ものっているのですごい暇になります。絶対暇つぶしになるものを用意しておくといいです。
-自分はだいたいMacでブログ書いていたりプログラミングしていました。
-やばそうな気流がぶつかることが何回かあって、多少ジェットコースター気分が味わえてしまいます。酔ってしまう人は注意してください。</li>
-</ul>
-
-
-<h2>電車</h2>
-
-<ul>
-<li>Moscone Centerまでは<a href="http://www.bart.gov/stations">地下鉄BART</a>を利用して行きます。電光掲示板が無いので毎回確認したほうがいいです。</li>
-<li>お金をチャージして乗る形式っぽいです。</li>
-</ul>
-
-
-<h2>生活</h2>
-
-<ul>
-<li>インターネット
-
-<ul>
-<li>自分はソフトバンクなので<a href="http://www.softbank.jp/mobile/service/global/overseas/web/packet-flat-late/">海外パケットし放題</a></li>
-</ul>
-</li>
-<li>だいたいのお店は袋が有料なので袋が必要ないのにOK!っていうと何セントかよけいに請求されます。</li>
-<li>チャージが含まれているお店とそうでないお店があるので注意
-
-<ul>
-<li>相場は15-20%の間?</li>
-<li>ベッドメイキングは<code>$1</code>が相場？</li>
-</ul>
-</li>
-<li>物価は日本とそんな変わらないのですがチップのこと考えると高いですね。</li>
-<li>タクシーは怖くて使わなかった</li>
-<li>お酒を購入するときはは写真のID見せろと言われるので忘れずに</li>
-<li>朝食・昼食はでますので食費には困らない
-
-<ul>
-<li>野菜でないのかなと思ってたらベジタリアン用の弁当がでていました。</li>
-</ul>
-</li>
-<li>よく外国は窃盗が多いからリュックは前にして、財布は後ろポケットにいれるな！っていう言い伝えのようなものがあったけど全然しなかった
-
-<ul>
-<li>会場行き来するくらいなので何も起きなかっただけなのかもしれません&hellip;</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>帰国</h2>
-
-<ul>
-<li>日本円に換金するときにコインは換金できないので使い切る必要があるといわれたのでコインは外国で使い切って帰国しましょう！！</li>
-</ul>
-
-
-<p>そんなところかな、何の問題もなく生活・帰還しました。
-　
-　</p>
-
-<p>終わり。</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -1064,6 +1049,10 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/07/26/core-foudation-for-swift/">About Core Foudation in Working With Cocoa Data Types</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/19/swift-shibuya-01/">Swift勉強会を開催して話してきました。</a>
       </li>
     
@@ -1079,15 +1068,11 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
         <a href="/blog/2014/06/10/study-swift-01/">Swift勉強会をした</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/06/09/wwdc2014-life/">WWDC2014に参加してきました - 番外編(暮らし)</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (20)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (2)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (21)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

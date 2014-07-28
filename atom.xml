@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-07-20T01:48:06+09:00</updated>
+  <updated>2014-07-29T08:04:06+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,99 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[About Core Foudation in Working with Cocoa Data Types]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/07/26/core-foudation-for-swift/"/>
+    <updated>2014-07-26T16:44:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/07/26/core-foudation-for-swift</id>
+    <content type="html"><![CDATA[<p>AV Foundation関連のプログラムをSwiftで書き直しているときに、単純に変換できないところがあったので
+一旦でキュメントに振り返って読み直してみました。</p>
+
+<p>参照先はAppleの<a href="https://developer.apple.com/library/prerelease/mac/documentation/Swift/Conceptual/BuildingCocoaApps/WorkingWithCocoaDataTypes.html">公式ドキュメント</a>に記載してあるのを自分なりに翻訳してみました。</p>
+
+<h1>Core Foundation</h1>
+
+<p><code>Core Foundation</code>型は自動的に<code>full-fledged</code>なSwiftクラスとしてインポートされる。
+メモリ管理が提供されるときはいつでも、Swiftは自動的に<code>Core Foundation objects</code>のメモリを管理し、
+自身をインスタンス化した<code>Core Foundation objects</code>をインクルードして管理します。Swift内で、
+あなたは<code>toll-free bridged</code>な<code>Foundation</code>と<code>Core Foundation</code>の両方を相互に変換できる。
+あなたはブリッジしている<code>Foundation</code>型をキャストするならSwiftの標準ライブラリに対して<code>toll-free bridged</code>な
+<code>Core Foundation</code>型をブリッジすることができる</p>
+
+<ul>
+<li>toll-free bridged
+
+<ul>
+<li>オブジェクトを変換することなくキャストすることで相互変換可能な仕組みのことを指すらしいです</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>Remapped Types</h2>
+
+<p>Swiftは<code>Core Foundation</code>型をインポートするとき、コンパイラはそれらの型名を再配置する
+コンパイラは各型の最後に記述されている<code>Ref</code>を削除する、なぜならSwiftクラスのすべては参照型、
+それゆえにサフィックスはいらない</p>
+
+<p><code>CFTypeRef</code>は<code>AnyObject</code>に再配置されるよ。<code>CFTypeRef</code>をつかうときは<code>AnyObject</code>を利用すべきだ！</p>
+
+<h2>Memory Managed Objects</h2>
+
+<p>APIから返却された<code>Core Foundation objects</code>はSwiftで自動的にメモリ管理される。
+CFRetain、CFRelease、CFAutoreleaseを自動で呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
+を返すのなら、それらを<code>CF_RETURNS_RETAINED</code>と<code>CF_RETURNS_NOT_RETAINED</code>のいずれかを使ってアノテートする。
+上記のAPIを呼び出すSwiftコードをコンパイルするとき、コンパイラは自動的ににメモリ管理用の呼び出しを行う。
+<code>Core Foundation objects</code>を返さないAPIを利用するときは、このセクションをスキップしてね。
+でないのなら<code>unmanaged Core Foundation objects</code>の操作について学んでね。</p>
+
+<h2>Unmanaged Objects</h2>
+
+<p>Swiftが提供されているAPIをimportするときに、コンパイラは自動的に返却された<code>Core Foundation Objects</code>をメモリ管理できないよ
+Swiftは<code>Unmanaged&lt;T&gt;</code>構造体内でこれらの返却された<code>Core Foundation objects</code>を内包する
+間接的に返却された<code>Core Foundation objects</code>のすべては管理されい。例えば以下のように宣言できる</p>
+
+<h3>Objective-C</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>CFStringRef StringByAddingTwoStrings(CFStringRef string1, CFStringRef string2)</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Swift</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func StringByAddingTwoStrings(CFString!, CFString!) -&gt; Unmanaged&lt;CFString&gt;!</span></code></pre></td></tr></table></div></figure>
+
+
+<p>非管理のオブジェクトを受け取るとき、あなたは直接メモり管理されたオブジェクトに変換すべきです、非管理のオブジェクトを受け取る前に。
+この方法でSwiftは主導でメモリ管理を行うことができる。
+Unmanaged<T>構造体は非管理オブジェクトをメモリ管理されたobjectに<code>takeUnretainedValue()</code>に変換したり、<code>takeRetainedValue()</code>に変換したりと２つの方法を提供する。
+あなたは自分が呼びだだしているAPIがunretained objectやretained objectを返すかどうかを基本に利用するためにどちらかのメソッドを選べる。</p>
+
+<h3>Swift</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let memoryManagedResult = StringByAddingTwoStrings(str1, str2).takeUnretainedValue()
+</span><span class='line'>// memoryManagedResult is a memory managed CFString</span></code></pre></td></tr></table></div></figure>
+
+
+<p>非管理のオブジェクトであるretain() release() autorelease() メソッドを呼び出すことができます、しかしこのアプローチは推奨されないよ</p>
+
+<h2>まとめ</h2>
+
+<p>どうもSwiftでもARC非対応のものがあるので<code>Unmanaged&lt;T&gt;</code>構造体を利用して<code>takeUnretainedValue()</code>、<code>takeRetainedValue()</code>経由でメモリ管理されたオブジェクトにしなければならないようだ。
+とはいえまだ完全理解というわけではないので引き続き調べていこうと思う。</p>
+
+<h2>参考文献</h2>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3-Objective-C-2-0-%E7%AC%AC3%E7%89%88-%E8%8D%BB%E5%8E%9F/dp/4797368276%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4797368276" target="_blank" title="詳解 Objective-C 2.0 第3版"><img src="http://ecx.images-amazon.com/images/I/41VdFg9YqsL._SL160_.jpg" width="115" height="150" alt="詳解 Objective-C 2.0 第3版" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E8%A9%B3%E8%A7%A3-Objective-C-2-0-%E7%AC%AC3%E7%89%88-%E8%8D%BB%E5%8E%9F/dp/4797368276%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4797368276" target="_blank">詳解 Objective-C 2.0 第3版</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Swift勉強会を開催して話してきました。]]></title>
@@ -2496,32 +2589,6 @@ iOSに携わる、すべての開発者に向けたカンファレンスイベ�
 
 
 <p>結構、簡単で地味なことだったのですが、こういうことが原因で数日迷走していた日があったのでもう迷走しない為に。。。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Happy New Year]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/01/02/happy-new-year/"/>
-    <updated>2014-01-02T20:22:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/01/02/happy-new-year</id>
-    <content type="html"><![CDATA[<p>明けましておめでとうございます。</p>
-
-<p>時が経つが年々早くなるのがだんだんと早く感じる今日この頃ですが、去年は自分がもう
-３０年も生きたことになり、仕事にプライベートに考えさせられる一年だったと思います。</p>
-
-<p>いかがおすごしでしょうか。
-nakajijapanです。</p>
-
-<p>去年を振り返ってみると、とにかく自分の可能性を信じつつ自分が未開拓な領域
-をガンガン攻めた年ではありました。しかし、まだスタート地点に立ったところ
-というか物足りないと感じてる次第です。もっとイケル！</p>
-
-<p>殻を打ち破る日はまだ分からないですが、あきらめず自分のケツを叩きながら
-一歩づつ前に突き進んでいこうと思います。</p>
-
-<p>今年も仕事にプライベートにがんばるぞ！</p>
-
-<p>今年もよろしくお願いします。</p>
 ]]></content>
   </entry>
   
