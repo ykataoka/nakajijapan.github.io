@@ -152,7 +152,7 @@ Swiftは<code>Unmanaged&lt;T&gt;</code>構造体内でこれらの返却され�
 
 
 <p>非管理のオブジェクトを受け取るとき、あなたは直接メモり管理されたオブジェクトに変換すべきです、非管理のオブジェクトを受け取る前に。
-この方法でSwiftは主導でメモリ管理を行うことができる。
+この方法でSwiftは手動でメモリ管理を行うことができる。
 Unmanaged<T>構造体は非管理オブジェクトをメモリ管理されたobjectに<code>takeUnretainedValue()</code>に変換したり、<code>takeRetainedValue()</code>に変換したりと２つの方法を提供する。
 あなたは自分が呼びだだしているAPIがunretained objectやretained objectを返すかどうかを基本に利用するためにどちらかのメソッドを選べる。</p>
 
