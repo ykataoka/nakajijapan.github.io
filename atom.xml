@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-08-24T03:00:04+09:00</updated>
+  <updated>2014-08-24T03:02:19+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[introducing-cloudkit]]></title>
+    <title type="html"><![CDATA[Introducing CloudKit]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/08/23/introducing-cloudkit/"/>
     <updated>2014-08-23T21:06:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/08/23/introducing-cloudkit</id>
