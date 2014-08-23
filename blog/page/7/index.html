@@ -9,8 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="前回の続きです。１章ではBackboneの基礎的な知識を読んでいきましたが、次は実際に使われるオブジェクトの説明。
-Backboneで利用される重要な３つのモデルModel, Coolection, Viewの説明（役割・使い方）でした。 概要と話題になったことをメモろうと思います。 Model &hellip;">
+  <meta name="description" content="欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
+Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
+して送信させるようにしました。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -66,6 +67,274 @@ Backboneで利用される重要な３つのモデルModel, Coolection, Viewの�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/07/01/csrf-protection/">CSRF Protection for Rails and Backbone.js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-07-01T07:53:00+09:00" pubdate data-updated="true">Jul 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>欲求不満では内部でBackbone.jsを利用しているのですが、セキュリティ強化のためにCSRF対策を施しました。
+Railsを利用しているときはCSRF用のtokenを発行しているのでそれをBackbone.jsで通信するさいに情報を負荷
+して送信させるようにしました。</p>
+
+<p>ちなみに以前はModelに<code>toJSON</code>メソッドでtokenを付加させていたのですがPOST,PUTのみの対応だったので
+DELETE用にも対応できるよう実装してみた。（<code>Model.destroy</code>時には<code>toJSON()</code>を仲介しない）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="err">#</span> <span class="nx">Sync</span>
+</span><span class='line'><span class="err">#</span><span class="o">-------------------------------------------</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span>
+</span><span class='line'><span class="nx">Backbone</span><span class="p">.</span><span class="nx">sync</span> <span class="o">=</span> <span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="o">-&gt;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;create&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;update&#39;</span> <span class="o">||</span> <span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;delete&#39;</span>
+</span><span class='line'>    <span class="nx">options_csrf</span> <span class="o">=</span>
+</span><span class='line'>      <span class="nx">headers</span><span class="o">:</span>
+</span><span class='line'>        <span class="s1">&#39;X-CSRF-Token&#39;</span><span class="o">:</span> <span class="nx">BackboneFrustration</span><span class="p">.</span><span class="nx">Model</span><span class="p">.</span><span class="nx">csrf_token</span><span class="p">()</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
+</span><span class='line'>      <span class="nx">options</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">options_csrf</span>
+</span><span class='line'>    <span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">return</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">_sync</span><span class="p">(</span><span class="nx">method</span><span class="p">,</span> <span class="nx">model</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>メソッドをオーバーライドしてHEADERに<code>X−CSRF-Token</code>を付加して親処理に渡す。<code>BackboneFrustration.Model.csrf_token()</code>は
+単純にフォームからCSRF用のtokenを取得しているだけです。これでajax通信のときはtokenを無視して処理をするようなその場しのぎな実装をせずになりました。</p>
+
+<p>以下のような処理撲滅です。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">protect_from_forgery</span> <span class="ss">except</span><span class="p">:</span> <span class="ss">:craete</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>この修正で問題なく動作しているので適用させました。</p>
+
+<p>ところでRails用のgemで<code>backbone-rails</code>なんてものがありましてそこのコードを
+見ていたらだいたい同じことをしていたのであらかじめこれを参考にして勉強すれば良かったと思いました。とほほ。。</p>
+
+<p><a href="https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js">https://github.com/codebrew/backbone-rails/blob/master/vendor/assets/javascripts/backbone_rails_sync.js</a></p>
+
+<p>とりあえず、これで一安心。</p>
+
+<h2>実際の修正箇所</h2>
+
+<p><a href="https://github.com/nakajijapan/frustrationme_app/pull/25/files">https://github.com/nakajijapan/frustrationme_app/pull/25/files</a></p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/24/use-commitstatus-at-jenkins/">Jenkinsでcommit Statusを操作する</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
+自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
+
+<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
+
+<h2>監視用の親ジョブ作成</h2>
+
+<ul>
+<li><p>ソースコード管理</p>
+
+<ul>
+<li>Gitを選択</li>
+<li>Repository URL(テスト対象のものを入れる)
+
+<ul>
+<li>ex) git@github.com:paperboy-petit/user-app.git</li>
+</ul>
+</li>
+<li>Branch Specifier()
+
+<ul>
+<li><code>*/master</code>, <code>*/release</code>を記述する</li>
+<li>高度な設定のChoosing strategy
+
+<ul>
+<li><code>Inverse</code>を選択する</li>
+</ul>
+</li>
+<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ビルド環境</p>
+
+<ul>
+<li>テストに必要な環境の設定なので適宜設定する</li>
+</ul>
+</li>
+<li><p>ビルド</p>
+
+<ul>
+<li>ここでテストする処理を実行</li>
+</ul>
+</li>
+<li><p>ビルド後の処理</p>
+
+<ul>
+<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
+<li>Build Triggers 1
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>stable or unstable but not failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=success</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Build Triggers 2
+
+<ul>
+<li>Project to build: <code>CommitSTatusUpdate</code></li>
+<li>Trigger when build is <code>failed</code></li>
+<li>parameters
+
+<ul>
+<li><code>commit_status=failure</code>を設定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>小ジョブ作成(CommitStatusUPdate)</h2>
+
+<ul>
+<li><p>ビルドのパラメータ化</p>
+
+<ul>
+<li>受け取るパラメータの設定
+
+<ul>
+<li>名前：commit_status</li>
+<li>デフォルト値：success</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>ソースコード管理
+親ジョブと同じ設定にする</p></li>
+<li><p>シェルの実行
+コミットステータスの変更を行う</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -H <span class="s1">&#39;Authorization: token hogehogehogehogheohogehoge&#39;</span> <span class="se">\</span>
+</span><span class='line'>  --data <span class="s2">&quot;{\&quot;state\&quot;:\&quot;${commit_status}\&quot;, \&quot;target_url\&quot;:\&quot;${BUILD_URL}\&quot;}&quot;</span> <span class="se">\</span>
+</span><span class='line'>  https://api.github.com/repos/paperboy-petit/user-app/statuses/<span class="k">${</span><span class="nv">GIT_COMMIT</span><span class="k">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>ビルド後の処理
+お好みでIRCに渡します</li>
+</ul>
+
+
+<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
+
+<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
+
+<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
+
+<ul>
+<li>参考
+
+<ul>
+<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
+</ul>
+</li>
+</ul>
+
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -533,255 +802,6 @@ version上がることごとにサイト確認して<code>wget</code>してこ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/30/backbone-guidebook01/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-30T00:12:00+09:00" pubdate data-updated="true">May 30<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>第１章の続き</p>
-
-<p>Eventsあたりのところから</p>
-
-<blockquote><p>Eventsが提供しているインタフェースはオブザーバパターンを駆使してオブジェクト間の結合を「疎」に保たせている</p></blockquote>
-
-<p>と記述されている。</p>
-
-<h2>オブザーバパターンとは</h2>
-
-<p>購読者と発行者と呼ばれるオブジェクトが存在する。
-発行者が購読者のメソッドを直接呼び出す代わりに、購読者は発行者
-のイベントを購読する。イベントが発生したらそれを購読している
-オブジェクトに通知される。</p>
-
-<p>発行者はだれが購読してるのか知らずに済む。</p>
-
-<p>イベント駆動開発の技法。</p>
-
-<p>詳細はここが分かりやすい。
-<a href="http://www.techscore.com/tech/DesignPattern/Observer.html/">http://www.techscore.com/tech/DesignPattern/Observer.html/</a></p>
-
-<h3>Backbone.jsでいう購読者と発行者</h3>
-
-<p>これを以下のようにして考えるとわかりやすい</p>
-
-<ul>
-<li>購読者: View</li>
-<li>発行者 : Model</li>
-</ul>
-
-
-<p>Modelはだれが購読してるかしらなくていい、イベントを通知してあげればいいんです。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'># viewの中で
-</span><span class='line'>var entry = new Entry();
-</span><span class='line'>entry.on('change', this.render());</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>メディエータパターン</h2>
-
-<blockquote><p>複数オブジェクトの間を取り持つ仲介者と鳴るオブジェクトを用意し、オブジェクト間の連動の詳細をその仲介者に持たせる
-個々のオブジェクトの独自性を高める</p></blockquote>
-
-<p>内容は理解できたけど、使いどころまだピンときていない。</p>
-
-<p>ここに詳しく記述されていた。
-<a href="http://www.techscore.com/tech/DesignPattern/Mediator.html/">http://www.techscore.com/tech/DesignPattern/Mediator.html/</a></p>
-
-<h2>コラムでのまめ知識</h2>
-
-<p>メモリーリークの問題から<code>on() off()</code>ではなくて <code>listenTo() stopListening()</code>を利用するといい
-v1.0からはView#remove()内部でstopListening() ViewではlistenToしてるので大丈夫！</p>
-
-<h2>Underscore.js</h2>
-
-<p>便利関数の紹介だった。</p>
-
-<ul>
-<li>_.debounce()
-
-<ul>
-<li>一定時間イベントが発生しなかったときに処理を実行する</li>
-</ul>
-</li>
-<li>_.throtte()
-
-<ul>
-<li>コールバックの実行頻度をさげる</li>
-</ul>
-</li>
-<li>_.delay()
-
-<ul>
-<li>処理を遅らせる</li>
-</ul>
-</li>
-<li>_.defer()
-
-<ul>
-<li>コールバック関数の中で最後に実行されることを保証する</li>
-</ul>
-</li>
-</ul>
-
-
-<p>上記二つの関数は今にも使えそうな便利関数だったので導入していきたいな。</p>
-
-<p><a href="http://underscorejs.org/">http://underscorejs.org/</a></p>
-
-<p>見る限り処理を便利＆スマートにしてくれるのでカジュアルにこれだけ導入でもありかもしれない。</p>
-
-<p>さて来週からは第二章ですよ。</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/05/23/backbone-guidebook00/">Backbone.jsガイドブック読書会 第１章 続き</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-05-23T00:12:00+09:00" pubdate data-updated="true">May 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>Backbone.js読書会１日目</h2>
-
-<p>Webも徐々にGUIアプリのような振る舞いが求められていく世の中になってきたし、技術的に可能になってきたと。クライアントでそんな振る舞いをしてくれてるのが現状javascriptです。僕たちはどんどんjavascriiptを利用して多種多様な振る舞いをしていかなければいけないけど、現状のjQueryでばんばん書いていくのにも限界がきてるんじゃないか。そのとき、外国で話題になっていたフレームワークをほそぼそと勉強しはじめ、今や業務にまで導入できることに成功しました。（まだ、いろいろ課題はありますが。。。）</p>
-
-<p>そんなときに、満を持して洋書よりも早く日本の書籍がでてしまったので早速基本に振り返るがてらみんなで知識深めようという目的で読書会はじめました。</p>
-
-<p>「Backbone.js ガイドブック」</p>
-
-<p><a href="http://www.amazon.co.jp/Backbone-js%E3%82%AC%E3%82%A4%E3%83%89%E3%83%96%E3%83%83%E3%82%AF-%E9%AB%98%E6%A9%8B-%E4%BE%91%E4%B9%85/dp/4899773501%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4899773501" target="_blank" title="Backbone.jsガイドブック"><img src="http://ecx.images-amazon.com/images/I/31tI0WaZukL._SL160_.jpg" width="118" height="150" alt="Backbone.jsガイドブック" /></a><br /><a href="http://www.amazon.co.jp/Backbone-js%E3%82%AC%E3%82%A4%E3%83%89%E3%83%96%E3%83%83%E3%82%AF-%E9%AB%98%E6%A9%8B-%E4%BE%91%E4%B9%85/dp/4899773501%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4899773501" target="_blank">Backbone.jsガイドブック</a></p>
-
-<p>はじめは概要なのですらっと。</p>
-
-<p>一つ話題になったのは、基本は「.extend」を利用してインスタンス用のプロパティを作成していくのが基本だけど、クラス用のプロパティってどこで利用するケースがあるかってこと。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">Parent</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">instance_p</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">instance_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">class_p</span><span class="o">:</span> <span class="mi">2</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">class_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>サンプルみただけだとふーんですよね。僕もいまのところふーんです。</p>
-
-<p>ケースとしてはクラスプロパティにテンプレートをぶち込んでおくのがよさげなのかしらね。例えば、Viewが管理している内部でモーダルを管理しているとき。モーダルは基本一つなのでクラスプロパティであらかじめ作成しておけば使い回しがきくと。$(&lsquo;modal&rsquo;)とかで毎回DOMを操作しなくて済む。</p>
-
-<p>ふと思った訳です。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="kd">var</span> <span class="nx">Parent</span> <span class="o">=</span> <span class="nx">Backbone</span><span class="p">.</span><span class="nx">View</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">instance_p</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">instance_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="s1">&#39;instance_m&#39;</span><span class="p">;}</span>
-</span><span class='line'>  <span class="p">},</span>
-</span><span class='line'>  <span class="p">{</span>
-</span><span class='line'>    <span class="nx">modal_template</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
-</span><span class='line'>    <span class="nx">class_m</span><span class="o">:</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">modal_template</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#modal&#39;</span><span class="p">).</span><span class="nx">html</span><span class="p">()}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>こんなかんじ。</p>
-
-<p>あと、なんだかんだ実装しながら確認してたら時間かかってしまったので１章の半分くらいで終了。バタリ。</p>
-
-<p>さ。来週もすすめていきますよ。</p>
-
-<h2>追記</h2>
-
-<p>洋書は今月末にでるようだ。</p>
-
-<p><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank" title="Developing Backbone.js Applications"><img src="http://ecx.images-amazon.com/images/I/5171nmxXQdL._SL160_.jpg" width="114" height="150" alt="Developing Backbone.js Applications" /></a><br /><a href="http://www.amazon.co.jp/Developing-Backbone-js-Applications-Addy-Osmani/dp/1449328253%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1449328253" target="_blank">Developing Backbone.js Applications</a></p>
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -830,6 +850,14 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing-cloudkit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/07/26/core-foudation-for-swift/">About Core Foudation in Working With Cocoa Data Types</a>
       </li>
     
@@ -841,19 +869,11 @@ v1.0からはView#remove()内部でstopListening() ViewではlistenToしてる�
         <a href="/blog/2014/07/11/xcode-folder-references/">Xcodeのフォルダ参照</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/06/15/study-avassetwriter/">録画時にブラックシーンができてしまう問題</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2014/06/10/study-swift-01/">Swift勉強会をした</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (21)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (23)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

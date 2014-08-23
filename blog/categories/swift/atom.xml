@@ -4,7 +4,7 @@
   <title><![CDATA[categories: Swift | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-08-04T11:42:02+09:00</updated>
+  <updated>2014-08-24T03:00:04+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -151,7 +151,7 @@ let memoryManagedResult = StringByAddingTwoStrings(str1, str2).takeUnretainedVal
 <p>Macアプリ、知識が溜まって来たらまた記事にします。</p>
 
 <p>とにかく、Swift勉強会が無事終えてよかったです。
-参加してくれたみなさん、そして発表してくれた、@misyobun @hypermkt @kurotaky ありがとうございました！！！</p>
+参加してくれたみなさん、そして発表してくれた、<a href="http://twitter.com/misyobun">@misyobun</a> <a href="http://twitter.com/hypermkt">@hypermkt</a> <a href="http://twitter.com/kurotaky">@kurotaky</a> ありがとうございました！！！</p>
 ]]></content>
   </entry>
   
