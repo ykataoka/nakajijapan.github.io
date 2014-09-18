@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-08-24T19:14:31+09:00</updated>
+  <updated>2014-09-19T01:31:59+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[お産合宿2014に参加してきた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/09/17/osan2014/"/>
+    <updated>2014-09-17T00:06:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/09/17/osan2014</id>
+    <content type="html"><![CDATA[<p>夏も終わろうかとしている今日このごろ皆さんいかがお過ごしでしょうか。
+僕はパンパンです。中島です。</p>
+
+<p>先日、弊社で<a href="http://osan.pepabo.com/2014/">お産合宿2014</a>という開発合宿的なイベントが開催されたので参加してきました。</p>
+
+<p>今回は、別なチームで組んだことと、参加締め切りまでそんなに時間がなかったので適当に<code>nakajijapan</code>というチームで応募(自分のtwitter idです&hellip;)しました。
+結果的にも自分の価値観を押し出す感じにはなりましたが、それでもみんな意見をいろいろだしてくれていい感じに開発できたと思います。</p>
+
+<p><img src="http://osan.pepabo.com/2014/wp-content/uploads/2014/08/tokyo_05_nakajijapan1000x800.png" width="300" /></p>
+
+<p>ほいで今年はこんなアプリを作成しました。</p>
+
+<h2>音楽位置情報アプリ 「Limu」</h2>
+
+<h3><a href="limu.xyz">limu.xyz</a></h3>
+
+<p><a href="http://limu.xyz">
+<img src="http://nakajijapan.github.io/images/posts/2014-09-17-01.png" alt="" />
+</a></p>
+
+<p>コンセプトは新しい音楽の出会い方です！</p>
+
+<p>詳細は後々後悔していきます。
+完成度としては、まだ５割ほどでいろいろ試行錯誤が必要なところが結構あるのですが１０月くらいにはリリースできるようにメンバー全員
+頑張っておりますのでぜひご期待ください！！！！！！！！！！！</p>
+
+<p>以下にお産合宿発表した資料を載せておきます。（一部修正しました）</p>
+
+<script async class="speakerdeck-embed" data-id="dd60f3a020540132fa3f463cb3105589" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing CloudKit]]></title>
@@ -2595,52 +2633,6 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
 <li>どの処理・メソッドが遅いのか、どこでメモリを消費しているのか調査する</li>
 </ul>
 </li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Confrence With Developer2に参加してLTしてきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014/"/>
-    <updated>2014-02-02T23:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/02/conference-with-developers-2014</id>
-    <content type="html"><![CDATA[<p>今回、Confrence With Developer2に参加してきました。
-iOSに携わる、すべての開発者に向けたカンファレンスイベントだったのですが
-いろいろ収穫があり、たくさん勉強させていただきました。</p>
-
-<p>そんな僕もここでLTをしてきたのでのせときます。以前は、MA9でも発表している
-ですがあくまでプロダクトとして発表だったのと今回は技術的なカンファレンス
-なので技術的側面に焦点をあてて発表させていただきました。</p>
-
-<p>話した内容はアプリでがんがん利用していた<code>AV Foundation</code>の話をしてきました。</p>
-
-<script async class="speakerdeck-embed" data-id="ebaab3406d820131c6665e5071095c76" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>(発表時にディスプレイコネクタが認識しなくて発狂していたところ<code>@tamotamago</code>さんにパソコンを貸していただき大変感謝です！)</p>
-
-<p>自分でもいろいろとメモっていたのですが以下のサイトがよく纏められていたのでご参照ください。</p>
-
-<h3>Developers.IO</h3>
-
-<ul>
-<li><a href="http://dev.classmethod.jp/smartphone/ios-confwd2/">http://dev.classmethod.jp/smartphone/ios-confwd2/</a></li>
-</ul>
-
-
-<h3>Togetter</h3>
-
-<ul>
-<li><a href="http://togetter.com/li/623779">http://togetter.com/li/623779</a></li>
-</ul>
-
-
-<h3>Ustream録画</h3>
-
-<ul>
-<li><a href="http://www.ustream.tv/recorded/43319245">http://www.ustream.tv/recorded/43319245</a></li>
-<li><a href="http://www.ustream.tv/recorded/43323576">http://www.ustream.tv/recorded/43323576</a></li>
 </ul>
 
 ]]></content>

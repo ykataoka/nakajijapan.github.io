@@ -4,7 +4,7 @@
   <title><![CDATA[categories: iOS | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/ios/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-08-24T19:14:31+09:00</updated>
+  <updated>2014-09-19T01:31:59+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[お産合宿2014に参加してきた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/09/17/osan2014/"/>
+    <updated>2014-09-17T00:06:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/09/17/osan2014</id>
+    <content type="html"><![CDATA[<p>夏も終わろうかとしている今日このごろ皆さんいかがお過ごしでしょうか。
+僕はパンパンです。中島です。</p>
+
+<p>先日、弊社で<a href="http://osan.pepabo.com/2014/">お産合宿2014</a>という開発合宿的なイベントが開催されたので参加してきました。</p>
+
+<p>今回は、別なチームで組んだことと、参加締め切りまでそんなに時間がなかったので適当に<code>nakajijapan</code>というチームで応募(自分のtwitter idです&hellip;)しました。
+結果的にも自分の価値観を押し出す感じにはなりましたが、それでもみんな意見をいろいろだしてくれていい感じに開発できたと思います。</p>
+
+<p><img src="http://osan.pepabo.com/2014/wp-content/uploads/2014/08/tokyo_05_nakajijapan1000x800.png" width="300" /></p>
+
+<p>ほいで今年はこんなアプリを作成しました。</p>
+
+<h2>音楽位置情報アプリ 「Limu」</h2>
+
+<h3><a href="limu.xyz">limu.xyz</a></h3>
+
+<p><a href="http://limu.xyz">
+<img src="/images/posts/2014-09-17-01.png" alt="" />
+</a></p>
+
+<p>コンセプトは新しい音楽の出会い方です！</p>
+
+<p>詳細は後々後悔していきます。
+完成度としては、まだ５割ほどでいろいろ試行錯誤が必要なところが結構あるのですが１０月くらいにはリリースできるようにメンバー全員
+頑張っておりますのでぜひご期待ください！！！！！！！！！！！</p>
+
+<p>以下にお産合宿発表した資料を載せておきます。（一部修正しました）</p>
+
+<script async class="speakerdeck-embed" data-id="dd60f3a020540132fa3f463cb3105589" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Introducing CloudKit]]></title>
@@ -317,38 +355,6 @@ let memoryManagedResult = StringByAddingTwoStrings(str1, str2).takeUnretainedVal
 
 <p>とにかく、Swift勉強会が無事終えてよかったです。
 参加してくれたみなさん、そして発表してくれた、<a href="http://twitter.com/misyobun">@misyobun</a> <a href="http://twitter.com/hypermkt">@hypermkt</a> <a href="http://twitter.com/kurotaky">@kurotaky</a> ありがとうございました！！！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Xcodeのフォルダ参照]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/07/11/xcode-folder-references/"/>
-    <updated>2014-07-11T00:37:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/07/11/xcode-folder-references</id>
-    <content type="html"><![CDATA[<p>なにげに今まで知らなかったんですが結構便利だってことに最近気づいたのでメモ。
-普段リソースをXcodeに関連づけさせるためにドラッグアンドドロップさせていたのですが、
-一旦以下のチェック項目でディレクトリ参照にしてしまえば、これ以降リソースファイルを追加したときに毎度
-ドラッグアンドドロップさせなくてよく、自動的に追加されます。</p>
-
-<p><img src="/images/posts/2014-07-11-01.png" alt="nakajijapan" /></p>
-
-<p><img src="/images/posts/2014-07-11-02.png" alt="nakajijapan" /></p>
-
-<p>他と違うのは対象のディレクトリは色が青になっています。</p>
-
-<p>実際に呼び出すときには通常の呼び出し方法と異なります。リソースファイルの前に指定のディレクトリ名を宣言
-する必要があります。</p>
-
-<p>今回だと以下の感じになります。</p>
-
-<p><code>
-let soundFilePath = NSBundle.mainBundle().pathForResource("music/sound001", ofType: "mp3")
-</code></p>
-
-<p><code>music</code>がディレクトリにあたりますね。</p>
-
-<p>これ、何気に便利で、デザイナさんにXcode立ち上げなくても指定のディレクトリおいておくだけで、余計なところを実装せずに済むので
-仕事が捗るのではないかと気づいた今日このごろでした。</p>
 ]]></content>
   </entry>
   
