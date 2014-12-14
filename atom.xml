@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-09-19T11:12:55+09:00</updated>
+  <updated>2014-12-15T00:01:27+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,90 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[osx-advent-calendar-2014]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014/"/>
+    <updated>2014-12-14T23:56:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014</id>
+    <content type="html"><![CDATA[<p><img src="https://devimages.apple.com.edgekey.net/osx/images/osx-whats-new-hero.png" alt="" /></p>
+
+<p>AppleがSwiftという言語をサポートしてから半年が経とうとしています。
+このほかにも今年はAppleに驚かせる一年になったのではないでしょうか。
+みなさんこんにちは<a href="https://twitter.com/nakajijapan">@nakajijapan</a>です。</p>
+
+<p>Swiftが出た当初はコードの書きやすさに驚き、ドキュメントを読んでは
+サンプルコードを書いたり、はたまた<a href="http://limu.xyz/">Limu</a>というサービスを作成するようになりました。ちなみにこのサービスはいまだに地道に開発しています。。。</p>
+
+<p>そして、私は新たな興味を持ちました。Macも頑張れば開発できるのではないかと。</p>
+
+<p>とにかく、なにも考えずMacプロジェクトを作成して初期起動してみる。
+とりあえずなにもできないWindowが起動できる。
+あとは、iOS開発でしたノウハウである程度のカスタマイズができるのではないかと。
+しかし、そこまでで終わりでUIKitやiOSの開発知識である程度流用できるものはありますが
+それ以上にCocoaプログラミングする上での仕様を学ぶ必要がありました。</p>
+
+<p>そこで今回は、ある程度開発できる？(いや、まだまだであります)ようになってきたのでここでちょっとまとめようと思います。</p>
+
+<h2>MACアプリ開発ができるようになるまでに行ったこと</h2>
+
+<ul>
+<li>とにかくサンプルを読む</li>
+<li>思ったことは駄目元で試してみる</li>
+<li>公式ドキュメントを読む</li>
+<li>本を読む</li>
+</ul>
+
+
+<h3>とにかくサンプルを読む</h3>
+
+<p>大体のサンプルはObjective-Cで書いてあります。最初からSwiftで書いていてほしいのですが、まだ昔のサンプルのままで更新されていないので、それをみるようになりますがObjective-CからSwiftに変えるのはそこまで難しくないです。ただより、下のレイヤーにを実装するとなると少し考える事が増えるでしょうが。。。そこにヒントが隠されているので気になるソースを落としてはサンプルを眺めてビルドしてみましょう。</p>
+
+<p>自分は10個くらい眺めてなんとなくこんな書き方すればいいんだと若干ながら理解して
+いきました。</p>
+
+<h3>思ったことは駄目元でためしてみる</h3>
+
+<p>iOS以上に情報が少ないので自分で解決しなきゃいけないことが多くなってきます。
+実装が滞るのであれば、ソースをミクロな状態にしてそれができるかこうやったらどうなるんだろうと試行錯誤をしてみることが大切です。</p>
+
+<h3>公式ドキュメントを読む</h3>
+
+<p>ネットの情報に自分の疑問の答えがあっても、仕様は確認するといいです。それより便利なプロパティやメソッドが用意されているかもしれませんし、そもそも使い方が間違っているかもしれません。</p>
+
+<h3>本を読む</h3>
+
+<p>日本語の情報がない中、以下の本を参考にしました。</p>
+
+<div class="booklog_html"><table><tr><td class="booklog_html_image"><a href="http://www.amazon.co.jp/MAC-OS-X-COCOA%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E7%AC%AC4%E7%89%88/dp/4501552700%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4501552700" target="_blank"><img src="http://ecx.images-amazon.com/images/I/41bAmGQ-ljL._SL160_.jpg" width="119" height="150" style="border:0;border-radius:0;" /></a></td><td class="booklog_html_info" style="padding-left:20px;"><div class="booklog_html_title" style="margin-bottom:10px;font-size:14px;font-weight:bold;"><a href="http://www.amazon.co.jp/MAC-OS-X-COCOA%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E7%AC%AC4%E7%89%88/dp/4501552700%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4501552700" target="_blank">MAC OS X COCOAプログラミング 第4版</a></div><div style="margin-bottom:10px;"><div class="booklog_html_author" style="margin-bottom:15px;font-size:12px;;line-height:1.2em">著者 : <a href="http://booklog.jp/author/%E3%82%A2%E3%83%BC%E3%83%AD%E3%83%B3%E3%83%BB%E3%83%92%E3%83%AC%E3%82%AC%E3%82%B9" target="_blank">アーロン・ヒレガス</a></div><div class="booklog_html_manufacturer" style="margin-bottom:5px;font-size:12px;;line-height:1.2em">東京電機大学出版局</div><div class="booklog_html_release" style="font-size:12px;;line-height:1.2em">発売日 : 2014-05-20</div></div><div class="booklog_html_link_amazon"><a href="http://booklog.jp/item/1/4501552700" style="font-size:12px;" target="_blank">ブクログでレビューを見る»</a></div></td></tr></table></div>
+
+
+<p>情報はかなり古いのですが、Cocoaプログラミングの基本がわかるというところまではいいのですが、ある程度iOSで学んだことが記述されているので分厚いわりにはそこまで自分にとって優良な情報は少なかったイメージがあります。</p>
+
+<div class="booklog_html"><table><tr><td class="booklog_html_image"><a href="http://www.amazon.co.jp/Mac-OS-iPhone%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AECocoa%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-%E8%97%A4%E6%9C%AC-%E8%A3%95%E4%B9%8B/dp/4881666967%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4881666967" target="_blank"><img src="http://ecx.images-amazon.com/images/I/519bb6t6VoL._SL160_.jpg" width="117" height="150" style="border:0;border-radius:0;" /></a></td><td class="booklog_html_info" style="padding-left:20px;"><div class="booklog_html_title" style="margin-bottom:10px;font-size:14px;font-weight:bold;"><a href="http://www.amazon.co.jp/Mac-OS-iPhone%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AECocoa%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-%E8%97%A4%E6%9C%AC-%E8%A3%95%E4%B9%8B/dp/4881666967%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4881666967" target="_blank">Mac OS X/iPhoneのためのCocoaプログラミング入門</a></div><div style="margin-bottom:10px;"><div class="booklog_html_author" style="margin-bottom:15px;font-size:12px;;line-height:1.2em">著者 : <a href="http://booklog.jp/author/%E8%97%A4%E6%9C%AC%E8%A3%95%E4%B9%8B" target="_blank">藤本裕之</a></div><div class="booklog_html_manufacturer" style="margin-bottom:5px;font-size:12px;;line-height:1.2em">ソーテック社</div><div class="booklog_html_release" style="font-size:12px;;line-height:1.2em">発売日 : 2009-07-04</div></div><div class="booklog_html_link_amazon"><a href="http://booklog.jp/item/1/4881666967" style="font-size:12px;" target="_blank">ブクログでレビューを見る»</a></div></td></tr></table></div>
+
+
+<p>他にもう一冊読もうかなと思って購入した一冊なのですが関西弁？と微妙な例えに苦しんで読みにくかった。。。</p>
+
+<h4>余談</h4>
+
+<div class="booklog_html"><table><tr><td class="booklog_html_image"><a href="http://www.amazon.co.jp/Cocoa-Programming-OS-Edition-Guides/dp/0134076958%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0134076958" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51CF44RQryL._SL160_.jpg" width="105" height="150" style="border:0;border-radius:0;" /></a></td><td class="booklog_html_info" style="padding-left:20px;"><div class="booklog_html_title" style="margin-bottom:10px;font-size:14px;font-weight:bold;"><a href="http://www.amazon.co.jp/Cocoa-Programming-OS-Edition-Guides/dp/0134076958%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0134076958" target="_blank">Cocoa Programming for OS X: The Big Nerd Ranch Guide (5th Edition) (Big Nerd Ranch Guides)</a></div><div style="margin-bottom:10px;"><div class="booklog_html_author" style="margin-bottom:15px;font-size:12px;;line-height:1.2em">著者 : <a href="http://booklog.jp/author/Aaron+Hillegass" target="_blank">Aaron Hillegass</a></div><div class="booklog_html_manufacturer" style="margin-bottom:5px;font-size:12px;;line-height:1.2em">Big Nerd Ranch Guides</div><div class="booklog_html_release" style="font-size:12px;;line-height:1.2em">発売日 : 2015-04-10</div></div><div class="booklog_html_link_amazon"><a href="http://booklog.jp/item/1/0134076958" style="font-size:12px;" target="_blank">ブクログでレビューを見る»</a></div></td></tr></table></div>
+
+
+<p>来年発売される第五版の本はSwift、Xcode6に対応しているので勉強しがいがあります。</p>
+
+<p><font color="red">熱い!!!!!!!</font></p>
+
+<h2>まとめ</h2>
+
+<p>自分がどうやってCocoaプログラミングの勉強してきたかをまとめてみました。
+なにあともあれ自分は何が作成したいかだと思うので、それありきの勉強じゃないと長続きはしないと思うのでそれを見つけるのが何より重要かもしれませんし、僕も作りたいものがあって勉強してます。</p>
+
+<p>来年の目標としては自分でもCocoa勉強会ひらけるようになるまでいけたらいいすね。</p>
+
+<p>これからも自分が作成したいものを作成できるようになりたいものです。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[お産合宿2014に参加してきた。]]></title>
@@ -1237,7 +1321,7 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
 
 <p>その後は、Bashというなの打ち上げが庭で開催されました。</p>
 
-<h3>5日目</h3>
+<h2>5日目</h2>
 
 <ul>
 <li>Advanced Swift Debugging in LLDB</li>
@@ -1288,7 +1372,7 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
 
 <p>いや、ビジネスと言う名の戦争です。
 外国の方（特に英語圏）は言語の壁がないのでがんがんLabに質問していって解決したり、勝手に他のエンジニアとなかよくなって情報交換したりと圧倒されたり、
-このようなエンジニアが会場でこんな多いと感じたのに正解にはもっとたくさんいるんだなと思うと自分なんてほんの点なんだなと萎縮しています。</p>
+このようなエンジニアが会場でこんな多いと感じたのに世界にはもっとたくさんいるんだなと思うと自分なんてほんの点なんだなと萎縮しています。</p>
 
 <p>そんな人と、ビジネスで闘っているとなるとなおさら。</p>
 
@@ -2397,244 +2481,6 @@ Appleが未だ実現されていない機能を先に作れ</p></blockquote>
 まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
 
 <p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Developers Summit 2014]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014/"/>
-    <updated>2014-02-15T01:51:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/15/developers-summit-2014</id>
-    <content type="html"><![CDATA[<p>先週ではありますが、Developers Summit 2014に参加してきました。
-サミットが平日だったので全部はみれていませんが、いくつかのステージをみること
-はできたのでそのメモを記します。</p>
-
-<ul>
-<li>Developers Summit 2014
-
-<ul>
-<li><a href="http://event.shoeisha.jp/devsumi/20140213/">http://event.shoeisha.jp/devsumi/20140213/</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h2>iOSアプリケーションの継続的デリバリー</h2>
-
-<ul>
-<li>発表者
-
-<ul>
-<li><a href="https://event.shoeisha.jp/devsumi/20140213/session/430">https://event.shoeisha.jp/devsumi/20140213/session/430</a></li>
-</ul>
-</li>
-<li>発表資料
-
-<ul>
-<li><a href="http://www.slideshare.net/numeha/ios-31199969">http://www.slideshare.net/numeha/ios-31199969</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h3>どのくらいスピードが必要なのか</h3>
-
-<ul>
-<li>iOS１ヶ月で約四回リリース</li>
-<li>ネックは申請降りるのに７日間必要。。。</li>
-<li>1年で１２回のリリース</li>
-<li>自分たちのリリースのリズムできてますか？
-
-<ul>
-<li>いつもリリースできる状態にしときましょう!!</li>
-</ul>
-</li>
-<li>継続的デリバリー
-
-<ul>
-<li>ビジネスの主導権を握る為にCIやるんだ!!!</li>
-</ul>
-</li>
-</ul>
-
-
-<blockquote><p>価値のあるソフトウェアをはやく継続的にリリースする</p></blockquote>
-
-<h3>徹底的に自動化してきた</h3>
-
-<h4>コード品質のパイプライン</h4>
-
-<ol>
-<li>コード取得 &ndash;> Git</li>
-<li>ビルド &ndash;> Xcode</li>
-<li>コード行数 &ndash;> SLOCCount</li>
-<li>重複コード &ndash;> DRY</li>
-<li><p>警告 &ndash;> Warnnings</p></li>
-<li><p>テストにはGHUnitを利用している</p></li>
-<li>カバレッジはgcovr</li>
-</ol>
-
-
-<h3>製品品質のパイプライン</h3>
-
-<ul>
-<li>実記でのテストが必要</li>
-<li>テストフレームワークを同封してビルドしている</li>
-<li>自動でipaファイル作成</li>
-<li>複数のデバイスに自動でインストール
-
-<ul>
-<li>fruitstrap or Instruments</li>
-</ul>
-</li>
-<li>特定の端末のピンポイントでデプロイする</li>
-<li>Frankというテストフレーム</li>
-<li>httpで外部から複数代のios端末を操作</li>
-<li>ios7からのTouch問うの操作API禁止</li>
-</ul>
-
-
-<p>どうしよう。。。</p>
-
-<ul>
-<li>解決策としてiOS6専用にしよう</li>
-<li>iOS7はInstruments経由で操作</li>
-<li>ビルドマシン一代につきiOS一代にいれよう</li>
-<li>テストフレームワークを複数いれられない
-
-<ul>
-<li>シングルプロセスでしか動作しないらしい</li>
-</ul>
-</li>
-</ul>
-
-
-<p>どうしよう。。。</p>
-
-<ul>
-<li>MacサーバでVMサーバ作って複数台での端末で実装してみたよ
-
-<ul>
-<li>実機のテストにはさまざまなシリーズ・OSバージョンのiPhone,iPadを用意してるらしい</li>
-</ul>
-</li>
-</ul>
-
-
-<p>エンタープライズすごい！</p>
-
-<h2>Tokyo MotionControl Network</h2>
-
-<ul>
-<li>Facebook
-
-<ul>
-<li><a href="https://www.facebook.com/TokyoMotioncontrolNetwork">https://www.facebook.com/TokyoMotioncontrolNetwork</a></li>
-</ul>
-</li>
-</ul>
-
-
-<p>モーションキャプチャを利用したさまざまなコンテンツの紹介をされていました。</p>
-
-<h4>VIRTUAL FASHION</h4>
-
-<ul>
-<li><code>Kinect/PrimeSence</code>で作成</li>
-<li>ボーントラッキングの技術をもちいてCGノ衣装をマッピング</li>
-<li>360度マッピングしてる</li>
-</ul>
-
-
-<h4>TRANSSHOME</h4>
-
-<ul>
-<li>ポーズをとったその陰で家を自動生成してくれる</li>
-<li>子供受けがいい</li>
-</ul>
-
-
-<h4>AIR SHODOU</h4>
-
-<ul>
-<li><code>Kinect</code>で作成</li>
-<li>書道をモーションキャプチャを通して描くシステム</li>
-</ul>
-
-
-<h4>執事力</h4>
-
-<ul>
-<li>執事のようにきれいな姿勢で入れるか検定する</li>
-<li>ボーントラッキングで検査している</li>
-</ul>
-
-
-<h4>うるしずく</h4>
-
-<h4>nt-kinesys</h4>
-
-<ul>
-<li><code>PrimeSense</code>で作成</li>
-</ul>
-
-
-<h4>ゲゲゲの鬼太郎</h4>
-
-<ul>
-<li>近づくと全身がネズミ男になるらしいです</li>
-</ul>
-
-
-<h3>メモ</h3>
-
-<p>他にもの以下のセッションが行われていました。</p>
-
-<ul>
-<li>モーションコントロールコンテンツの実装からみえてきたもの
-
-<ul>
-<li><a href="http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi">http://www.slideshare.net/NaojiTaniguchi/developer-summit-2014naojitaniguchi</a></li>
-</ul>
-</li>
-<li>モーションセンサーの現状と2014年の予測
-
-<ul>
-<li><a href="http://www.slideshare.net/kaorun55/devsumi-201414c5">http://www.slideshare.net/kaorun55/devsumi-201414c5</a></li>
-</ul>
-</li>
-</ul>
-
-
-<h2>所感</h2>
-
-<p>今回一番勉強になったのはメインでリコーさんのiOSの発表で、いろいろ勉強させていただきました。
-そこでいくつかのツールがでてきたので今度利用してみようと思います。
-大企業もCIでやることはだいたいかわらないけど、実機数十台用意してそこにデプロイしてテストするとこは大企業だなと感じました。</p>
-
-<ul>
-<li>Frank
-
-<ul>
-<li><a href="http://www.testingwithfrank.com/">http://www.testingwithfrank.com/</a></li>
-</ul>
-</li>
-<li>fruitstrap
-
-<ul>
-<li><a href="https://github.com/ghughes/fruitstrap">https://github.com/ghughes/fruitstrap</a></li>
-<li><code>This project is no longer maintained.</code>が気になりました。。。</li>
-</ul>
-</li>
-<li>Instruments
-
-<ul>
-<li>Xcodeに付属しているプロファイラツール</li>
-<li>どの処理・メソッドが遅いのか、どこでメモリを消費しているのか調査する</li>
-</ul>
-</li>
-</ul>
-
 ]]></content>
   </entry>
   
