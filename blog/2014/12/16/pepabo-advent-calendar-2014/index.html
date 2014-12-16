@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pepabo Advent Calendar 2014 - Nakajijapan</title>
+  <meta name="author" content="nakajijapan">
+
+  
+  <meta name="description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
+明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;">
+  <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <!-- twitter -->
+  <meta name="twitter:creator" content="@nakajijapan">
+  <meta name="twitter:url" content="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="nakajijapan">
+  <meta name="twitter:description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
+明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;">
+
+
+  <!-- facebook -->
+  <meta property="og:title" content="nakajijapan" />
+  <meta property="og:type"  content="website" />
+  <meta property="og:url"   content="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014" />
+  <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
+  <meta property="og:description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
+明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;" />
+
+
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Nakajijapan</a></h1>
+  
+    <h2>生きるのに必死です。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:nakajijapan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://www.nakajijapan.net">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Pepabo Advent Calendar 2014</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-16T22:33:00+09:00" pubdate data-updated="true">Dec 16<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>この記事は、<a href="http://qiita.com/advent-calendar/2014/pepabo">Pepabo Advent Calendar 2014</a>の17日目の記事です。
+明日は lamanotrama さんです。くろださーーーん。</p>
+
+<p>最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。</p>
+
+<p>Pepabo Advent Calendarはやっぱりこれでしょうということで<a href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/">WWDC2014</a>に行ったことを出そうかなと思ったのですが、何も書いていないのはあれなのでその後、どうなったかを書いていきます。</p>
+
+<p>最初に&hellip;</p>
+
+<h2>テンションあがる</h2>
+
+<p>ただ参加しただけでも大きな価値があると思うのですが、今年はAppleが開発者向けに大きな発表があったことはみなさんご存知だと思います。それによりさらにさらにテンションアゲアゲMAXでアドレナリン分泌状態であります。</p>
+
+<h2>プレッシャー感高まる</h2>
+
+<p>会社の神対応には大変感謝しておりますが、まぁそれと同等のプレッシャーは感じておりまして今以上に何か恩返しせねばという勢いで、まず社内のSNSのハンドルネーム的なものをApple信者会員番号２番にしました。（社内から僕の他に@misyobunという人も参加してもともとAndroidエンジニアだったのが急に寝返って僕よりも早くApple信者に変えていた裏切り者がいるので。。。）</p>
+
+<h2>神恩返しのために</h2>
+
+<h3>座談会を盛り上げました？</h3>
+
+<p>弊社では業務中に週に一回ずつAndroidとiOSで座談会的な集会が行われています。
+いろんなサービスがあるペパボでは、なかなか同じ職種（特にモバイル）の人が一緒に
+仕事をする機会がない中で、同じ職種の人が集まって今週どうだったかどか、新しい機種出たね、この実装どうしてるとかを話せる貴重な時間であり、日々ぽよぽよしています。</p>
+
+<h3>CIサーバ構築</h3>
+
+<p>モバイル環境でもCI活動ができるようにJenkins運用したり。</p>
+
+<script async class="speakerdeck-embed" data-slide="9" data-id="55cde09038e501324a864a15dbbe3320" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>(これはFlat Designの歴史について話した時のつかみみたいなものです。。。)</p>
+
+<p>プラグインは<a href="https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin">Simple Theme Plugin</a>を利用しましたCSSを変更しました。
+jenkinsをsteve jobsにすることでさらにテンションが上がり、仕事の意欲も高まりました。
+自動化してしまうとIRCに結果が流れてくるので、なかなか直接みに行かないものですがなぜか、時々見に行ってしまいます。</p>
+
+<h3>Swiftrisを作成した</h3>
+
+<p><a href="https://www.bloc.io/swiftris-build-your-first-ios-game-with-swift">BLOC &ndash; Learn Swift</a>を題材にSwift勉強しながらテトリス作っちゃおうという教材を利用してみんなで隔週で行いました。</p>
+
+<p>BGMはこの曲にするとテンションがあがることでしょう。</p>
+
+<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/88243228&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>
+
+
+<h3>iOS8 SDK読書会</h3>
+
+<div class="booklog_html"><table><tr><td class="booklog_html_image"><a href="http://www.amazon.co.jp/Ios-Sdk-Development-Creating-Iphone/dp/1941222641%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1941222641" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51jTyaM8J5L._SL160_.jpg" width="124" height="150" style="border:0;border-radius:0;" /></a></td><td class="booklog_html_info" style="padding-left:20px;"><div class="booklog_html_title" style="margin-bottom:10px;font-size:14px;font-weight:bold;"><a href="http://www.amazon.co.jp/Ios-Sdk-Development-Creating-Iphone/dp/1941222641%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1941222641" target="_blank">Ios 8 Sdk Development: Creating Iphone and Ipad Apps With Swift</a></div><div style="margin-bottom:10px;"><div class="booklog_html_author" style="margin-bottom:15px;font-size:12px;;line-height:1.2em">著者 : <a href="http://booklog.jp/author/Chris+Adamson" target="_blank">Chris Adamson</a></div><div class="booklog_html_manufacturer" style="margin-bottom:5px;font-size:12px;;line-height:1.2em">Pragmatic Bookshelf</div><div class="booklog_html_release" style="font-size:12px;;line-height:1.2em">発売日 : 2015-01-25</div></div><div class="booklog_html_link_amazon"><a href="http://booklog.jp/item/1/1941222641" style="font-size:12px;" target="_blank">ブクログでレビューを見る»</a></div></td></tr></table></div>
+
+
+<p>まだBeta版なのですが、出た瞬間後輩の<a href="https://twitter.com/kurotaky">@kurotaky</a>, <a href="https://twitter.com/ryoma_123">@ryoma_123</a>に懇願して仕事が始まる１時間前に集合して朝練活動を行っております。コードを書きながら進んでいるので遅めですが最近やっとGestureRecognizerの章までいきました。執筆に追いつくことを目標に日々取り組んでおります。</p>
+
+<h3>IRCに通知するやつ</h3>
+
+<p>なるべく情報の取得が遅れないようにと話のネタ作りにモバイル関係の記事を流すようにしました。。。主にAndroidとAppleの情報が毎朝流れるようになっています。もっとモバイルに興味もってーーーーーーーという僕の想いの表れです。</p>
+
+<p><a href="https://github.com/nakajijapan/post-feeds-in-irc">https://github.com/nakajijapan/post-feeds-in-irc</a></p>
+
+<h2>まだまだだ！</h2>
+
+<p>と、なにかと活動してきましたが、まだまだもっと自分ができることはたくさんあるはずだし進化できると思う。
+なので、来年は今年以上に技術をさらに掘り下げつつサービスや会社に貢献していくんだ！！と決意。
+以下の三つを掘り下げます。</p>
+
+<ol>
+<li>iPhoneおじさんを掘り下げる</li>
+<li>モバイルの開発基盤を掘り下げる</li>
+<li>UI/UXを掘り下げる</li>
+</ol>
+
+
+<p>その先に神恩返しがあるのではないかと思います。</p>
+
+<p>以上、自分が決意する記事でした。</p>
+
+<h2>そんな僕たちは</h2>
+
+<p>モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>そして、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>さらに、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>もう一度おまけに、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>一緒にMac App作りましょう！</p>
+</div>
+
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">nakajijapan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-16T22:33:00+09:00" pubdate data-updated="true">Dec 16<span>th</span>, 2014</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/diary/'>Diary</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="twitter">
+    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014/" >Tweet</a>
+  </div>
+  
+  
+  <div class="google">
+    <div class="g-plusone" data-size="medium"></div>
+  </div>
+  
+
+  <div class="hatena">
+    <a href="http://b.hatena.ne.jp/entry/http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014/" class="hatena-bookmark-button" data-hatena-bookmark-title="nakajijapan" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </div>
+
+  
+    <!--
+    <div class="fb-like" data-send="true" data-width="400" data-show-faces="false"></div>
+    -->
+    <div class="fb-like" data-href="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014/" data-layout="button_count" data-send="false" data-show-faces="false"></div>
+
+  
+
+</div>
+
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/12/14/osx-advent-calendar-2014/" title="Previous Post: OS X Advent Calendar 2014 - OSXアプリ初心者の域を脱するためにしたこと">&laquo; OS X Advent Calendar 2014 - OSXアプリ初心者の域を脱するためにしたこと</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Profile</h1>
+  <div style="text-align: center;">
+    <img src="http://blog.nakajijapan.net/wp-content/uploads/2012/09/ore.jpg" width="200px" style="border-radius: 100px;"/>
+  </div>
+  <div>
+    <div><b>nakajijapan</b></div>
+    <a href="http://twitter.com/nakajijapan">Twitter @nakajijapan</a><br />
+    <a href="http://www.nakajijapan.net">www.nakajijapan.net</a><br />
+  </div>  
+</section>
+<section>
+  <h1>My Products</h1>
+
+  <a href="http://www.frustration.me" style="text-decoration: none;">
+    <img src="https://raw.github.com/nakajijapan/frustrationme_app/master/app/assets/images/icon500_500.png" width="200px" />
+  </a>
+  
+  <a href="https://itunes.apple.com/jp/app/xin-ling-xie-zhenapuri-owakariitadaketadarouka/id455944521?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1758.phobos.apple.com/us/r30/Purple4/v4/88/23/fc/8823fce4-bb15-45c1-aff0-57f3dd2b1d44/mzl.uettjbrc.png" width="200px" alt="心霊写真アプリ 「おわかりいただけただろうか」 - HajiShiraZu" />
+  </a>
+
+  <a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" width="200px" alt="心霊動画アプリ もう一度ご覧いただこう - HajiShiraZu" />
+  </a>
+
+ 
+  <a href="https://itunes.apple.com/jp/app/zhong-dao-qing-sao-ju/id580907679?mt=8" style="text-decoration: none;">
+    <img src="http://a1561.phobos.apple.com/us/r1000/113/Purple/v4/bb/21/b8/bb21b8dd-3ec6-dea5-d7eb-64a033ca8ae2/mzl.rmbpduxb.png" width="200px" />
+  </a>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/12/16/pepabo-advent-calendar-2014/">Pepabo Advent Calendar 2014</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/12/14/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - OSXアプリ初心者の域を脱するためにしたこと</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/09/17/osan2014/">お産合宿2014に参加してきた。</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing CloudKit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/nakajijapan">@nakajijapan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'nakajijapan',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - nakajijapan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

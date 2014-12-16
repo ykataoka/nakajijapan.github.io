@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-15T00:13:21+09:00</updated>
+  <updated>2014-12-17T07:36:50+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pepabo Advent Calendar 2014]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014/"/>
+    <updated>2014-12-16T22:33:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/12/16/pepabo-advent-calendar-2014</id>
+    <content type="html"><![CDATA[<p>この記事は、<a href="http://qiita.com/advent-calendar/2014/pepabo">Pepabo Advent Calendar 2014</a>の17日目の記事です。
+明日は lamanotrama さんです。くろださーーーん。</p>
+
+<p>最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。</p>
+
+<p>Pepabo Advent Calendarはやっぱりこれでしょうということで<a href="http://nakajijapan.github.io/blog/2014/06/08/wwdc2014/">WWDC2014</a>に行ったことを出そうかなと思ったのですが、何も書いていないのはあれなのでその後、どうなったかを書いていきます。</p>
+
+<p>最初に&hellip;</p>
+
+<h2>テンションあがる</h2>
+
+<p>ただ参加しただけでも大きな価値があると思うのですが、今年はAppleが開発者向けに大きな発表があったことはみなさんご存知だと思います。それによりさらにさらにテンションアゲアゲMAXでアドレナリン分泌状態であります。</p>
+
+<h2>プレッシャー感高まる</h2>
+
+<p>会社の神対応には大変感謝しておりますが、まぁそれと同等のプレッシャーは感じておりまして今以上に何か恩返しせねばという勢いで、まず社内のSNSのハンドルネーム的なものをApple信者会員番号２番にしました。（社内から僕の他に@misyobunという人も参加してもともとAndroidエンジニアだったのが急に寝返って僕よりも早くApple信者に変えていた裏切り者がいるので。。。）</p>
+
+<h2>神恩返しのために</h2>
+
+<h3>座談会を盛り上げました？</h3>
+
+<p>弊社では業務中に週に一回ずつAndroidとiOSで座談会的な集会が行われています。
+いろんなサービスがあるペパボでは、なかなか同じ職種（特にモバイル）の人が一緒に
+仕事をする機会がない中で、同じ職種の人が集まって今週どうだったかどか、新しい機種出たね、この実装どうしてるとかを話せる貴重な時間であり、日々ぽよぽよしています。</p>
+
+<h3>CIサーバ構築</h3>
+
+<p>モバイル環境でもCI活動ができるようにJenkins運用したり。</p>
+
+<script async class="speakerdeck-embed" data-slide="9" data-id="55cde09038e501324a864a15dbbe3320" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
+
+
+<p>(これはFlat Designの歴史について話した時のつかみみたいなものです。。。)</p>
+
+<p>プラグインは<a href="https://wiki.jenkins-ci.org/display/JENKINS/Simple+Theme+Plugin">Simple Theme Plugin</a>を利用しましたCSSを変更しました。
+jenkinsをsteve jobsにすることでさらにテンションが上がり、仕事の意欲も高まりました。
+自動化してしまうとIRCに結果が流れてくるので、なかなか直接みに行かないものですがなぜか、時々見に行ってしまいます。</p>
+
+<h3>Swiftrisを作成した</h3>
+
+<p><a href="https://www.bloc.io/swiftris-build-your-first-ios-game-with-swift">BLOC &ndash; Learn Swift</a>を題材にSwift勉強しながらテトリス作っちゃおうという教材を利用してみんなで隔週で行いました。</p>
+
+<p>BGMはこの曲にするとテンションがあがることでしょう。</p>
+
+<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/88243228&amp;color=ff5500&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>
+
+
+<h3>iOS8 SDK読書会</h3>
+
+<div class="booklog_html"><table><tr><td class="booklog_html_image"><a href="http://www.amazon.co.jp/Ios-Sdk-Development-Creating-Iphone/dp/1941222641%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1941222641" target="_blank"><img src="http://ecx.images-amazon.com/images/I/51jTyaM8J5L._SL160_.jpg" width="124" height="150" style="border:0;border-radius:0;" /></a></td><td class="booklog_html_info" style="padding-left:20px;"><div class="booklog_html_title" style="margin-bottom:10px;font-size:14px;font-weight:bold;"><a href="http://www.amazon.co.jp/Ios-Sdk-Development-Creating-Iphone/dp/1941222641%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1941222641" target="_blank">Ios 8 Sdk Development: Creating Iphone and Ipad Apps With Swift</a></div><div style="margin-bottom:10px;"><div class="booklog_html_author" style="margin-bottom:15px;font-size:12px;;line-height:1.2em">著者 : <a href="http://booklog.jp/author/Chris+Adamson" target="_blank">Chris Adamson</a></div><div class="booklog_html_manufacturer" style="margin-bottom:5px;font-size:12px;;line-height:1.2em">Pragmatic Bookshelf</div><div class="booklog_html_release" style="font-size:12px;;line-height:1.2em">発売日 : 2015-01-25</div></div><div class="booklog_html_link_amazon"><a href="http://booklog.jp/item/1/1941222641" style="font-size:12px;" target="_blank">ブクログでレビューを見る»</a></div></td></tr></table></div>
+
+
+<p>まだBeta版なのですが、出た瞬間後輩の<a href="https://twitter.com/kurotaky">@kurotaky</a>, <a href="https://twitter.com/ryoma_123">@ryoma_123</a>に懇願して仕事が始まる１時間前に集合して朝練活動を行っております。コードを書きながら進んでいるので遅めですが最近やっとGestureRecognizerの章までいきました。執筆に追いつくことを目標に日々取り組んでおります。</p>
+
+<h3>IRCに通知するやつ</h3>
+
+<p>なるべく情報の取得が遅れないようにと話のネタ作りにモバイル関係の記事を流すようにしました。。。主にAndroidとAppleの情報が毎朝流れるようになっています。もっとモバイルに興味もってーーーーーーーという僕の想いの表れです。</p>
+
+<p><a href="https://github.com/nakajijapan/post-feeds-in-irc">https://github.com/nakajijapan/post-feeds-in-irc</a></p>
+
+<h2>まだまだだ！</h2>
+
+<p>と、なにかと活動してきましたが、まだまだもっと自分ができることはたくさんあるはずだし進化できると思う。
+なので、来年は今年以上に技術をさらに掘り下げつつサービスや会社に貢献していくんだ！！と決意。
+以下の三つを掘り下げます。</p>
+
+<ol>
+<li>iPhoneおじさんを掘り下げる</li>
+<li>モバイルの開発基盤を掘り下げる</li>
+<li>UI/UXを掘り下げる</li>
+</ol>
+
+
+<p>その先に神恩返しがあるのではないかと思います。</p>
+
+<p>以上、自分が決意する記事でした。</p>
+
+<h2>そんな僕たちは</h2>
+
+<p>モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>そして、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>さらに、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>もう一度おまけに、モバイルエンジニアを大大大大大募集です！！！！</p>
+
+<p><a href="https://js01.jposting.net/paperboy/u/recruit/job.phtml?job_code=109">30days Album　Androidアプリエンジニア（正社員）</a></p>
+
+<p>一緒にMac App作りましょう！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OS X Advent Calendar 2014 - OSXアプリ初心者の域を脱するためにしたこと]]></title>
@@ -2244,248 +2348,6 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
 
 <p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
 (アフェリエイトおじさんです。。。)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[【iOS勉強会】ヤフー vs クラスメソッド に参加してきた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue/"/>
-    <updated>2014-02-26T21:44:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/26/yxcm-epilogue</id>
-    <content type="html"><![CDATA[<p>面白そうな勉強会が開催されると耳にして<a href="http://connpass.com/event/5159/">【iOS勉強会】ヤフー vs クラスメソッド</a> に参加してきました。</p>
-
-<ul>
-<li><p>ヤフーさん発表資料
-<a href="http://techblog.yahoo.co.jp/ios/yxcm/">http://techblog.yahoo.co.jp/ios/yxcm/</a></p></li>
-<li><p>クラスメソッドさん発表資料
-<a href="http://dev.classmethod.jp/study_meeting/yxcm-epilogue/">http://dev.classmethod.jp/study_meeting/yxcm-epilogue/</a></p></li>
-</ul>
-
-
-<p>形式的にはYahoo!さんとクラスメソッドさんが交互にiOS開発に関連するテーマに対して発表してどちらグッドだったか競う会になっていました。よかったらその場でボタンを連打して投票する仕組みがあるのですが、リアルタイムにFacebook風ないいねの花火みたいなのでがドーンと別画面で表示されてわかるのはかなり面白かったです（Node.jsかな&hellip;）。</p>
-
-<p>そのなかで便利そうなものをpickupして自分でもやってみました。</p>
-
-<h2>code snippet</h2>
-
-<h3><code>Code Snippet Library</code>を開いた状態にする</h3>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2014-02-28_02.png" alt="01" /></p>
-
-<h3>対象のコードを選択しといてそれLibrary側にドラッグアンドドロップ</h3>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2014-02-28_01.png" alt="01" /></p>
-
-<p>そうすると<code>My Code Snippet</code>が出来上がるのでそれを適当に編集すると終わりです。
-作成されたSnippetは<code>/Users/username/Library/Developer/Xcode/UserData/CodeSnippets/</code>いかに保存されます。</p>
-
-<p>試しにUIAlertViewをいれてみました。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">UIAlertView</span> <span class="o">*</span><span class="n">alertView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UIAlertView</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">initWithTitle</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;Title&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                                    <span class="n">message</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;Message&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                                   <span class="n">delegate</span> <span class="o">:</span> <span class="n">self</span>
-</span><span class='line'>                                          <span class="n">cancelButtonTitle</span> <span class="o">:</span> <span class="n">NSLocalizedString</span><span class="p">(</span><span class="s">@&quot;OK&quot;</span><span class="p">,</span> <span class="nb">nil</span><span class="p">)</span>
-</span><span class='line'>                                          <span class="n">otherButtonTitles</span> <span class="o">:</span> <span class="nb">nil</span>
-</span><span class='line'>                          <span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">alertView</span> <span class="nl">setTag:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">alertView</span> <span class="n">show</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Objective-Cって結構冗長になりがちなので、よく利用するものは登録しておくとよさそう。</p>
-
-<h2>code template</h2>
-
-<p>よくファイルを作成するときにはデフォルトでその親クラスに合わせたコードなりヘッダコメントなりテンプレートを作成してくれるのですが、カスタマイズしたくなったときは<code>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/Xcode/Templates/File Templates</code>にいっぱいテンプレートが用意されています。これを自分のディレクトリにコピーして利用するといいです。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">mkdir</span> <span class="o">-</span><span class="n">p</span> <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span>
-</span><span class='line'><span class="n">cd</span>    <span class="o">~/</span><span class="n">Library</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span>
-</span><span class='line'><span class="n">cp</span> <span class="o">/</span><span class="n">Applications</span><span class="o">/</span><span class="n">Xcode</span><span class="p">.</span><span class="n">app</span><span class="o">/</span><span class="n">Contents</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Platforms</span><span class="o">/</span><span class="n">iPhoneOS</span><span class="p">.</span><span class="n">platform</span><span class="o">/</span><span class="n">Developer</span><span class="o">/</span><span class="n">Library</span><span class="o">/</span><span class="n">Xcode</span><span class="o">/</span><span class="n">Templates</span><span class="o">/</span><span class="n">File</span> <span class="n">Templates</span><span class="o">/*</span> <span class="p">.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>File Templates</code>いかに<code>Cocoa Touch</code>ディレクトリがあるのですが自分がカスタマイズしたものだよとわかるように<code>My Cocoa Touch</code>とか作成してみる。</p>
-
-<p>ファイルを作成するときにオプションで以下のような設定をするとオプションでテンプレートを利用するかしないか決定できるようです。<code>Objective-C class.xctemplate/TemplateInfo.plist</code>ファイルで設定するのですがXML形式なっているのでそこの<code>Options</code>以下に新しい設定を追加します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Default</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">false</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Identifier</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">Nakajijapan</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Name</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">Nakajijapan</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">RequiredOptions</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">cocoaTouchSubclass</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;</span><span class="n">array</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">NSObject</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">UIViewController</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'>      <span class="o">&lt;/</span><span class="n">array</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Type</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">checkbox</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>NSObject/___FILENAME___.h</code>を上書きしてもよいのですが、念のため自分用に作成しておきましょう。<code>NSObjectNakajijapan/___FILENAME___.h</code>な感じで。（suffixは適当です。。。）</p>
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.h</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  ___FILENAME___</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Created by ___FULLUSERNAME___.</span>
-</span><span class='line'><span class="c1">//  Copyright ___YEAR___ ___FULLUSERNAME___. All rights reserved.</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">___IMPORTHEADER_cocoaTouchSubclass___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span> : <span class="nc">___VARIABLE_cocoaTouchSubclass___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>NSObjectNakajijapan/<strong><em>FILENAME</em></strong>.m</h4>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  ___FILENAME___</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'><span class="c1">//  Created by ___FULLUSERNAME___.</span>
-</span><span class='line'><span class="c1">//  Copyright ___YEAR___ ___FULLUSERNAME___. All rights reserved.</span>
-</span><span class='line'><span class="c1">//</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#import &quot;___FILEBASENAME___.h&quot;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@interface</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span> <span class="p">()</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@implementation</span> <span class="nc">___FILEBASENAMEASIDENTIFIER___</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">id</span><span class="p">)</span><span class="nf">initWithNibName:</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="p">)</span><span class="nv">nibNameOrNil</span> <span class="nf">bundle:</span><span class="p">(</span><span class="n">NSBundle</span> <span class="o">*</span><span class="p">)</span><span class="nv">nibBundleOrNil</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">self</span> <span class="o">=</span> <span class="p">[</span><span class="n">super</span> <span class="nl">initWithNibName:</span><span class="n">nibNameOrNil</span> <span class="nl">bundle:</span><span class="n">nibBundleOrNil</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">self</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1">// Custom initialization</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">viewDidLoad</span><span class="p">];</span>
-</span><span class='line'>  <span class="c1">// Do any additional setup after loading the view.</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">didReceiveMemoryWarning</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">super</span> <span class="n">didReceiveMemoryWarning</span><span class="p">];</span>
-</span><span class='line'>    <span class="c1">// Dispose of any resources that can be recreated.</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">@end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで自分好みの設定にできました。</p>
-
-<h3>参加してみて</h3>
-
-<p>吉田 一星さんの発表が印象的で</p>
-
-<iframe src="http://www.slideshare.net/slideshow/embed_code/31669085" width="510" height="420" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:1px solid #CCC; border-width:1px 1px 0; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
-
-
-<p> <div style="margin-bottom:5px"> <strong> <a href="https://www.slideshare.net/issaymk2/apple-31669085" title="Appleの先を行くポストタッチインターフェース" target="_blank">Appleの先を行くポストタッチインターフェース</a> </strong> from <strong><a href="http://www.slideshare.net/issaymk2" target="_blank">issaymk2</a></strong> </div></p>
-
-<blockquote><p>既存のAPIをそのまま使うアイディアは他の誰かに実現されている
-Appleが未だ実現されていない機能を先に作れ</p></blockquote>
-
-<p>あえてブログでも書くようなものじゃなくてごくごく当たり前のことなのですが、これおもろくね？って思ったものはだいたいというかしょっちゅう世の中に出ちゃってるんですよね。その度に落胆しているnakajijapanですが。。。
-まぁ、自分もまだAPIを利用してなんとかアプリを作っているレベルなのでドキュメントにものどこにもないような「え、そんなんできんの！！」っていわれるもの作っていきたいですね。もちろん、アプリのアイディアとか企画は別にして。技術的な観点からのはなしでした。まだまだ頑張りまっしゅ。</p>
-
-<p>あと、自分でも使えそうなTipsが、今回のエントリ以外にたくさんあったのでちょこちょこ利用していこうと思います。</p>
 ]]></content>
   </entry>
   
