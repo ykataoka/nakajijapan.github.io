@@ -4,7 +4,7 @@
   <title><![CDATA[categories: OSX | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/osx/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-24T23:03:34+09:00</updated>
+  <updated>2014-12-24T23:19:27+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -15,22 +15,26 @@
   
   <entry>
     <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacApp作成してみた。]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/12/24/osx-advent-calendar-2014/"/>
-    <updated>2014-12-24T21:20:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/12/24/osx-advent-calendar-2014</id>
+    <link href="http://nakajijapan.github.io/blog/2014/12/25/osx-advent-calendar-2014/"/>
+    <updated>2014-12-25T00:00:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/12/25/osx-advent-calendar-2014</id>
     <content type="html"><![CDATA[<p>この記事は<a href="http://qiita.com/advent-calendar/2014/osx">OS X Advent Calendar 2014</a>の25日目の記事になります。
 ラストーーーーーーーー！！！！</p>
 
 <p>実は前回も<a href="http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014/">自分がOSXアプリ初心者の行きを脱するためにしたこと</a>書きましたが、
 まだまだ熱が冷めないので二つ目の記事を書くことにしました。</p>
 
-<p>WWDC2014の発表から少しづつ地道に開発してきてようやく形になりました。</p>
+<p>teitenというアプリ作成しました。
+WWDC2014の発表から少しづつ地道に開発してきてようやく形になりました。</p>
 
 <h2>teiten</h2>
 
 <p><img src="/images/posts/2014-12-25-01.png" alt="teiten" /></p>
 
-<p>Macのカメラを通して自分自身を定点観測するアプリです。</p>
+<p>Macのカメラを通して自分自身を定点観測するアプリです。
+アイコンはめっちゃ見ている感じを出したくてカメラ＋妖怪でそれっぽさを出してみました。
+観測というかもう監視している感じですが。。。
+アイコンはえびちゃんというデザイナの方に作成していただきました。</p>
 
 <h3>機能</h3>
 
@@ -68,8 +72,9 @@
 
 <p>プロダクト作るのって自分の興味＋αでいろいろ知らないといけないんですが、何か作る度に自分が一歩成長している間があるのでなかなかやめれない。
 あと、そもそも楽しい。
-まだまだ、バグも多いし機能も足りないのでちょっとづつ改善していこう思います。
-なんとかAdvent Calenderには間に合ったけど、僕のクリスマスはこれで消えてしまった！！！</p>
+まだまだ、バグも多いし機能も足りないのでちょっとづつ改善していこう思います。</p>
+
+<p>なんとかAdvent Calenderには間に合ったけど、僕のクリスマスはこれで消えてしまった！！！</p>
 ]]></content>
   </entry>
   
