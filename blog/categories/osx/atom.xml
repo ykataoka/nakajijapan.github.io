@@ -4,7 +4,7 @@
   <title><![CDATA[categories: OSX | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/osx/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-24T23:19:27+09:00</updated>
+  <updated>2014-12-24T23:22:09+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacApp作成してみた。]]></title>
+    <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacOS X App作成してみた。]]></title>
     <link href="http://nakajijapan.github.io/blog/2014/12/25/osx-advent-calendar-2014/"/>
     <updated>2014-12-25T00:00:00+09:00</updated>
     <id>http://nakajijapan.github.io/blog/2014/12/25/osx-advent-calendar-2014</id>
@@ -24,7 +24,7 @@
 <p>実は前回も<a href="http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014/">自分がOSXアプリ初心者の行きを脱するためにしたこと</a>書きましたが、
 まだまだ熱が冷めないので二つ目の記事を書くことにしました。</p>
 
-<p>teitenというアプリ作成しました。
+<p>teitenという MacOS Xアプリを作成しました。
 WWDC2014の発表から少しづつ地道に開発してきてようやく形になりました。</p>
 
 <h2>teiten</h2>
@@ -59,6 +59,8 @@ WWDC2014の発表から少しづつ地道に開発してきてようやく形に
 <h3>ScreenShot</h3>
 
 <p><img src="/images/posts/2014-12-25-02.gif" alt="" /></p>
+
+<p><code>capture image</code>でも写真は取れるのですが、カウントダウンされて０になっても写真が撮れます。</p>
 
 <h2>経緯</h2>
 
