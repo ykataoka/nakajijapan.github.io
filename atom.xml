@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-17T07:42:53+09:00</updated>
+  <updated>2014-12-24T23:00:19+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,66 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacApp作成してみた。]]></title>
+    <link href="http://nakajijapan.github.io/blog/2014/12/24/osx-advent-calendar-2014/"/>
+    <updated>2014-12-24T21:20:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2014/12/24/osx-advent-calendar-2014</id>
+    <content type="html"><![CDATA[<p>この記事は<a href="http://qiita.com/advent-calendar/2014/osx">OS X Advent Calendar 2014</a>の25日目の記事になります。
+ラストーーーーーーーー！！！！</p>
+
+<p>実は前回も<a href="http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014/">自分がOSXアプリ初心者の行きを脱するためにしたこと</a>書きましたが、
+まだまだ熱が冷めないので二つ目の記事を書くことにしました。</p>
+
+<p>WWDC2014の発表から少しづつ地道に開発してきてようやく形になりました。</p>
+
+<h2>teiten</h2>
+
+<p><img src="http://nakajijapan.github.io/images/posts/2014-12-25-01-01.png" alt="teiten" /></p>
+
+<p>Macのカメラを通して自分自身を定点観測するアプリです。</p>
+
+<h3>機能</h3>
+
+<ul>
+<li>10 sec or 60 sec ごとに勝手に写真を撮ります。</li>
+<li>自由に自分自身で写真を取ることもできます。</li>
+<li>適当に溜まったら画像を集めて動画が作成できるようになります。</li>
+</ul>
+
+
+<h3>Compatibility</h3>
+
+<p>OS X 10.9以上ですが、もしかしたら10.10しか動かないかも&hellip;</p>
+
+<h3>Dwonload</h3>
+
+<p>期間限定ですが<a href="http://nakajijapan.heteml.jp/teiten.app.zip">ここ</a>あるのでよければどうぞ。</p>
+
+<p>それだけです。それだけのアプリなのにいろいろハマりにハマりまくって結構時間かかりました。。。
+めっちゃシンプルなアプリですがなんか大変だった。。</p>
+
+<h3>ScreenShot</h3>
+
+<p><img src="http://nakajijapan.github.io/images/posts/2014-12-25-02.gif" alt="" /></p>
+
+<h2>経緯</h2>
+
+<p>実は昔にペパボの先輩の<a href="https://twitter.com/tarop">@tarop</a>と <a href="https://twitter.com/daiskip">@diskip</a>が同じようなWEBサービス作成していました。
+個人的には好きで、毎日のように利用していたのですが、もうサービスが無くなってしまったのがちょっと悲しくて、なんかもったいないと思ったので
+それに近い形でありながらMacOSXアプリならではの機能をつけて作成した次第です。</p>
+
+<p>もう一つは、今作成している<a href="http://limu.xyz/">Limu</a>というサービスがMac版も対応する予定でいるので、その準備運動の一つでもあります。</p>
+
+<h2>最後に</h2>
+
+<p>プロダクト作るのって自分の興味＋αでいろいろ知らないといけないんですが、何か作る度に自分が一歩成長している間があるのでなかなかやめれない。
+あと、そもそも楽しい。
+まだまだ、バグも多いし機能も足りないのでちょっとづつ改善していこう思います。
+なんとかAdvent Calenderには間に合ったけど、僕のクリスマスはこれで消えてしまった！！！</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pepabo Advent Calendar 2014]]></title>
@@ -466,7 +526,7 @@ CKQueryぽいですね。</p>
 <h2>Memory Managed Objects</h2>
 
 <p>APIから返却された<code>Core Foundation objects</code>はSwiftで自動的にメモリ管理される。
-CFRetain、CFRelease、CFAutoreleaseを自動で呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
+あなたは自分自身でCFRetain、CFRelease、CFAutoreleaseを呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
 を返すのなら、それらを<code>CF_RETURNS_RETAINED</code>と<code>CF_RETURNS_NOT_RETAINED</code>のいずれかを使ってアノテートする。
 上記のAPIを呼び出すSwiftコードをコンパイルするとき、コンパイラは自動的ににメモリ管理用の呼び出しを行う。
 <code>Core Foundation objects</code>を返さないAPIを利用するときは、このセクションをスキップしてね。
@@ -2326,28 +2386,6 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
 まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
 
 <p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Vagrant勉強会でLTした]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips/"/>
-    <updated>2014-02-28T20:34:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/02/28/vagrant-tips</id>
-    <content type="html"><![CDATA[<p>社内でVagrant勉強会があったので参加・発表してきました。</p>
-
-<p>あるサービスのVagrant化を進めていて、エンジニアは当然のことデザイナさんでもローカルで開発できるように環境をそろえていた時に苦労したちょっとしたTipsを発表しました。まぁちょっとしたことなのですが、はまると何時間もはまるときあるのでこういう機会があると大変助かります。。。</p>
-
-<script async class="speakerdeck-embed" data-id="dc857f2082a0013107e95ea41e86eac8" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>僕の他にも公開しているメンバーがいるのでご紹介します。
-こちらのブログにもリンクがあるので他の人の資料にもたどりつけると思います。</p>
-
-<h3>うづら(udzura)さん</h3>
-
-<p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
-(アフェリエイトおじさんです。。。)</p>
 ]]></content>
   </entry>
   

@@ -9,8 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
-明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;">
+  <meta name="description" content="この記事はOS X Advent Calendar 2014の25日目の記事になります。
+ラストーーーーーーーー！！！！ 実は前回も自分がOSXアプリ初心者の行きを脱するためにしたこと書きましたが、
+まだまだ熱が冷めないので二つ目の記事を書くことにしました。 &hellip;">
   <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
 
 
@@ -35,8 +36,9 @@
   <meta name="twitter:url" content="http://nakajijapan.github.io">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="nakajijapan">
-  <meta name="twitter:description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
-明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;">
+  <meta name="twitter:description" content="この記事はOS X Advent Calendar 2014の25日目の記事になります。
+ラストーーーーーーーー！！！！ 実は前回も自分がOSXアプリ初心者の行きを脱するためにしたこと書きましたが、
+まだまだ熱が冷めないので二つ目の記事を書くことにしました。 &hellip;">
 
 
   <!-- facebook -->
@@ -44,8 +46,9 @@
   <meta property="og:type"  content="website" />
   <meta property="og:url"   content="http://nakajijapan.github.io" />
   <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
-  <meta property="og:description" content="この記事は、Pepabo Advent Calendar 2014の17日目の記事です。
-明日は lamanotrama さんです。くろださーーーん。 最近ではiPhoneおじさんとして活動させていただいています。@nakajijapanです。 Pepabo Advent &hellip;" />
+  <meta property="og:description" content="この記事はOS X Advent Calendar 2014の25日目の記事になります。
+ラストーーーーーーーー！！！！ 実は前回も自分がOSXアプリ初心者の行きを脱するためにしたこと書きましたが、
+まだまだ熱が冷めないので二つ目の記事を書くことにしました。 &hellip;" />
 
 
 
@@ -89,6 +92,94 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/12/24/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - 初めてMacApp作成してみた。</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-12-24T21:20:00+09:00" pubdate data-updated="true">Dec 24<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>この記事は<a href="http://qiita.com/advent-calendar/2014/osx">OS X Advent Calendar 2014</a>の25日目の記事になります。
+ラストーーーーーーーー！！！！</p>
+
+<p>実は前回も<a href="http://nakajijapan.github.io/blog/2014/12/14/osx-advent-calendar-2014/">自分がOSXアプリ初心者の行きを脱するためにしたこと</a>書きましたが、
+まだまだ熱が冷めないので二つ目の記事を書くことにしました。</p>
+
+<p>WWDC2014の発表から少しづつ地道に開発してきてようやく形になりました。</p>
+
+<h2>teiten</h2>
+
+<p><img src="/images/posts/2014-12-25-01-01.png" alt="teiten" /></p>
+
+<p>Macのカメラを通して自分自身を定点観測するアプリです。</p>
+
+<h3>機能</h3>
+
+<ul>
+<li>10 sec or 60 sec ごとに勝手に写真を撮ります。</li>
+<li>自由に自分自身で写真を取ることもできます。</li>
+<li>適当に溜まったら画像を集めて動画が作成できるようになります。</li>
+</ul>
+
+
+<h3>Compatibility</h3>
+
+<p>OS X 10.9以上ですが、もしかしたら10.10しか動かないかも&hellip;</p>
+
+<h3>Dwonload</h3>
+
+<p>期間限定ですが<a href="http://nakajijapan.heteml.jp/teiten.app.zip">ここ</a>あるのでよければどうぞ。</p>
+
+<p>それだけです。それだけのアプリなのにいろいろハマりにハマりまくって結構時間かかりました。。。
+めっちゃシンプルなアプリですがなんか大変だった。。</p>
+
+<h3>ScreenShot</h3>
+
+<p><img src="/images/posts/2014-12-25-02.gif" alt="" /></p>
+
+<h2>経緯</h2>
+
+<p>実は昔にペパボの先輩の<a href="https://twitter.com/tarop">@tarop</a>と <a href="https://twitter.com/daiskip">@diskip</a>が同じようなWEBサービス作成していました。
+個人的には好きで、毎日のように利用していたのですが、もうサービスが無くなってしまったのがちょっと悲しくて、なんかもったいないと思ったので
+それに近い形でありながらMacOSXアプリならではの機能をつけて作成した次第です。</p>
+
+<p>もう一つは、今作成している<a href="http://limu.xyz/">Limu</a>というサービスがMac版も対応する予定でいるので、その準備運動の一つでもあります。</p>
+
+<h2>最後に</h2>
+
+<p>プロダクト作るのって自分の興味＋αでいろいろ知らないといけないんですが、何か作る度に自分が一歩成長している間があるのでなかなかやめれない。
+あと、そもそも楽しい。
+まだまだ、バグも多いし機能も足りないのでちょっとづつ改善していこう思います。
+なんとかAdvent Calenderには間に合ったけど、僕のクリスマスはこれで消えてしまった！！！</p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -562,87 +653,6 @@ CKQueryぽいですね。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-08-19T03:49:00+09:00" pubdate data-updated="true">Aug 19<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>この夏に読んだ本をメモライズ。</p>
-
-<h2>Mac App</h2>
-
-<p>この２冊でMac周りの勉強をざっくりしました。</p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/MAC-OS-X-COCOA%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E7%AC%AC4%E7%89%88/dp/4501552700%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4501552700" target="_blank" title="MAC OS X COCOAプログラミング 第4版"><img src="http://ecx.images-amazon.com/images/I/41bAmGQ-ljL._SL160_.jpg" width="119" height="150" alt="MAC OS X COCOAプログラミング 第4版" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/MAC-OS-X-COCOA%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E7%AC%AC4%E7%89%88/dp/4501552700%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4501552700" target="_blank">MAC OS X COCOAプログラミング 第4版</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Mac-OS-iPhone%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AECocoa%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-%E8%97%A4%E6%9C%AC-%E8%A3%95%E4%B9%8B/dp/4881666967%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4881666967" target="_blank" title="Mac OS X/iPhoneのためのCocoaプログラミング入門"><img src="http://ecx.images-amazon.com/images/I/519bb6t6VoL._SL160_.jpg" width="117" height="150" alt="Mac OS X/iPhoneのためのCocoaプログラミング入門" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/Mac-OS-iPhone%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AECocoa%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E5%85%A5%E9%96%80-%E8%97%A4%E6%9C%AC-%E8%A3%95%E4%B9%8B/dp/4881666967%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4881666967" target="_blank">Mac OS X/iPhoneのためのCocoaプログラミング入門</a></p>
-
-<h2>Core Data</h2>
-
-<p>CloudKitと合わせて使いたかったので読みました。</p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/iOS-Core-Data%E5%BE%B9%E5%BA%95%E5%85%A5%E9%96%80-%E5%9C%8B%E5%B1%85-%E8%B2%B4%E6%B5%A9/dp/4798039799%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798039799" target="_blank" title="iOS Core Data徹底入門"><img src="http://ecx.images-amazon.com/images/I/41l4NOjbb8L._SL160_.jpg" width="106" height="150" alt="iOS Core Data徹底入門" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/iOS-Core-Data%E5%BE%B9%E5%BA%95%E5%85%A5%E9%96%80-%E5%9C%8B%E5%B1%85-%E8%B2%B4%E6%B5%A9/dp/4798039799%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798039799" target="_blank">iOS Core Data徹底入門</a></p>
-
-<h2>Objective-C</h2>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Effective-Objective-C-2-0-Matt-Galloway/dp/4798134198%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798134198" target="_blank" title="Effective Objective-C 2.0"><img src="http://ecx.images-amazon.com/images/I/51BbaG2KA1L._SL160_.jpg" width="120" height="150" alt="Effective Objective-C 2.0" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/Effective-Objective-C-2-0-Matt-Galloway/dp/4798134198%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798134198" target="_blank">Effective Objective-C 2.0</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/iOS%E4%BD%8D%E7%BD%AE%E6%83%85%E5%A0%B1%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E2%80%95iBeacon-GeoFence-Navi-CoreMotion-M7%E3%81%AE%E7%90%86%E8%A7%A3%E3%81%A8%E5%AE%9F%E8%B7%B5/dp/4798040703%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798040703" target="_blank" title="iOS位置情報プログラミング―iBeacon/GeoFence/Navi/CoreMotion/M7の理解と実践"><img src="http://ecx.images-amazon.com/images/I/41IrAamsuEL._SL160_.jpg" width="113" height="150" alt="iOS位置情報プログラミング―iBeacon/GeoFence/Navi/CoreMotion/M7の理解と実践" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/iOS%E4%BD%8D%E7%BD%AE%E6%83%85%E5%A0%B1%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E2%80%95iBeacon-GeoFence-Navi-CoreMotion-M7%E3%81%AE%E7%90%86%E8%A7%A3%E3%81%A8%E5%AE%9F%E8%B7%B5/dp/4798040703%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4798040703" target="_blank">iOS位置情報プログラミング―iBeacon/GeoFence/Navi/CoreMotion/M7の理解と実践</a></p>
-
-<h2>About Apple</h2>
-
-<p>スティーブ・ジョブズ亡き後ののアップルがどうなるんだろうか本</p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E6%B2%88%E3%81%BF%E3%82%86%E3%81%8F%E5%B8%9D%E5%9B%BD-%E3%82%B9%E3%83%86%E3%82%A3%E3%83%BC%E3%83%96%E3%83%BB%E3%82%B8%E3%83%A7%E3%83%96%E3%82%BA%E4%BA%A1%E3%81%8D%E3%81%82%E3%81%A8%E3%80%81%E3%82%A2%E3%83%83%E3%83%97%E3%83%AB%E3%81%AF%E5%81%89%E5%A4%A7%E3%81%AA%E4%BC%81%E6%A5%AD%E3%81%A7%E3%81%84%E3%82%89%E3%82%8C%E3%82%8B%E3%81%AE%E3%81%8B-%E3%82%B1%E3%82%A4%E3%83%B3%E5%B2%A9%E8%B0%B7%E3%82%86%E3%81%8B%E3%82%8A-ebook/dp/B00KMVHZE6%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00KMVHZE6" target="_blank" title="沈みゆく帝国 スティーブ・ジョブズ亡きあと、アップルは偉大な企業でいられるのか"><img src="http://ecx.images-amazon.com/images/I/51CePaw6ywL._SL160_.jpg" width="102" height="150" alt="沈みゆく帝国 スティーブ・ジョブズ亡きあと、アップルは偉大な企業でいられるのか" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/%E6%B2%88%E3%81%BF%E3%82%86%E3%81%8F%E5%B8%9D%E5%9B%BD-%E3%82%B9%E3%83%86%E3%82%A3%E3%83%BC%E3%83%96%E3%83%BB%E3%82%B8%E3%83%A7%E3%83%96%E3%82%BA%E4%BA%A1%E3%81%8D%E3%81%82%E3%81%A8%E3%80%81%E3%82%A2%E3%83%83%E3%83%97%E3%83%AB%E3%81%AF%E5%81%89%E5%A4%A7%E3%81%AA%E4%BC%81%E6%A5%AD%E3%81%A7%E3%81%84%E3%82%89%E3%82%8C%E3%82%8B%E3%81%AE%E3%81%8B-%E3%82%B1%E3%82%A4%E3%83%B3%E5%B2%A9%E8%B0%B7%E3%82%86%E3%81%8B%E3%82%8A-ebook/dp/B00KMVHZE6%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00KMVHZE6" target="_blank">沈みゆく帝国 スティーブ・ジョブズ亡きあと、アップルは偉大な企業でいられるのか</a></p>
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -689,6 +699,10 @@ CKQueryぽいですね。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/24/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - 初めてMacApp作成してみた。</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/16/pepabo-advent-calendar-2014/">Pepabo Advent Calendar 2014</a>
       </li>
     
@@ -704,15 +718,11 @@ CKQueryぽいですね。</p>
         <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing CloudKit</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (2)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

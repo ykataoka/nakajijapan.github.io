@@ -4,7 +4,7 @@
   <title><![CDATA[categories: Swift | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/swift/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-17T07:42:53+09:00</updated>
+  <updated>2014-12-24T23:00:19+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -53,7 +53,7 @@
 <h2>Memory Managed Objects</h2>
 
 <p>APIから返却された<code>Core Foundation objects</code>はSwiftで自動的にメモリ管理される。
-CFRetain、CFRelease、CFAutoreleaseを自動で呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
+あなたは自分自身でCFRetain、CFRelease、CFAutoreleaseを呼び出す必要はない。独自のCの関数から<code>Core Foundation objects</code>
 を返すのなら、それらを<code>CF_RETURNS_RETAINED</code>と<code>CF_RETURNS_NOT_RETAINED</code>のいずれかを使ってアノテートする。
 上記のAPIを呼び出すSwiftコードをコンパイルするとき、コンパイラは自動的ににメモリ管理用の呼び出しを行う。
 <code>Core Foundation objects</code>を返さないAPIを利用するときは、このセクションをスキップしてね。

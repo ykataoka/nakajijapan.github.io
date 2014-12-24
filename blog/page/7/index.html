@@ -9,8 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
-人魂でもいれてみようじゃないかと思い立って作ってみました。 iOS5からCore &hellip;">
+  <meta name="description" content="iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
+UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
+しないといけないようです。 &hellip;">
   <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
 
 
@@ -35,8 +36,9 @@
   <meta name="twitter:url" content="http://nakajijapan.github.io/blog/page/7">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="nakajijapan">
-  <meta name="twitter:description" content="お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
-人魂でもいれてみようじゃないかと思い立って作ってみました。 iOS5からCore &hellip;">
+  <meta name="twitter:description" content="iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
+UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
+しないといけないようです。 &hellip;">
 
 
   <!-- facebook -->
@@ -44,8 +46,9 @@
   <meta property="og:type"  content="website" />
   <meta property="og:url"   content="http://nakajijapan.github.io/blog/page/7" />
   <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
-  <meta property="og:description" content="お化けアプリを絶賛作成中なのですが、そのなかで世界観を少しでも作るべくいろいろ試行錯誤しているのですが、ちょっとトップに
-人魂でもいれてみようじゃないかと思い立って作ってみました。 iOS5からCore &hellip;" />
+  <meta property="og:description" content="iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
+UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
+しないといけないようです。 &hellip;" />
 
 
 
@@ -89,6 +92,149 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/18/customize-uibutton/">UIButtonのカスタマイズ - ライトON/OFFを制御するボタンを作成してみた</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-18T20:19:00+09:00" pubdate data-updated="true">Sep 18<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>iPhoneについているライトのON/OFFを制御したいのですが、ボタンをそのまま流量できるのかなと思いきや
+UIImagePickerControllerを利用しないで実装する場合はイベントしか用意されておらずデザインも自分で実装
+しないといけないようです。</p>
+
+<p>なので自分なりにそれっぽいのを実装してみました。
+（とりあえず手動でon/offで切り替えるUIにしてます）</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">// ライトが利用できたら表示</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">device</span><span class="p">.</span><span class="n">torchAvailable</span> <span class="o">==</span> <span class="n">YES</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">UIButton</span><span class="o">*</span> <span class="n">toggleLightButton</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIButton</span> <span class="nl">buttonWithType:</span><span class="n">UIButtonTypeCustom</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setFrame:</span><span class="n">CGRectMake</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">55</span><span class="p">)];</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">setTitle:</span><span class="s">@&quot;ON&quot;</span> <span class="nl">forState:</span><span class="n">UIControlStateNormal</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 画像を左側に埋め込む</span>
+</span><span class='line'>    <span class="n">UIImage</span><span class="o">*</span> <span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageNamed:</span><span class="s">@&quot;light.png&quot;</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">CALayer</span><span class="o">*</span> <span class="n">imgLayer</span> <span class="o">=</span> <span class="p">[</span><span class="n">CALayer</span> <span class="n">layer</span><span class="p">];</span>
+</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">contents</span> <span class="o">=</span> <span class="n">CFBridgingRelease</span><span class="p">([</span><span class="n">image</span> <span class="n">CGImage</span><span class="p">]);</span>
+</span><span class='line'>    <span class="n">imgLayer</span><span class="p">.</span><span class="n">frame</span>    <span class="o">=</span> <span class="n">CGRectMake</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span><span class="p">.</span><span class="n">layer</span> <span class="nl">addSublayer:</span><span class="n">imgLayer</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
+</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">view</span> <span class="nl">addSubview:</span><span class="n">toggleLightButton</span><span class="p">];</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>実際できたのがこんな感じ。
+なんかそれっぽくできました。（アイコンは当てなのであしからず）</p>
+
+<p><img src="/images/posts/2013-09-18_01.png" alt="ss" /></p>
+
+<p>基本は<code>CALayer</code>でデザインの修正をおこなう。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// レイヤー内でボタンデザインの編集を行う</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setCornerRadius:</span><span class="mf">25.0f</span><span class="p">];</span><span class="c1">// 角丸</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setMasksToBounds:</span><span class="n">YES</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderWidth:</span><span class="mf">2.5f</span><span class="p">];</span><span class="c1">// 枠線の太さ</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBorderColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.7</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 枠線の色</span>
+</span><span class='line'>    <span class="p">[[</span><span class="n">toggleLightButton</span> <span class="n">layer</span><span class="p">]</span> <span class="nl">setBackgroundColor:</span><span class="p">[[</span><span class="n">UIColor</span> <span class="nl">colorWithRed:</span><span class="mf">1.0</span> <span class="nl">green:</span><span class="mf">1.0</span> <span class="nl">blue:</span><span class="mf">1.0</span> <span class="nl">alpha:</span><span class="mf">0.3</span><span class="p">]</span> <span class="n">CGColor</span><span class="p">]];</span><span class="c1">// 背景色</span>
+</span><span class='line'>    <span class="p">[</span><span class="n">toggleLightButton</span> <span class="nl">addTarget:</span><span class="n">self</span> <span class="nl">action:</span><span class="k">@selector</span><span class="p">(</span><span class="nl">toggleChangeTorchMode:</span><span class="p">)</span> <span class="nl">forControlEvents:</span><span class="n">UIControlEventTouchUpInside</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>画像を組み込んだ場合は文字と被るといけないので文字の表示位置をずらします。
+XIBの場合はIBの左側のメニューで設定できるのですが、それを実装で行うときは<code>UIEdgeInsets</code>クラスを
+利用します。CSSのイメージでいうとpaddingをイメージして設定すると想像できます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'>    <span class="c1">// 文字列のpaddingを設定する</span>
+</span><span class='line'>    <span class="n">UIEdgeInsets</span> <span class="n">insets</span> <span class="o">=</span> <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">insets</span><span class="p">.</span><span class="n">left</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">;</span>
+</span><span class='line'>    <span class="n">toggleLightButton</span><span class="p">.</span><span class="n">contentEdgeInsets</span> <span class="o">=</span> <span class="n">insets</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>UIButton</code>でいろいろカスタマイズしてみました。ほとんどはUIViewを親にもっていて、そのなかにCALayerをもっているのです。
+そのCALayerをうまく使ってデザインすればいい感じにカスタマイズができますよって話でした。</p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -735,174 +881,6 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/24/use-commitstatus-at-jenkins/">Jenkinsでcommit Statusを操作する</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-24T08:02:00+09:00" pubdate data-updated="true">Jun 24<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>自分のサービスでテストを行うときはTravisCIに任せて自動で作業させているのですが、基本はソースをオープンにしないといけないので
-自社サービスに利用する訳にはいきません。そこでJenkinsを利用して同じような仕組みを作成しました。</p>
-
-<p>仕組みとしは<code>commit status</code>を操作するためのGitHubのAPI利用してPull Requestがきたらジョブを走らせるようにします。</p>
-
-<h2>監視用の親ジョブ作成</h2>
-
-<ul>
-<li><p>ソースコード管理</p>
-
-<ul>
-<li>Gitを選択</li>
-<li>Repository URL(テスト対象のものを入れる)
-
-<ul>
-<li>ex) git@github.com:paperboy-petit/user-app.git</li>
-</ul>
-</li>
-<li>Branch Specifier()
-
-<ul>
-<li><code>*/master</code>, <code>*/release</code>を記述する</li>
-<li>高度な設定のChoosing strategy
-
-<ul>
-<li><code>Inverse</code>を選択する</li>
-</ul>
-</li>
-<li>これで<code>master</code>,<code>release</code>意外のブランチを監視対象にできる</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>ビルド環境</p>
-
-<ul>
-<li>テストに必要な環境の設定なので適宜設定する</li>
-</ul>
-</li>
-<li><p>ビルド</p>
-
-<ul>
-<li>ここでテストする処理を実行</li>
-</ul>
-</li>
-<li><p>ビルド後の処理</p>
-
-<ul>
-<li>ビルド後の結果をトリガーにしてパラメータを小ジョブに渡す設定行う。フォームにはいかの用に項目設定する</li>
-<li>Build Triggers 1
-
-<ul>
-<li>Project to build: <code>CommitSTatusUpdate</code></li>
-<li>Trigger when build is <code>stable or unstable but not failed</code></li>
-<li>parameters
-
-<ul>
-<li><code>commit_status=success</code>を設定</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Build Triggers 2
-
-<ul>
-<li>Project to build: <code>CommitSTatusUpdate</code></li>
-<li>Trigger when build is <code>failed</code></li>
-<li>parameters
-
-<ul>
-<li><code>commit_status=failure</code>を設定</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>小ジョブ作成(CommitStatusUPdate)</h2>
-
-<ul>
-<li><p>ビルドのパラメータ化</p>
-
-<ul>
-<li>受け取るパラメータの設定
-
-<ul>
-<li>名前：commit_status</li>
-<li>デフォルト値：success</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>ソースコード管理
-親ジョブと同じ設定にする</p></li>
-<li><p>シェルの実行
-コミットステータスの変更を行う</p></li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -H <span class="s1">&#39;Authorization: token hogehogehogehogheohogehoge&#39;</span> <span class="se">\</span>
-</span><span class='line'>  --data <span class="s2">&quot;{\&quot;state\&quot;:\&quot;${commit_status}\&quot;, \&quot;target_url\&quot;:\&quot;${BUILD_URL}\&quot;}&quot;</span> <span class="se">\</span>
-</span><span class='line'>  https://api.github.com/repos/paperboy-petit/user-app/statuses/<span class="k">${</span><span class="nv">GIT_COMMIT</span><span class="k">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>ビルド後の処理
-お好みでIRCに渡します</li>
-</ul>
-
-
-<p>最終的に以下のようにチェックがついてたりしたら出来ています</p>
-
-<p><img src="/images/posts/2013-06-24-01.png" alt="commit status" /></p>
-
-<p>これでPull Requestベースでの開発ができて、テスト結果が最新コミットにチェックがつくので安心安全にメインブランチにマージができるようになります。</p>
-
-<ul>
-<li>参考
-
-<ul>
-<li><a href="http://qiita.com/items/6352b81fc9222e9c23ec">http://qiita.com/items/6352b81fc9222e9c23ec</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/8/">&larr; Older</a>
@@ -951,6 +929,10 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/24/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - 初めてMacApp作成してみた。</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/16/pepabo-advent-calendar-2014/">Pepabo Advent Calendar 2014</a>
       </li>
     
@@ -966,15 +948,11 @@ DELETE用にも対応できるよう実装してみた。（<code>Model.destroy<
         <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing CloudKit</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (2)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

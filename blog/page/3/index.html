@@ -9,7 +9,8 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="前回の記事(WWDC2014に参加してきました)の番外編です。 初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。 前準備 予約 ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、 &hellip;">
+  <meta name="description" content="社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。 はじめに 以下の動画をみてまずざっくりどんなものか概要をつかむ &hellip;">
   <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
 
 
@@ -34,7 +35,8 @@
   <meta name="twitter:url" content="http://nakajijapan.github.io/blog/page/3">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="nakajijapan">
-  <meta name="twitter:description" content="前回の記事(WWDC2014に参加してきました)の番外編です。 初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。 前準備 予約 ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、 &hellip;">
+  <meta name="twitter:description" content="社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。 はじめに 以下の動画をみてまずざっくりどんなものか概要をつかむ &hellip;">
 
 
   <!-- facebook -->
@@ -42,7 +44,8 @@
   <meta property="og:type"  content="website" />
   <meta property="og:url"   content="http://nakajijapan.github.io/blog/page/3" />
   <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
-  <meta property="og:description" content="前回の記事(WWDC2014に参加してきました)の番外編です。 初めてのサンフランシスコだったり、そこに一週間もいたのでブログにそのときの記録を記します。 前準備 予約 ホテルと飛行機は早めに撮った方がいいです。全世界から人が集まるのでホテルは早く予約しないと結構遠くになって毎日いくのが大変、 &hellip;" />
+  <meta property="og:description" content="社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。 はじめに 以下の動画をみてまずざっくりどんなものか概要をつかむ &hellip;" />
 
 
 
@@ -86,6 +89,505 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/06/10/study-swift-01/">Swift勉強会をした</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-06-10T18:25:00+09:00" pubdate data-updated="true">Jun 10<span>th</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>社内で早速Swift勉強会を開きました。
+流れとしては、あのときの動画（クレイグがSwiftを発表したところ）をみんなで１０分程鑑賞してテンションあげてから公式のドキュメントを見ながら、みんなでぺちゃくちゃ話す会をしました。</p>
+
+<h2>はじめに</h2>
+
+<p>以下の動画をみてまずざっくりどんなものか概要をつかむ</p>
+
+<p><a href="https://developer.apple.com/videos/wwdc/2014/?id=101">https://developer.apple.com/videos/wwdc/2014/?id=101</a></p>
+
+<h1>A Swift Tour</h1>
+
+<h2>About Swift</h2>
+
+<ul>
+<li>Objective-C without the C</li>
+<li>iOSとOS Xで開発するための開発言語</li>
+<li>Ccoa and Cocoa Touch</li>
+<li>Build with LLVM compiler</li>
+<li>Optimizer and Autovectorizer</li>
+<li>ARC memory management</li>
+<li>Same runtime as Objective-C</li>
+</ul>
+
+
+<h2>Simple Value</h2>
+
+<ul>
+<li><code>let</code>,<code>var</code>で宣言</li>
+<li><code>let</code>は定数、<code>var</code>は変数</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var foo = 33
+</span><span class='line'>let foo = 33</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>格納する値が明白であれば自動できに方が決定される</li>
+<li>十分でなければ明示的に指定することも可能</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let total = 30
+</span><span class='line'>let total = 30.0
+</span><span class='line'>let total:Double = 0</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>初期化に以下のような宣言ができる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let emptyArray = String[]()
+</span><span class='line'>let emptyDictionary = Dictionary&lt;String, Float&gt;()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>単純な初期化は<code>[] and [:]</code>で省略できる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>let emptyArray = []
+</span><span class='line'>let emptyDictionary = [:]</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Control Flow</h3>
+
+<ul>
+<li>どこかでみたような記述でif,switch,for-in,for,while,do-whileできるよ</li>
+<li><code>..</code>で数値の範囲を決定できることができる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var total = 0;
+</span><span class='line'>for i in 0..10 {
+</span><span class='line'>    total += 2
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>total</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Functions and Closures</h2>
+
+<ul>
+<li>考え方は他の言語と同じ。引数があって返り値がある</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func greet(name: String, day: String) -&gt; String {
+</span><span class='line'>  return "Hello \(name), today is \(day)"
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>greet("Bob", "Tuesday")</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Touple
+
+<ul>
+<li>複数の返り値を返す</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func getGasPrices() -&gt; (Double, Double, Double) {
+</span><span class='line'>    return (3.59, 3.69, 3.79)
+</span><span class='line'>}
+</span><span class='line'>getGasPrices()
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>引数を任意で指定することもできます</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func sumOf(numbers:Int...) -&gt; Int
+</span><span class='line'>{
+</span><span class='line'>    var sum = 0
+</span><span class='line'>    for number in numbers {
+</span><span class='line'>        sum += number
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    return sum
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>sumOf()
+</span><span class='line'>
+</span><span class='line'>sumOf(10, 20, 33)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>{}</code>でクロージャを記述</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>numbers.map({
+</span><span class='line'>    (number: Int) -&gt; Int in
+</span><span class='line'>    let result = 3 * number
+</span><span class='line'>    return result
+</span><span class='line'>})</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下の記述も同じ意味</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>numbers.map({ number in 3 * number })</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Objects and Classes</h2>
+
+<ul>
+<li><code>class</code>で定義</li>
+<li><code>init()</code>はコンストラクタ</li>
+</ul>
+
+
+<p>継承は</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Squre : NamedShape {
+</span><span class='line'>
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>overrideはfuncの前に<code>override</code>を宣言する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>override func init() {
+</span><span class='line'>    super.init()
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>インスタンス変数をカスタマイズできる</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var perimeter: Double {
+</span><span class='line'>    get {
+</span><span class='line'>        return 3.0 * sideLength
+</span><span class='line'>    }
+</span><span class='line'>    set {
+</span><span class='line'>        sideLength = newValue / 3.0
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>メンバ変数に以下の記述,<code>willSet</code>,<code>didSet</code>をすることであらかじめ、前処理後処理ができるようになる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class {
+</span><span class='line'>    var triangle: EquilateralTriangle {
+</span><span class='line'>    willSet {
+</span><span class='line'>        square.sideLength = newValue.sideLength
+</span><span class='line'>    }
+</span><span class='line'>    didSet {
+</span><span class='line'>        square.sideLength *= 2
+</span><span class='line'>    }
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>引数に別名を持たせられる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Counter {
+</span><span class='line'>    var count: Int = 0
+</span><span class='line'>    func incrementBy(amount: Int, numberOfTimes times: Int) {
+</span><span class='line'>        count += amount * times
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>var counter = Counter()
+</span><span class='line'>counter.incrementBy(2, numberOfTimes: 7)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Enumerations and Structures</h2>
+
+<ul>
+<li>メソッドも作成できる</li>
+<li>最初に数値を入れておかなければならない</li>
+<li>後はインクリメントされる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enum Rank: Int {
+</span><span class='line'>    case Ace = 1
+</span><span class='line'>    case Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten
+</span><span class='line'>    case Jack, Queen, King
+</span><span class='line'>    func simpleDescription() -&gt; String {
+</span><span class='line'>        switch self {
+</span><span class='line'>        case .Ace:
+</span><span class='line'>            return "ace"
+</span><span class='line'>        case .Jack:
+</span><span class='line'>            return "jack"
+</span><span class='line'>        case .Queen:
+</span><span class='line'>            return "queen"
+</span><span class='line'>        case .King:
+</span><span class='line'>            return "king"
+</span><span class='line'>        default:
+</span><span class='line'>            return String(self.toRaw())
+</span><span class='line'>        }
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>let ace = Rank.Ace
+</span><span class='line'>let aceRawValue = ace.toRaw() # 1
+</span><span class='line'>let name = ace.simpleDescription() # "Ace"
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>enumの方で比較しないとだめ</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>        if ace == Rank.Ace {
+</span><span class='line'>            NSLog("-- ace!!!")
+</span><span class='line'>        }
+</span><span class='line'>// NG
+</span><span class='line'>//        else if ace == 1 {
+</span><span class='line'>//            NSLog("-- no ace...")
+</span><span class='line'>//        }
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>structure</h5>
+
+<ul>
+<li>classとほぼ同じ振る舞いをする</li>
+<li>処理するときは必ずコピーされる, クラスは参照によって処理される</li>
+</ul>
+
+
+<h2>Protocols and Extensions</h2>
+
+<ul>
+<li>基本的なところはObjective-Cと変わらない</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>protocol ExampleProtocol {
+</span><span class='line'>    var simpleDescription: String { get } # readonly
+</span><span class='line'>    mutating func adjust()
+</span><span class='line'>}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>クラスにも構造体にも組み込める</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class SimpleClass: ExampleProtocol {
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>struct SimpleStructure: ExampleProtocol {
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Generics</h2>
+
+<ul>
+<li>型に汎用性を持たせて同じロジックを処理させることができる</li>
+<li><code>classes</code>, <code>enumerations</code>, <code>structures</code>で利用できる</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>func repeat&lt;T&gt;(item: T, times: Int) -&gt; T[] {
+</span><span class='line'>    var result = T[]()
+</span><span class='line'>    for i in 0..times {
+</span><span class='line'>        result += item
+</span><span class='line'>    }
+</span><span class='line'>    return result
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>repeat("knock", 4)
+</span><span class='line'>repeat(333, 3)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>何よりシンプルでモダンな作りになっているのでアプリを作ることがよりいっそう楽しくなること間違い無しですな。
+ただ、いくつか説明できないところがあったので、次の会まで宿題にすることにします。</p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -652,126 +1154,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/05/01/about-audiomix/">AVAudioMixでオーディオの調節を行う</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-05-01T11:56:00+09:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
-その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
-対策としては、ナレーションの音声はそのままにして録画した動画の音声を小さくするように調整すること。<code>AVAudioMix</code>、<code>AVMutableAudioMixInputParameters</code>をうまく利用することで解決しました。</p>
-
-<h2>実装</h2>
-
-<p>基本的には対象のメディア情報に対して、オーディオを制御する用の<code>AVMutableAudioMixInputParameters</code>を利用します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableComposition</span> <span class="n">avComposition</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// movie sound</span>
-</span><span class='line'><span class="n">AVMutableCompositionTrack</span><span class="o">*</span> <span class="n">compositionAudioTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">avComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeAudio</span>
-</span><span class='line'>                                                                              <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// オーディオのメディア情報をもとにオーディオミックス用のパラメータを生成する</span>
-</span><span class='line'><span class="n">AVMutableAudioMixInputParameters</span> <span class="o">*</span><span class="n">mixInputParameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMixInputParameters</span>
-</span><span class='line'>                                                        <span class="nl">audioMixInputParametersWithTrack:</span><span class="n">audioTrack</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 音量の調整</span>
-</span><span class='line'><span class="p">[</span><span class="n">mixInputParameters</span> <span class="nl">setVolumeRampFromStartVolume:</span><span class="mf">0.2f</span> <span class="nl">toEndVolume:</span><span class="mf">0.2f</span>
-</span><span class='line'>                                  <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">kCMTimeZero</span><span class="p">,</span> <span class="n">videoAsset</span><span class="p">.</span><span class="n">duration</span><span class="p">)];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 入力パラメータをオーディオミックスに渡す。</span>
-</span><span class='line'><span class="n">mutableAudioMix</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMix</span> <span class="n">audioMix</span><span class="p">];</span>
-</span><span class='line'><span class="n">mutableAudioMix</span><span class="p">.</span><span class="n">inputParameters</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="n">mixInputParameters</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>&ndash; (BOOL)getVolumeRampForTime:(CMTime)time startVolume:(float <em>)startVolume endVolume:(float </em>)endVolume timeRange:(CMTimeRange *)timeRange</h4>
-
-<p>これでどの時間からどのくらいの間、音量をどのくらいにするのかの設定を行えるので、ここでその制御を行います。自分の場合はずっと音量を低くできればよかったので上記のような設定になっています。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAssetExportSession</span> <span class="o">*</span><span class="n">assetExportSession</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 音声の制御</span>
-</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">audioMix</span> <span class="o">=</span> <span class="n">mutableAudioMix</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>設定が終われば、<code>AVAssetExportSession</code>の<code>audioMix</code>に格納すれば、設定が反映されているはずです。
-これでナレーションが動画がうるさくてもしっかり聞こえるようになったので、よりテレビ番組のような感じに近づけられたかと思います！！！</p>
-
-<h2>Resources</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableAudioMix_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40009740">AVMutableAudioMix Class</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioMixInputParameters_Class/Reference/Reference.html#//apple_ref/occ/cl/AVAudioMixInputParameters">AVAudioMixInputParameters Class</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -820,6 +1202,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/24/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - 初めてMacApp作成してみた。</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/16/pepabo-advent-calendar-2014/">Pepabo Advent Calendar 2014</a>
       </li>
     
@@ -835,15 +1221,11 @@
         <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing CloudKit</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (2)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>

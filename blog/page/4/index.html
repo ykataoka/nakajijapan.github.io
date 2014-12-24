@@ -9,7 +9,9 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 app道場 #2に参加して、LTしてきました。 今回は、WWDC 2013 Session VideosのAdvanced Editing with AV Foundationをみていたときにまだ試していないサンプルがあったのと、 &hellip;">
+  <meta name="description" content="先日、心霊動画アプリ「もう一度ご覧いただこう」のアップデートしました。
+その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
+対策としては、 &hellip;">
   <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
 
 
@@ -34,7 +36,9 @@
   <meta name="twitter:url" content="http://nakajijapan.github.io/blog/page/4">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="nakajijapan">
-  <meta name="twitter:description" content="先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 app道場 #2に参加して、LTしてきました。 今回は、WWDC 2013 Session VideosのAdvanced Editing with AV Foundationをみていたときにまだ試していないサンプルがあったのと、 &hellip;">
+  <meta name="twitter:description" content="先日、心霊動画アプリ「もう一度ご覧いただこう」のアップデートしました。
+その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
+対策としては、 &hellip;">
 
 
   <!-- facebook -->
@@ -42,7 +46,9 @@
   <meta property="og:type"  content="website" />
   <meta property="og:url"   content="http://nakajijapan.github.io/blog/page/4" />
   <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
-  <meta property="og:description" content="先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 app道場 #2に参加して、LTしてきました。 今回は、WWDC 2013 Session VideosのAdvanced Editing with AV Foundationをみていたときにまだ試していないサンプルがあったのと、 &hellip;" />
+  <meta property="og:description" content="先日、心霊動画アプリ「もう一度ご覧いただこう」のアップデートしました。
+その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
+対策としては、 &hellip;" />
 
 
 
@@ -86,6 +92,126 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/05/01/about-audiomix/">AVAudioMixでオーディオの調節を行う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2014-05-01T11:56:00+09:00" pubdate data-updated="true">May 1<span>st</span>, 2014</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
+その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
+対策としては、ナレーションの音声はそのままにして録画した動画の音声を小さくするように調整すること。<code>AVAudioMix</code>、<code>AVMutableAudioMixInputParameters</code>をうまく利用することで解決しました。</p>
+
+<h2>実装</h2>
+
+<p>基本的には対象のメディア情報に対して、オーディオを制御する用の<code>AVMutableAudioMixInputParameters</code>を利用します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableComposition</span> <span class="n">avComposition</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// movie sound</span>
+</span><span class='line'><span class="n">AVMutableCompositionTrack</span><span class="o">*</span> <span class="n">compositionAudioTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">avComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeAudio</span>
+</span><span class='line'>                                                                              <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// オーディオのメディア情報をもとにオーディオミックス用のパラメータを生成する</span>
+</span><span class='line'><span class="n">AVMutableAudioMixInputParameters</span> <span class="o">*</span><span class="n">mixInputParameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMixInputParameters</span>
+</span><span class='line'>                                                        <span class="nl">audioMixInputParametersWithTrack:</span><span class="n">audioTrack</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 音量の調整</span>
+</span><span class='line'><span class="p">[</span><span class="n">mixInputParameters</span> <span class="nl">setVolumeRampFromStartVolume:</span><span class="mf">0.2f</span> <span class="nl">toEndVolume:</span><span class="mf">0.2f</span>
+</span><span class='line'>                                  <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">kCMTimeZero</span><span class="p">,</span> <span class="n">videoAsset</span><span class="p">.</span><span class="n">duration</span><span class="p">)];</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 入力パラメータをオーディオミックスに渡す。</span>
+</span><span class='line'><span class="n">mutableAudioMix</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMix</span> <span class="n">audioMix</span><span class="p">];</span>
+</span><span class='line'><span class="n">mutableAudioMix</span><span class="p">.</span><span class="n">inputParameters</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="n">mixInputParameters</span><span class="p">];</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>&ndash; (BOOL)getVolumeRampForTime:(CMTime)time startVolume:(float <em>)startVolume endVolume:(float </em>)endVolume timeRange:(CMTimeRange *)timeRange</h4>
+
+<p>これでどの時間からどのくらいの間、音量をどのくらいにするのかの設定を行えるので、ここでその制御を行います。自分の場合はずっと音量を低くできればよかったので上記のような設定になっています。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAssetExportSession</span> <span class="o">*</span><span class="n">assetExportSession</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// 音声の制御</span>
+</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">audioMix</span> <span class="o">=</span> <span class="n">mutableAudioMix</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>設定が終われば、<code>AVAssetExportSession</code>の<code>audioMix</code>に格納すれば、設定が反映されているはずです。
+これでナレーションが動画がうるさくてもしっかり聞こえるようになったので、よりテレビ番組のような感じに近づけられたかと思います！！！</p>
+
+<h2>Resources</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableAudioMix_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40009740">AVMutableAudioMix Class</a></li>
+<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioMixInputParameters_Class/Reference/Reference.html#//apple_ref/occ/cl/AVAudioMixInputParameters">AVAudioMixInputParameters Class</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -761,56 +887,6 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/02/28/vagrant-tips/">Vagrant勉強会でLTした</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2014-02-28T20:34:00+09:00" pubdate data-updated="true">Feb 28<span>th</span>, 2014</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>社内でVagrant勉強会があったので参加・発表してきました。</p>
-
-<p>あるサービスのVagrant化を進めていて、エンジニアは当然のことデザイナさんでもローカルで開発できるように環境をそろえていた時に苦労したちょっとしたTipsを発表しました。まぁちょっとしたことなのですが、はまると何時間もはまるときあるのでこういう機会があると大変助かります。。。</p>
-
-<script async class="speakerdeck-embed" data-id="dc857f2082a0013107e95ea41e86eac8" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>僕の他にも公開しているメンバーがいるのでご紹介します。
-こちらのブログにもリンクがあるので他の人の資料にもたどりつけると思います。</p>
-
-<h3>うづら(udzura)さん</h3>
-
-<p><a href="http://udzura.hatenablog.jp/entry/2014/02/28/140957">http://udzura.hatenablog.jp/entry/2014/02/28/140957</a>
-(アフェリエイトおじさんです。。。)</p>
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -859,6 +935,10 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/12/24/osx-advent-calendar-2014/">OS X Advent Calendar 2014 - 初めてMacApp作成してみた。</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/12/16/pepabo-advent-calendar-2014/">Pepabo Advent Calendar 2014</a>
       </li>
     
@@ -874,15 +954,11 @@ mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をあ
         <a href="/blog/2014/08/23/introducing-cloudkit/">Introducing CloudKit</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2014/08/19/read-books-in-2014-summer/">2014年夏に読んだ本</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Categories</h1>
-    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (1)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (24)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (2)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
 </section>
 
 <section>
