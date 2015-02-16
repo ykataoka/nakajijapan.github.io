@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2014-12-25T12:26:32+09:00</updated>
+  <updated>2015-02-16T10:27:26+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,355 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[自作のアプリから他のWindowに画像をドラッグする]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/02/10/osx-dandd2/"/>
+    <updated>2015-02-10T21:15:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/02/10/osx-dandd2</id>
+    <content type="html"><![CDATA[<p>タイトルの通り。たとえば、自作アプリで生成された画像をそのままGitHubにドロップして画像を登録する。
+っていうことをできるようにしたい。だけど前回の記事だとどうしてもドロップする機能が実装できなくて
+困っていたのですができる方法が見つかったので記録しておく。</p>
+
+<p>結論からいうと<code>NSTableView</code>をうまく利用することでできるようになった。</p>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">公式ドキュメント</a>
+にもあるのですが、Draggingの操作があらかじめ用意されていてすくない実装で目的のことができるようになります。</p>
+
+<h3>Setup</h3>
+
+<p><code>NSTableView</code>は初期化されていることは前提で、それ以外で必要な設定を説明します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>let types = [NSImage.imagePasteboardTypes()]
+</span><span class='line'>tableView.registerForDraggedTypes(types)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これはドロップできるデータのデータのタイプを指定します。
+この場合だと画像の種類を指定しています。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tableView.setDraggingSourceOperationMask(NSDragOperation.Copy, forLocal: false)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これは、ドラッグできる操作の種類、他のWindowにもドラッグできるかどうかも指定できます。
+この場合だとファイルのコピーを他のWindowにドロップします。</p>
+
+<p>ドラッグの種類は<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">ここ</a>
+にすべて記述してあります。</p>
+
+<h3>NSTableViewDataSource</h3>
+
+<p>今回は一つだけ表示できればいいので要素を一つのみ表示する処理をします。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>// MARK: - NSTableViewDataSource
+</span><span class='line'>
+</span><span class='line'>func numberOfRowsInTableView(tableView: NSTableView) -&gt; Int {
+</span><span class='line'>    return 1
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -&gt; NSView? {
+</span><span class='line'>    var view = tableView.makeViewWithIdentifier("imageCell", owner: self) as NSView
+</span><span class='line'>
+</span><span class='line'>    self.entity = Entity()
+</span><span class='line'>    var imageView = view.viewWithTag(1) as NSImageView
+</span><span class='line'>    imageView.image = self.entity.image
+</span><span class='line'>
+</span><span class='line'>    return view
+</span><span class='line'>}
+</span><span class='line'>
+</span><span class='line'>func tableView(tableView: NSTableView, pasteboardWriterForRow row: Int) -&gt; NSPasteboardWriting? {
+</span><span class='line'>     return self.entity
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>データを管理するEntityを作成</h3>
+
+<p>TableViewを扱うというとはCellが必要になってそこに描画するデータが必要になります。
+今回はそのデータを管理するクラスを作成して、そこにドラッグするデータを保持します。
+さらにそのデータをドロップしたときの処理も<code>NSPasteboardWriting</code>を宣言して実装していきます。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Class Entity: NSObject, NSPasteboardWriting {
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    (..snip..)
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'>    var fileURL:NSURL!
+</span><span class='line'>
+</span><span class='line'>    // MARK: - NSPasteboardWriting
+</span><span class='line'>
+</span><span class='line'>    func writableTypesForPasteboard(pasteboard: NSPasteboard!) -&gt; [AnyObject]! {
+</span><span class='line'>        return self.fileURL.writableTypesForPasteboard(pasteboard)
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    func pasteboardPropertyListForType(type: String!) -&gt; AnyObject! {
+</span><span class='line'>        return self.fileURL.pasteboardPropertyListForType(type)
+</span><span class='line'>    }
+</span><span class='line'>
+</span><span class='line'>    func writinOptionsForType(type: String!, pasteboard: NSPasteboard!) -&gt; NSPasteboardWritingOptions {
+</span><span class='line'>        return self.fileURL.writingOptionsForType(type, pasteboard: pasteboard)
+</span><span class='line'>    }
+</span><span class='line'>}
+</span><span class='line'>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ここではファイルのパスをPasteboardにファイルURLのデータをどの型でどのオブジェクトを返すのかを実装しています。
+NSURLがNSPasteboardWritingの実装をしてくれているのでそのまま返せば問題ありません。</p>
+
+<h2>まとめ</h2>
+
+<p>これで画像をドラッグしてFinder等にドロップして画像を保存することが可能になりました。
+今回は<code>NSTableView</code>を利用して目的を実現できましたが、まわりくどいやりかたしなくてもできそうな気はぬぐいきれないのです。
+単純にNSView側にドラッグとドロップの処理実装できればシンプルになりそうな気がした今日この頃です。それができると信じて
+調査したんだけどリタイヤしたのが前回の記事の話でした。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">NSTableView</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">NSDragOperation</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/#//apple_ref/occ/instp/NSDraggingSession/draggingLocation">NSDraggingSession</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[最近読んだ本]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/02/01/book/"/>
+    <updated>2015-02-01T22:52:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/02/01/book</id>
+    <content type="html"><![CDATA[<p>最近読んだ本</p>
+
+<p><img src="https://imagery.pragprog.com/products/373/adios2_xlargebeta.jpg?1414692598" alt="" /></p>
+
+<p><a href="https://pragprog.com/book/adios2/ios-8-sdk-development">iOS 8 SDK Development: Creating iPhone and iPad Apps with Swift</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank" title="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー"><img src="http://ecx.images-amazon.com/images/I/51WbR9eLwOL._SL160_.jpg" width="101" height="150" alt="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank">ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank" title="Pro iOS Continuous Integration"><img src="http://ecx.images-amazon.com/images/I/41bLTp-nTpL._SL160_.jpg" width="121" height="150" alt="Pro iOS Continuous Integration" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank">Pro iOS Continuous Integration</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank" title="マイクロインタラクション ―UI/UXデザインの神が宿る細部"><img src="http://ecx.images-amazon.com/images/I/51LgvWft-IL._SL160_.jpg" width="105" height="150" alt="マイクロインタラクション ―UI/UXデザインの神が宿る細部" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank">マイクロインタラクション ―UI/UXデザインの神が宿る細部</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank" title="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)"><img src="http://ecx.images-amazon.com/images/I/51PLsDdMCbL._SL160_.jpg" width="115" height="150" alt="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank">iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank" title="Swift Development with Cocoa: Developing for the Mac and iOS App Stores"><img src="http://ecx.images-amazon.com/images/I/51QozVPjPiL._SL160_.jpg" width="114" height="150" alt="Swift Development with Cocoa: Developing for the Mac and iOS App Stores" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank">Swift Development with Cocoa: Developing for the Mac and iOS App Stores</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank" title="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework"><img src="http://ecx.images-amazon.com/images/I/51njEv08GbL._SL160_.jpg" width="116" height="150" alt="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank">Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OSX ドラッグアンドドロップの調査]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/01/20/osx-dandd/"/>
+    <updated>2015-01-20T17:01:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/01/20/osx-dandd</id>
+    <content type="html"><![CDATA[<p>ドラッギングアンドドロップ関連の調査</p>
+
+<h2>NSDraggingSource</h2>
+
+<p>プロトコルメソッドで、Dragging Session内のオブジェクトによって実装される。
+ドラッグ捜査中に受け取るメッセージ</p>
+
+<h3>draggingSession(_:sourceOperationMaskForDraggingContext:)</h3>
+
+<p>ドラッギングしている状況を教えて、どんなドラッグのタイプを許すか設定します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>enum NSDraggingContext : Int {
+</span><span class='line'>
+</span><span class='line'>    case OutsideApplication
+</span><span class='line'>    case WithinApplication
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ドラッグ操作のマスク。ここでどんな操作を許すのかの種類</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>struct NSDragOperation : RawOptionSetType {
+</span><span class='line'>    init(_ rawValue: UInt)
+</span><span class='line'>    init(rawValue: UInt)
+</span><span class='line'>
+</span><span class='line'>    static var None: NSDragOperation { get }
+</span><span class='line'>    static var Copy: NSDragOperation { get }
+</span><span class='line'>    static var Link: NSDragOperation { get }
+</span><span class='line'>    static var Generic: NSDragOperation { get }
+</span><span class='line'>    static var Private: NSDragOperation { get }
+</span><span class='line'>    static var Move: NSDragOperation { get }
+</span><span class='line'>    static var Delete: NSDragOperation { get }
+</span><span class='line'>    static var Every: NSDragOperation { get }
+</span><span class='line'>
+</span><span class='line'>    static var All_Obsolete: NSDragOperation { get } // Use NSDragOperationEvery
+</span><span class='line'>    static var All: NSDragOperation { get } // Use NSDragOperationEvery
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下は、指定されたスクリーン上をトリガーにして呼び出されるメソッド
+その時の位置も保持している。</p>
+
+<h3>draggingSession(_:willBeginAtPoint:)</h3>
+
+<p>スクリーン上でドラッグされ始めたときに呼び出される</p>
+
+<h3>draggingSession(_:endedAtPoint:operation:)</h3>
+
+<p>スクリーン上でドラッグが終了したときに呼び出される</p>
+
+<h3>draggingSession(_:movedToPoint:)</h3>
+
+<p>スクリーン上でドラッグされているときに呼び出される</p>
+
+<h2>NSDraggingDestination</h2>
+
+<p>プロトコルメソッド。実装したViewに対してイベントが呼び出される</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>draggingEntered(_:)
+</span><span class='line'>draggingUpdated(_:)
+</span><span class='line'>draggingEnded(_:)
+</span><span class='line'>draggingExited(_:)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下は、ドロップ処理の実行要求。
+上記メソッドでドロップ可能と返した状態でこのテキストフィールド上でマウスボタンを放した時に呼び出されます。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>prepareForDragOperation(_:)
+</span><span class='line'>performDragOperation(_:)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ここでドラッグしたオブジェクトが対象のオブジェクトに対してどうゆう処理をするのかを実装する</p>
+
+<h2>NSDraggingSession</h2>
+
+<p>ドラッグアンドドロップ関連の処理を提供してくれる。ドラッグ処理中に編集を許可する。</p>
+
+<h3>Example</h3>
+
+<p>以下のようにして対象のオブジェクトを監視する</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>var draggingSession:NSDraggingSession = self.beginDraggingSessionWithItems([dragItem], event: theEvent, source: self)
+</span><span class='line'>
+</span><span class='line'># 失敗したときに画像をもとの位置に戻すかどうか
+</span><span class='line'>draggingSession.animatesToStartingPositionsOnCancelOrFail = true
+</span><span class='line'>
+</span><span class='line'># ドラッグしている状態のビジュアルをどんな表現するかの設定
+</span><span class='line'>#    None: 画像をポイントに維持させる
+</span><span class='line'>draggingSession.draggingFormation = NSDraggingFormation.None</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>まとめ</h2>
+
+<p>ここで対象のオブジェクトをドラッグアンドドロップできるようになる。
+たとえばFinderにある画像を実装したオブジェクトに画像とかをドロップできたりできる。
+ただ、実装したオブジェクトをドラッグしてFinderにドロップして（画像を保存したり）はできないのでもうすこし調査が必要。</p>
+
+<h2>参照</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/DragandDrop/DragandDrop.html#//apple_ref/doc/uid/10000069i">Introduction to Drag and Drop</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingDestination_Protocol/#//apple_ref/occ/intfm/NSDraggingDestination/prepareForDragOperation:">NSDraggingDestination</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingSource_Protocol/#//apple_ref/occ/intfm/NSDraggingSource/draggingSession:willBeginAtPoint:">NSDraggingSource</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/">NSDraggingSession</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/NSPasteboardWriting_Protocol/index.html#//apple_ref/occ/intfm/NSPasteboardWriting/writableTypesForPasteboard:">NSPasteboardWriting</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacOS X App作成してみた。]]></title>
@@ -1854,547 +2203,6 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
 
 <p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
 mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[メディアキャプチャの出力先の実装について]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput/"/>
-    <updated>2014-04-07T02:10:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/04/07/about-avcaptureinput</id>
-    <content type="html"><![CDATA[<p><code>AV Foundation</code>を利用して写真の撮影やはたまた動画の撮影を行う場合は、カメラデバイスに接続して映像をリアルタイムに表示させたい場合があるかと思います。</p>
-
-<p><img src="http://nakajijapan.github.io/images/posts/2014-04-06-01.png" alt="AV Foundation" /></p>
-
-<p>そんなときは<code>AVCaptureSession</code>を利用してメディアキャプチャの実装の準備をを行い、入力先・出力先はどうするかという設定を行うのですが、今回はその出力部分について何パターンか方法があったので調べてみました。</p>
-
-<h3>Video Output</h3>
-
-<ul>
-<li>AVCaptureMovieFileOutput
-
-<ul>
-<li>ムービーファイルを出力するときに利用する</li>
-</ul>
-</li>
-<li>AVCaptureVideoDataOutput
-
-<ul>
-<li>キャプチャ中のビデオフレームを処理するときに利用する</li>
-</ul>
-</li>
-<li>AVCaptureStillImageOutput
-
-<ul>
-<li>付随するメタデータを使用して静止画像をキャプチャするときに利用する</li>
-</ul>
-</li>
-</ul>
-
-
-<h3>Audio Output</h3>
-
-<ul>
-<li>AVCaptureAudioDataOutput
-
-<ul>
-<li>キャプチャ中のオーディオフレームを処理するときに利用する</li>
-</ul>
-</li>
-</ul>
-
-
-<h2>使い方</h2>
-
-<h3>AVCaptureMovieFileOutput</h3>
-
-<p>ムービーファイルを保存するのに必要な処理を提供してくれるクラス。</p>
-
-<p>録画するときは</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="c1">//録画開始</span>
-</span><span class='line'><span class="p">[</span><span class="n">captureMovieFileOutput</span> <span class="nl">startRecordingToOutputFileURL:</span><span class="n">outputURL</span> <span class="nl">recordingDelegate:</span><span class="n">self</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>のように始めることができます。</p>
-
-<p>必要に応じて<code>AVCaptureFileOutputRecordingDelegate</code>オプションを利用して、各タイミングに応じた処理を行います。</p>
-
-<ul>
-<li>AVCaptureFileOutputRecordingDelegate</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
-</span><span class='line'>
-</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didStartRecordingToOutputFileAtURL:fromConnections:</span>
-</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>前者は録画を開始したときに、後者は終了したときに呼び出されるメソッドです。例えば、<code>captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:</code>の時に録画したムービーファイルをデバイスに保存する等の処理が行えることができます。</p>
-
-<h4>AVCaptureStillImageOutput</h4>
-
-<p>画像をキャプチャするときに利用して、出力は以下のように実装します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVCaptureConnection</span> <span class="o">*</span><span class="n">connection</span> <span class="o">=</span> <span class="p">[[</span><span class="n">captureStillImageOutput</span> <span class="n">connections</span><span class="p">]</span> <span class="n">lastObject</span><span class="p">];</span>
-</span><span class='line'><span class="p">[</span><span class="n">captureStillImageOutput</span> <span class="nl">captureStillImageAsynchronouslyFromConnection:</span><span class="n">connection</span>
-</span><span class='line'>                                                     <span class="nl">completionHandler:</span><span class="o">^</span><span class="p">(</span><span class="n">CMSampleBufferRef</span> <span class="n">imageDataSampleBuffer</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                                                         <span class="n">NSData</span> <span class="o">*</span><span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVCaptureStillImageOutput</span> <span class="nl">jpegStillImageNSDataRepresentation:</span><span class="n">imageDataSampleBuffer</span><span class="p">];</span>
-</span><span class='line'>                                                         <span class="n">UIImage</span> <span class="o">*</span><span class="n">image</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIImage</span> <span class="nl">imageWithData:</span><span class="n">data</span><span class="p">];</span>
-</span><span class='line'>                                                         <span class="n">ALAssetsLibrary</span> <span class="o">*</span><span class="n">library</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ALAssetsLibrary</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>                                                         <span class="p">[</span><span class="n">library</span> <span class="nl">writeImageToSavedPhotosAlbum:</span><span class="n">image</span><span class="p">.</span><span class="n">CGImage</span>
-</span><span class='line'>                                                                                   <span class="nl">orientation:</span><span class="n">image</span><span class="p">.</span><span class="n">imageOrientation</span>
-</span><span class='line'>                                                                               <span class="nl">completionBlock:</span><span class="o">^</span><span class="p">(</span><span class="n">NSURL</span> <span class="o">*</span><span class="n">assetURL</span><span class="p">,</span> <span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>                                                                                   <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;saved&quot;</span><span class="p">);</span>
-</span><span class='line'>                                                                               <span class="p">}];</span>
-</span><span class='line'>                                                     <span class="p">}];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>AVCaptureVideoDataOutput, AVCaptureAudioDataOutput</h3>
-
-<p>デリゲートメソッドを利用して非圧縮状態のビデオフレーム情報を提供します。
-そのフレーム情報は<code>CMSampleBufferRef</code>という形式で送信されてきてそれを利用して動画の保存やら編集やらを行うことができます。
-このときにビデオとオーディオは別で処理しないといけません。（デリゲートメソッドが分かれているように）
-主にビデオもオーディオも両方扱うときは<code>– captureOutput:didOutputSampleBuffer:fromConnection:</code>でどちらのメディアなのか区別して処理を行うような実装になります。
-さらに細かい処理を行っていく場合はこちらのクラスを実装しないといけないですね。例えば、リアルタイムに動画を編集したりだとか、Vineみたいにタッチしているときは動画の保存し続けるような処理でしょうか。</p>
-
-<ul>
-<li>AVCaptureVideoDataOutputSampleBufferDelegate</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Managing</span> <span class="n">Sample</span> <span class="n">Buffer</span> <span class="n">Behavior</span>
-</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
-</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didDropSampleBuffer:fromConnection:</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>AVCaptureAudioDataOutputSampleBufferDelegat</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">Delegate</span> <span class="n">Methods</span>
-</span><span class='line'><span class="err">–</span> <span class="nl">captureOutput:didOutputSampleBuffer:fromConnection:</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>まとめ</h2>
-
-<p>メディアキャプチャの出力先の実装について調べてみました。目的に応じてどれを使うかは選択していけばいいのですが、よりユーザにインタラクティブなインタフェースや体験をさせるにはそれ相応に細かい実装していかなければいけないこともわかりました。何度も言っているかもしれないけどメディア系の実装は大変です。。。</p>
-
-<h2>ref</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation公式ドキュメント</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureMovieFileOutput_Class/Reference/Reference.html#//apple_ref/occ/cl/AVCaptureMovieFileOutput">AVCaptureMovieFileOutput</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureFileOutputRecordingDelegate_Protocol/Reference/Reference.html">AVCaptureFileOutputRecordingDelegate</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutput_Class/Reference/Reference.html">AVCaptureVideoDataOutput</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureVideoDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html#//apple_ref/occ/intfm/AVCaptureVideoDataOutputSampleBufferDelegate/captureOutput:didOutputSampleBuffer:fromConnection:">AVCaptureVideoDataOutputSampleBufferDelegate</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/AVFoundation/Reference/AVCaptureAudioDataOutputSampleBufferDelegate_Protocol/Reference/Reference.html">AVCaptureAudioDataOutputSampleBufferDelegate</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[IRKit + iBeacon]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon/"/>
-    <updated>2014-03-29T16:32:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/03/29/irkit-plus-ibeacon</id>
-    <content type="html"><![CDATA[<p>先日IRKitとEstimote Beaconsを購入しまして、せっかくなんでこの二つ合わせてなにかできないかなーと思いまして
-自宅で活用できるものを作ってみました。</p>
-
-<h4>IRKit</h4>
-
-<p><a href="http://www.amazon.co.jp/IRKit-001-IRKit-iPhone-iPad%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E5%A4%96%E5%87%BA%E5%85%88%E3%81%8B%E3%82%89%E3%82%A8%E3%82%A2%E3%82%B3%E3%83%B3%E7%AD%89%E3%81%AE%E5%AE%B6%E9%9B%BB%E3%82%92%E6%93%8D%E4%BD%9C%E3%81%A7%E3%81%8D%E3%82%8B%E5%AD%A6%E7%BF%92%E3%83%AA%E3%83%A2%E3%82%B3%E3%83%B3/dp/B00H91KK26%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00H91KK26" target="_blank" title="IRKit - iPhone,iPadを使って外出先からエアコン等の家電を操作できる学習リモコン"><img src="http://ecx.images-amazon.com/images/I/31HuSy3ACXL.jpg" width="500" height="356" alt="IRKit - iPhone,iPadを使って外出先からエアコン等の家電を操作できる学習リモコン" /></a></p>
-
-<h4>Estimote Beacons</h4>
-
-<iframe src="http://nakajijapan.github.io//instagram.com/p/iDTqkYMR1I/embed/" width="612" height="710" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
-
-
-<p>仕様としては、</p>
-
-<ul>
-<li>beaconに近づいたら（家に帰ってきたら）テレビをつける</li>
-<li>beaconから離れたら（外出したら）テレビを消す</li>
-</ul>
-
-
-<p>ってことを試してみました。</p>
-
-<h2>下準備</h2>
-
-<p>まずはそれぞれのライブラリを追加して<code>pod install</code>する。</p>
-
-<p>SDKのインストール。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>target "irkit_ibeacon" do
-</span><span class='line'>  pod 'IRKit', :git =&gt; 'https://github.com/irkit/ios-sdk.git'
-</span><span class='line'>  pod 'EstimoteSDK'
-</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
-
-
-<p>frameworkの追加。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>CoreLocation.framework
-</span><span class='line'>CoreBluetooth.framework</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>IRKit</h2>
-
-<p>ここでは、IRKit SDKを利用してシグナルを登録してテーブルのセルにボタンを追加する処理を行います。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">..)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// find IRKit</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">([</span><span class="n">IRKit</span> <span class="n">sharedInstance</span><span class="p">].</span><span class="n">countOfReadyPeripherals</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">IRNewPeripheralViewController</span> <span class="o">*</span><span class="n">vc</span> <span class="o">=</span> <span class="p">[[</span><span class="n">IRNewPeripheralViewController</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>        <span class="n">vc</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">self</span> <span class="nl">presentViewController:</span><span class="n">vc</span>
-</span><span class='line'>                           <span class="nl">animated:</span><span class="n">YES</span>
-</span><span class='line'>                         <span class="nl">completion:</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>                             <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;presented&quot;</span><span class="p">);</span>
-</span><span class='line'>                         <span class="p">}];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">IRSignals</span> <span class="o">*</span><span class="n">tmpSignals</span> <span class="o">=</span> <span class="p">[[</span><span class="n">IRSignals</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// and add a signal to the collection</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">tmpSignals</span> <span class="nl">loadFromStandardUserDefaultsKey:</span><span class="s">@&quot;xxxxxxxxxxxxxxxxxxxxxx&quot;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="p">[[</span><span class="n">tmpSignals</span> <span class="n">signals</span><span class="p">]</span> <span class="n">count</span><span class="p">];</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;%@&quot;</span><span class="p">,</span> <span class="p">[[</span><span class="n">tmpSignals</span> <span class="n">signals</span><span class="p">]</span> <span class="nl">objectAtIndex:</span><span class="n">i</span><span class="p">]);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>IRNewPeripheralViewControllerDelegate</code>で信号の登録が終了したときに呼ばれるメソッドの実装を行います。
-ここでは、ハード側で学習が完了した信号を<code>NSUserDefault</code>側でも保存させるようにしておきます。（実際にはそのシグナルを識別できるようにするためのハッシュ値のようなもの）</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="cp">#pragma mark - IRNewPeripheralViewControllerDelegate</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">newSignalViewController:</span><span class="p">(</span><span class="n">IRNewSignalViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span>
-</span><span class='line'>            <span class="nf">didFinishWithSignal:</span><span class="p">(</span><span class="n">IRSignal</span> <span class="o">*</span><span class="p">)</span><span class="nv">signal</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span> <span class="s">@&quot;signal: %@&quot;</span><span class="p">,</span> <span class="n">signal</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_datasource</span> <span class="nl">addSignalsObject:</span><span class="n">signal</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">_datasource</span><span class="p">.</span><span class="n">signals</span> <span class="nl">saveToStandardUserDefaultsWithKey:</span><span class="s">@&quot;SIGNALS&quot;</span><span class="p">];</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">tableView</span> <span class="n">reloadData</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span>
-</span><span class='line'>                             <span class="nl">completion:</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>                                 <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;dismissed&quot;</span><span class="p">);</span>
-</span><span class='line'>                             <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="cp">#pragma mark - IRNewSignalViewControllerDelegate</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">newPeripheralViewController:</span><span class="p">(</span><span class="n">IRNewPeripheralViewController</span> <span class="o">*</span><span class="p">)</span><span class="nv">viewController</span>
-</span><span class='line'>            <span class="nf">didFinishWithPeripheral:</span><span class="p">(</span><span class="n">IRPeripheral</span> <span class="o">*</span><span class="p">)</span><span class="nv">peripheral</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span> <span class="s">@&quot;peripheral: %@&quot;</span><span class="p">,</span> <span class="n">peripheral</span> <span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span> <span class="nl">dismissViewControllerAnimated:</span><span class="n">YES</span>
-</span><span class='line'>                             <span class="nl">completion:</span><span class="o">^</span><span class="p">{</span>
-</span><span class='line'>                                 <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;dismissed&quot;</span><span class="p">);</span>
-</span><span class='line'>                             <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>登録した信号を実行するときは以下のような実装で呼び出せるようになります。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">tableView:</span><span class="p">(</span><span class="n">UITableView</span> <span class="o">*</span><span class="p">)</span><span class="nv">tableView</span> <span class="nf">didSelectRowAtIndexPath:</span><span class="p">(</span><span class="n">NSIndexPath</span> <span class="o">*</span><span class="p">)</span><span class="nv">indexPath</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;indexPath: %@&quot;</span><span class="p">,</span> <span class="n">indexPath</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">tableView</span> <span class="nl">deselectRowAtIndexPath:</span><span class="n">indexPath</span>
-</span><span class='line'>                             <span class="nl">animated:</span><span class="n">YES</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">IRSignal</span> <span class="o">*</span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="n">_datasource</span> <span class="nl">objectAtIndex:</span><span class="n">indexPath</span><span class="p">.</span><span class="n">row</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">signal</span> <span class="nl">sendWithCompletion:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;sent error: %@&quot;</span><span class="p">,</span> <span class="n">error</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}];</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>iBeacon</h2>
-
-<p>ここでは、ビーコンで領域を観測し出たか入ったかを監視して、IRKitに信号を送る処理を行います。</p>
-
-<p>まず、<code>ESTBeaconManager</code>をインスタンス化して<code>startMonitoringForRegion:</code> で監視を開始します。
-<code>startRangingBeaconsInRegion:</code>で距離の観測を開始します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">viewDidLoad</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">...)</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">beaconManager</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ESTBeaconManager</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">self</span><span class="p">.</span><span class="n">beaconManager</span><span class="p">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="n">self</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">ESTBeaconRegion</span> <span class="o">*</span><span class="n">region</span> <span class="o">=</span> <span class="p">[[</span><span class="n">ESTBeaconRegion</span> <span class="n">alloc</span><span class="p">]</span> <span class="nl">initWithProximityUUID:</span><span class="n">MY_ESTIMOTE_PROXIMITY_UUID</span>
-</span><span class='line'>                                                                       <span class="nl">major:</span><span class="mi">36605</span>
-</span><span class='line'>                                                                       <span class="nl">minor:</span><span class="mi">43679</span>
-</span><span class='line'>                                                                  <span class="nl">identifier:</span><span class="s">@&quot;EstimoteSampleRegion&quot;</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">beaconManager</span> <span class="nl">startMonitoringForRegion:</span><span class="n">region</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">self</span><span class="p">.</span><span class="n">beaconManager</span> <span class="nl">startRangingBeaconsInRegion:</span><span class="n">region</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>位置情報を利用した領域観測の方法と同様に、ビーコン領域の出入りのイベントをハンドリングします。その処理内でIRKitへ信号の送信する処理を実行します。
-メソッドとしては、<code>locationManager:didEnterRegion:</code>と、<code>locationManager:didExitRegion:</code>をハンドリングして処理を行います。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">beaconManager:</span><span class="p">(</span><span class="n">ESTBeaconManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span> <span class="nf">didEnterRegion:</span><span class="p">(</span><span class="n">ESTBeaconRegion</span> <span class="o">*</span><span class="p">)</span><span class="nv">region</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">IRSignals</span> <span class="o">*</span><span class="n">signals</span> <span class="o">=</span> <span class="p">[[</span><span class="n">IRSignals</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">signals</span> <span class="nl">loadFromStandardUserDefaultsKey:</span><span class="s">@&quot;SIGNALS&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">IRSignal</span> <span class="o">*</span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="n">signals</span> <span class="nl">objectAtIndex:</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">signal</span> <span class="nl">sendWithCompletion:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="p">[</span><span class="n">self</span> <span class="nl">say:</span><span class="p">[</span><span class="n">NSString</span>  <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@を実行しました。&quot;</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">name</span><span class="p">]];</span>
-</span><span class='line'>        <span class="p">}];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;beaconの近くに入りました。&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">-</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">beaconManager:</span><span class="p">(</span><span class="n">ESTBeaconManager</span> <span class="o">*</span><span class="p">)</span><span class="nv">manager</span> <span class="nf">didExitRegion:</span><span class="p">(</span><span class="n">ESTBeaconRegion</span> <span class="o">*</span><span class="p">)</span><span class="nv">region</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="n">IRSignals</span> <span class="o">*</span><span class="n">signals</span> <span class="o">=</span> <span class="p">[[</span><span class="n">IRSignals</span> <span class="n">alloc</span><span class="p">]</span> <span class="n">init</span><span class="p">];</span>
-</span><span class='line'>    <span class="p">[</span><span class="n">signals</span> <span class="nl">loadFromStandardUserDefaultsKey:</span><span class="s">@&quot;SIGNALS&quot;</span><span class="p">];</span>
-</span><span class='line'>    <span class="n">IRSignal</span> <span class="o">*</span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="n">signals</span> <span class="nl">objectAtIndex:</span><span class="mi">1</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">signal</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="p">[</span><span class="n">signal</span> <span class="nl">sendWithCompletion:</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="p">[</span><span class="n">self</span> <span class="nl">say:</span><span class="p">[</span><span class="n">NSString</span>  <span class="nl">stringWithFormat:</span><span class="s">@&quot;%@を実行しました。&quot;</span><span class="p">,</span> <span class="n">signal</span><span class="p">.</span><span class="n">name</span><span class="p">]];</span>
-</span><span class='line'>        <span class="p">}];</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;beaconから離れました。&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>まとめ</h2>
-
-<p>これで上記の仕様が実現できます。
-今回の実装はまだIRKitにしてもEstimote Beaconsにしてもさわりの部分しか実装していないのですが、他の仕様も合わせたりするとまだまだ面白いことでできるかと思います。
-最近、生活が変わるような技術がどんどんでてきていて楽しいですね♪（ただハードを購入しなきゃいけないのでお金がかかってしまいますがw）
-まだまだこれからも、生活を変えるような技術がでてくると思うのでそれキャッチアップして試せるものは試していこうと思います！！</p>
-
-<p>Enjoy Technology!!!</p>
-
-<h2>Ref</h2>
-
-<ul>
-<li><a href="http://getirkit.com/">IRKit</a></li>
-<li><a href="http://estimote.com/">Estimote Beacons</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[第５回 #potatotips に参加してきた。]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer/"/>
-    <updated>2014-03-17T03:37:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/03/17/potetotips5-nkjmoviecomposer</id>
-    <content type="html"><![CDATA[<p>先日ですが、#potatetips　（第五回）に参加させていただきました。
-持ち時間一人５分のtips共有会なのですが、自分はAVFoundation周りの話をしてきました。
-本当は実装しているときにこんなメソッド使うと便利だよとかこうすると迷走するからこうしたしたほうがいいよとかあればよかったのですが
-いまいち思いつかなくて、自分でプラグイン作成して、これ使うと便利だよっ、知らなかったでしょう！！という感じに強制的にもっていった発表内容でした。
-内容としては前回の発表のつづきで、以前作成したアプリの機能を切り出して、動画関連の処理を簡単に実装できるようにした（CocoaPods化）した話をしました。</p>
-
-<script async class="speakerdeck-embed" data-id="f675b2008c7e013162b85e7a2e8ee0d7" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p><a href="https://github.com/nakajijapan/NKJMovieComposer">NKJMovieComposer</a></p>
-
-<p>インストール方法は至って簡単で</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>pod "NKJMovieComposer"</span></code></pre></td></tr></table></div></figure>
-
-
-<p>でオッケーです。後は実装するファイルに<code>#import 'NKJMovieComposer.h'を追加すればOKです。</code></p>
-
-<p>機能としては以下の機能が実装できます。</p>
-
-<ul>
-<li>動画結合</li>
-<li>ワイプ</li>
-<li>フェードイン・アウト</li>
-</ul>
-
-
-<p>詳しいことは<a href="https://github.com/nakajijapan/NKJMovieComposer">GitHub</a>をみていただくことにして、
-まだエラー処理とかデバイス・OSに応じたカスタマイズがまだまだできていないので地道に実装していこうと思います。</p>
-
-<p>最後に、発表者のみなさん、クックパッドさんおつかれさまでした！</p>
 ]]></content>
   </entry>
   

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: OSX,Swift | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/osx-swift/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2015-02-16T10:27:26+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[自作のアプリから他のWindowに画像をドラッグする]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/02/10/osx-dandd2/"/>
+    <updated>2015-02-10T21:15:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/02/10/osx-dandd2</id>
+    <content type="html"><![CDATA[<p>タイトルの通り。たとえば、自作アプリで生成された画像をそのままGitHubにドロップして画像を登録する。
+っていうことをできるようにしたい。だけど前回の記事だとどうしてもドロップする機能が実装できなくて
+困っていたのですができる方法が見つかったので記録しておく。</p>
+
+<p>結論からいうと<code>NSTableView</code>をうまく利用することでできるようになった。</p>
+
+<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">公式ドキュメント</a>
+にもあるのですが、Draggingの操作があらかじめ用意されていてすくない実装で目的のことができるようになります。</p>
+
+<h3>Setup</h3>
+
+<p><code>NSTableView</code>は初期化されていることは前提で、それ以外で必要な設定を説明します。</p>
+
+<p><code>
+let types = [NSImage.imagePasteboardTypes()]
+tableView.registerForDraggedTypes(types)
+</code></p>
+
+<p>これはドロップできるデータのデータのタイプを指定します。
+この場合だと画像の種類を指定しています。</p>
+
+<p><code>
+tableView.setDraggingSourceOperationMask(NSDragOperation.Copy, forLocal: false)
+</code></p>
+
+<p>これは、ドラッグできる操作の種類、他のWindowにもドラッグできるかどうかも指定できます。
+この場合だとファイルのコピーを他のWindowにドロップします。</p>
+
+<p>ドラッグの種類は<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">ここ</a>
+にすべて記述してあります。</p>
+
+<h3>NSTableViewDataSource</h3>
+
+<p>今回は一つだけ表示できればいいので要素を一つのみ表示する処理をします。</p>
+
+<p>```
+// MARK: &ndash; NSTableViewDataSource</p>
+
+<p>func numberOfRowsInTableView(tableView: NSTableView) &ndash;> Int {</p>
+
+<pre><code>return 1
+</code></pre>
+
+<p>}</p>
+
+<p>func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) &ndash;> NSView? {</p>
+
+<pre><code>var view = tableView.makeViewWithIdentifier("imageCell", owner: self) as NSView
+
+self.entity = Entity()
+var imageView = view.viewWithTag(1) as NSImageView
+imageView.image = self.entity.image
+
+return view
+</code></pre>
+
+<p>}</p>
+
+<p>func tableView(tableView: NSTableView, pasteboardWriterForRow row: Int) &ndash;> NSPasteboardWriting? {</p>
+
+<pre><code> return self.entity
+</code></pre>
+
+<p>}
+```</p>
+
+<h3>データを管理するEntityを作成</h3>
+
+<p>TableViewを扱うというとはCellが必要になってそこに描画するデータが必要になります。
+今回はそのデータを管理するクラスを作成して、そこにドラッグするデータを保持します。
+さらにそのデータをドロップしたときの処理も<code>NSPasteboardWriting</code>を宣言して実装していきます。</p>
+
+<p>```
+Class Entity: NSObject, NSPasteboardWriting {</p>
+
+<pre><code>(..snip..)
+
+
+var fileURL:NSURL!
+
+// MARK: - NSPasteboardWriting
+
+func writableTypesForPasteboard(pasteboard: NSPasteboard!) -&gt; [AnyObject]! {
+    return self.fileURL.writableTypesForPasteboard(pasteboard)
+}
+
+func pasteboardPropertyListForType(type: String!) -&gt; AnyObject! {
+    return self.fileURL.pasteboardPropertyListForType(type)
+}
+
+func writinOptionsForType(type: String!, pasteboard: NSPasteboard!) -&gt; NSPasteboardWritingOptions {
+    return self.fileURL.writingOptionsForType(type, pasteboard: pasteboard)
+}
+</code></pre>
+
+<p>}</p>
+
+<p>```</p>
+
+<p>ここではファイルのパスをPasteboardにファイルURLのデータをどの型でどのオブジェクトを返すのかを実装しています。
+NSURLがNSPasteboardWritingの実装をしてくれているのでそのまま返せば問題ありません。</p>
+
+<h2>まとめ</h2>
+
+<p>これで画像をドラッグしてFinder等にドロップして画像を保存することが可能になりました。
+今回は<code>NSTableView</code>を利用して目的を実現できましたが、まわりくどいやりかたしなくてもできそうな気はぬぐいきれないのです。
+単純にNSView側にドラッグとドロップの処理実装できればシンプルになりそうな気がした今日この頃です。それができると信じて
+調査したんだけどリタイヤしたのが前回の記事の話でした。</p>
+
+<h2>参考</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">NSTableView</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">NSDragOperation</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/#//apple_ref/occ/instp/NSDraggingSession/draggingLocation">NSDraggingSession</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OSX ドラッグアンドドロップの調査]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/01/20/osx-dandd/"/>
+    <updated>2015-01-20T17:01:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/01/20/osx-dandd</id>
+    <content type="html"><![CDATA[<p>ドラッギングアンドドロップ関連の調査</p>
+
+<h2>NSDraggingSource</h2>
+
+<p>プロトコルメソッドで、Dragging Session内のオブジェクトによって実装される。
+ドラッグ捜査中に受け取るメッセージ</p>
+
+<h3>draggingSession(_:sourceOperationMaskForDraggingContext:)</h3>
+
+<p>ドラッギングしている状況を教えて、どんなドラッグのタイプを許すか設定します。</p>
+
+<p>```
+enum NSDraggingContext : Int {</p>
+
+<pre><code>case OutsideApplication
+case WithinApplication
+</code></pre>
+
+<p>}
+```</p>
+
+<p>ドラッグ操作のマスク。ここでどんな操作を許すのかの種類</p>
+
+<p>```
+struct NSDragOperation : RawOptionSetType {</p>
+
+<pre><code>init(_ rawValue: UInt)
+init(rawValue: UInt)
+
+static var None: NSDragOperation { get }
+static var Copy: NSDragOperation { get }
+static var Link: NSDragOperation { get }
+static var Generic: NSDragOperation { get }
+static var Private: NSDragOperation { get }
+static var Move: NSDragOperation { get }
+static var Delete: NSDragOperation { get }
+static var Every: NSDragOperation { get }
+
+static var All_Obsolete: NSDragOperation { get } // Use NSDragOperationEvery
+static var All: NSDragOperation { get } // Use NSDragOperationEvery
+</code></pre>
+
+<p>}
+```</p>
+
+<p>以下は、指定されたスクリーン上をトリガーにして呼び出されるメソッド
+その時の位置も保持している。</p>
+
+<h3>draggingSession(_:willBeginAtPoint:)</h3>
+
+<p>スクリーン上でドラッグされ始めたときに呼び出される</p>
+
+<h3>draggingSession(_:endedAtPoint:operation:)</h3>
+
+<p>スクリーン上でドラッグが終了したときに呼び出される</p>
+
+<h3>draggingSession(_:movedToPoint:)</h3>
+
+<p>スクリーン上でドラッグされているときに呼び出される</p>
+
+<h2>NSDraggingDestination</h2>
+
+<p>プロトコルメソッド。実装したViewに対してイベントが呼び出される</p>
+
+<p><code>
+draggingEntered(_:)
+draggingUpdated(_:)
+draggingEnded(_:)
+draggingExited(_:)
+</code></p>
+
+<p>以下は、ドロップ処理の実行要求。
+上記メソッドでドロップ可能と返した状態でこのテキストフィールド上でマウスボタンを放した時に呼び出されます。</p>
+
+<p><code>
+prepareForDragOperation(_:)
+performDragOperation(_:)
+</code></p>
+
+<p>ここでドラッグしたオブジェクトが対象のオブジェクトに対してどうゆう処理をするのかを実装する</p>
+
+<h2>NSDraggingSession</h2>
+
+<p>ドラッグアンドドロップ関連の処理を提供してくれる。ドラッグ処理中に編集を許可する。</p>
+
+<h3>Example</h3>
+
+<p>以下のようにして対象のオブジェクトを監視する</p>
+
+<p>```
+var draggingSession:NSDraggingSession = self.beginDraggingSessionWithItems([dragItem], event: theEvent, source: self)</p>
+
+<h1>失敗したときに画像をもとの位置に戻すかどうか</h1>
+
+<p>draggingSession.animatesToStartingPositionsOnCancelOrFail = true</p>
+
+<h1>ドラッグしている状態のビジュアルをどんな表現するかの設定</h1>
+
+<h1>None: 画像をポイントに維持させる</h1>
+
+<p>draggingSession.draggingFormation = NSDraggingFormation.None
+```</p>
+
+<h2>まとめ</h2>
+
+<p>ここで対象のオブジェクトをドラッグアンドドロップできるようになる。
+たとえばFinderにある画像を実装したオブジェクトに画像とかをドロップできたりできる。
+ただ、実装したオブジェクトをドラッグしてFinderにドロップして（画像を保存したり）はできないのでもうすこし調査が必要。</p>
+
+<h2>参照</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/DragandDrop/DragandDrop.html#//apple_ref/doc/uid/10000069i">Introduction to Drag and Drop</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingDestination_Protocol/#//apple_ref/occ/intfm/NSDraggingDestination/prepareForDragOperation:">NSDraggingDestination</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingSource_Protocol/#//apple_ref/occ/intfm/NSDraggingSource/draggingSession:willBeginAtPoint:">NSDraggingSource</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/">NSDraggingSession</a></li>
+<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/NSPasteboardWriting_Protocol/index.html#//apple_ref/occ/intfm/NSPasteboardWriting/writableTypesForPasteboard:">NSPasteboardWriting</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

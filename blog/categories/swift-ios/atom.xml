@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[categories: Swift,iOS | Nakajijapan]]></title>
+  <link href="http://nakajijapan.github.io/blog/categories/swift-ios/atom.xml" rel="self"/>
+  <link href="http://nakajijapan.github.io/"/>
+  <updated>2015-02-16T10:27:26+09:00</updated>
+  <id>http://nakajijapan.github.io/</id>
+  <author>
+    <name><![CDATA[nakajijapan]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[最近読んだ本]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/02/01/book/"/>
+    <updated>2015-02-01T22:52:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/02/01/book</id>
+    <content type="html"><![CDATA[<p>最近読んだ本</p>
+
+<p><img src="https://imagery.pragprog.com/products/373/adios2_xlargebeta.jpg?1414692598" alt="" /></p>
+
+<p><a href="https://pragprog.com/book/adios2/ios-8-sdk-development">iOS 8 SDK Development: Creating iPhone and iPad Apps with Swift</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank" title="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー"><img src="http://ecx.images-amazon.com/images/I/51WbR9eLwOL._SL160_.jpg" width="101" height="150" alt="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank">ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank" title="Pro iOS Continuous Integration"><img src="http://ecx.images-amazon.com/images/I/41bLTp-nTpL._SL160_.jpg" width="121" height="150" alt="Pro iOS Continuous Integration" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank">Pro iOS Continuous Integration</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank" title="マイクロインタラクション ―UI/UXデザインの神が宿る細部"><img src="http://ecx.images-amazon.com/images/I/51LgvWft-IL._SL160_.jpg" width="105" height="150" alt="マイクロインタラクション ―UI/UXデザインの神が宿る細部" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank">マイクロインタラクション ―UI/UXデザインの神が宿る細部</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank" title="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)"><img src="http://ecx.images-amazon.com/images/I/51PLsDdMCbL._SL160_.jpg" width="115" height="150" alt="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank">iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank" title="Swift Development with Cocoa: Developing for the Mac and iOS App Stores"><img src="http://ecx.images-amazon.com/images/I/51QozVPjPiL._SL160_.jpg" width="114" height="150" alt="Swift Development with Cocoa: Developing for the Mac and iOS App Stores" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank">Swift Development with Cocoa: Developing for the Mac and iOS App Stores</a></p>
+
+<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank" title="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework"><img src="http://ecx.images-amazon.com/images/I/51njEv08GbL._SL160_.jpg" width="116" height="150" alt="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework" style="border:0;border-radius:0" /></a></div>
+
+
+<p><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank">Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework</a></p>
+]]></content>
+  </entry>
+  
+</feed>
