@@ -4,7 +4,7 @@
   <title><![CDATA[Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2015-02-16T10:27:26+09:00</updated>
+  <updated>2015-04-04T23:54:19+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[teiten をv1.1.1にした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/03/17/teiten-v1-dot-1-1/"/>
+    <updated>2015-03-17T13:49:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/03/17/teiten-v1-dot-1-1</id>
+    <content type="html"><![CDATA[<p><img src="http://teiten.nakajijapan.net/images/icon.png" width="300" /></p>
+
+<p><a href="http://teiten.nakajijapan.net/">Teiten</a>のバージョンアップを行いました。</p>
+
+<p>バージョンアップ内容は以下の内容です。</p>
+
+<ul>
+<li>画像を保存するときに画像の解像度を選択できるようになりました。</li>
+<li><code>File</code> &ndash;> <code>Open Saved Images</code> で保存されているディレクトリをFinderで開ける用にしました。</li>
+</ul>
+
+
+<p>地味なバージョアンアップでした。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[NKJMovieComposerをSwiftにした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/03/17/nkjmoviecomposer-swift/"/>
+    <updated>2015-03-17T13:40:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/03/17/nkjmoviecomposer-swift</id>
+    <content type="html"><![CDATA[<p>ようやくCocoapodsがSwiftに対応した(0.36になった)ので自分のプラグインもSwfitに書き換えたものを<code>master</code>にマージしました。
+Swiftは名前空間あるのでキラキラ名にするでも良かったんだけど、良い名前が思い浮かばなかったのとなんだか <em>NKJ</em> に愛着があるので
+そのままにしましたｗ</p>
+
+<p>基本自分のプラグインを書き換えるときはこの方針で行こう。
+あと、わかりやすいように自分のプラグインのデモをのせてみました。</p>
+
+<p><img src="https://github.com/nakajijapan/NKJMovieComposer/raw/master/demo.gif" alt="nakajijapan" /></p>
+
+<ul>
+<li>Swiftに書き換えた時のレポジトリ
+
+<ul>
+<li><a href="https://github.com/nakajijapan/NKJMovieComposer/pull/1">https://github.com/nakajijapan/NKJMovieComposer/pull/1</a></li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[自作のアプリから他のWindowに画像をドラッグする]]></title>
@@ -2090,119 +2137,6 @@ Vine動画のようにタッチしたら録画し、タッチが終了したら(
 <li><a href="https://developer.apple.com/library/ios/documentation/AudioVideo/Conceptual/AVFoundationPG/AVFoundationPG.pdf">AV Foundation Programming Guide</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AVAudioMixでオーディオの調節を行う]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/05/01/about-audiomix/"/>
-    <updated>2014-05-01T11:56:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/05/01/about-audiomix</id>
-    <content type="html"><![CDATA[<p>先日、<a href="https://itunes.apple.com/jp/app/the-ghost-movie-app-look-again/id696530211?mt=8">心霊動画アプリ「もう一度ご覧いただこう」</a>のアップデートしました。
-その修正内容を書き綴ろうと思います。この動画アプリでは、録画した動画の同じタイムライン上にナレーションが入るのですが、あまりに録画した動画がにぎやかすぎるとナレーションがほとんど聞き取れない問題がありました。
-対策としては、ナレーションの音声はそのままにして録画した動画の音声を小さくするように調整すること。<code>AVAudioMix</code>、<code>AVMutableAudioMixInputParameters</code>をうまく利用することで解決しました。</p>
-
-<h2>実装</h2>
-
-<p>基本的には対象のメディア情報に対して、オーディオを制御する用の<code>AVMutableAudioMixInputParameters</code>を利用します。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVMutableComposition</span> <span class="n">avComposition</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// movie sound</span>
-</span><span class='line'><span class="n">AVMutableCompositionTrack</span><span class="o">*</span> <span class="n">compositionAudioTrack</span> <span class="o">=</span> <span class="p">[</span><span class="n">avComposition</span> <span class="nl">addMutableTrackWithMediaType:</span><span class="n">AVMediaTypeAudio</span>
-</span><span class='line'>                                                                              <span class="nl">preferredTrackID:</span><span class="n">kCMPersistentTrackID_Invalid</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// オーディオのメディア情報をもとにオーディオミックス用のパラメータを生成する</span>
-</span><span class='line'><span class="n">AVMutableAudioMixInputParameters</span> <span class="o">*</span><span class="n">mixInputParameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMixInputParameters</span>
-</span><span class='line'>                                                        <span class="nl">audioMixInputParametersWithTrack:</span><span class="n">audioTrack</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 音量の調整</span>
-</span><span class='line'><span class="p">[</span><span class="n">mixInputParameters</span> <span class="nl">setVolumeRampFromStartVolume:</span><span class="mf">0.2f</span> <span class="nl">toEndVolume:</span><span class="mf">0.2f</span>
-</span><span class='line'>                                  <span class="nl">timeRange:</span><span class="n">CMTimeRangeMake</span><span class="p">(</span><span class="n">kCMTimeZero</span><span class="p">,</span> <span class="n">videoAsset</span><span class="p">.</span><span class="n">duration</span><span class="p">)];</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 入力パラメータをオーディオミックスに渡す。</span>
-</span><span class='line'><span class="n">mutableAudioMix</span> <span class="o">=</span> <span class="p">[</span><span class="n">AVMutableAudioMix</span> <span class="n">audioMix</span><span class="p">];</span>
-</span><span class='line'><span class="n">mutableAudioMix</span><span class="p">.</span><span class="n">inputParameters</span> <span class="o">=</span> <span class="err">@</span><span class="p">[</span><span class="n">mixInputParameters</span><span class="p">];</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h4>&ndash; (BOOL)getVolumeRampForTime:(CMTime)time startVolume:(float <em>)startVolume endVolume:(float </em>)endVolume timeRange:(CMTimeRange *)timeRange</h4>
-
-<p>これでどの時間からどのくらいの間、音量をどのくらいにするのかの設定を行えるので、ここでその制御を行います。自分の場合はずっと音量を低くできればよかったので上記のような設定になっています。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='obj-c'><span class='line'><span class="n">AVAssetExportSession</span> <span class="o">*</span><span class="n">assetExportSession</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="p">(</span><span class="n">snip</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">// 音声の制御</span>
-</span><span class='line'><span class="n">assetExportSession</span><span class="p">.</span><span class="n">audioMix</span> <span class="o">=</span> <span class="n">mutableAudioMix</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>設定が終われば、<code>AVAssetExportSession</code>の<code>audioMix</code>に格納すれば、設定が反映されているはずです。
-これでナレーションが動画がうるさくてもしっかり聞こえるようになったので、よりテレビ番組のような感じに近づけられたかと思います！！！</p>
-
-<h2>Resources</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVMutableAudioMix_Class/Reference/Reference.html#//apple_ref/doc/uid/TP40009740">AVMutableAudioMix Class</a></li>
-<li><a href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioMixInputParameters_Class/Reference/Reference.html#//apple_ref/occ/cl/AVAudioMixInputParameters">AVAudioMixInputParameters Class</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[AVCompositionDebugVieweriOS使ってみた]]></title>
-    <link href="http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing/"/>
-    <updated>2014-04-23T10:50:00+09:00</updated>
-    <id>http://nakajijapan.github.io/blog/2014/04/23/debug-of-a-video-editing</id>
-    <content type="html"><![CDATA[<script async class="speakerdeck-embed" data-id="e6b31510ad7401311d323e814ed3dd4c" data-ratio="1.33333333333333" src="http://nakajijapan.github.io//speakerdeck.com/assets/embed.js"></script>
-
-
-<p>先日ですが、mixiさんで開催されたスマホアプリ開発勉強会 <a href="http://atnd.org/events/49386">app道場 #2</a>に参加して、LTしてきました。</p>
-
-<p>今回は、WWDC 2013 Session Videosの<code>Advanced Editing with AV Foundation</code>をみていたときにまだ試していないサンプルがあったのと、ビデオ編集時に使えそうなテストプログラムだったので試しに使ってみたときの話をしてきました。
-「Debug of a video editing」です。サンプルプログラムのタイトルは<code>AVCompositionDebugVieweriOS</code>です。</p>
-
-<p>これは、ビデオ編集時に大きく<code>AVComposition</code>,<code>AVVideoComposition</code>,<code>AVAudioMix</code>なるクラスを利用するのですが、その構造を可視化してくれるプログラムでした。
-普段は、生成した後に単純に目的の動画が完成しているかをただ <strong>目視</strong> しているだけだったのでサンプレプログラムなのに大変助かるプログラムでした。なので少しカスタマイズして自分で作った動画アプリ<a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&amp;ign-mpt=uo%3D4">「もう一度ご覧いただこう」</a>に組み込んでおきました。</p>
-
-<p>発表がすべて終了した後の反省会なる飲み会が、参加者全員？といろいろおしゃべりもできて大変有意義な時間を過ごさせていただきました。
-mixiさん、@punchdrunkerさん、参加された皆さん楽しい時間をありがとうございました！</p>
 ]]></content>
   </entry>
   

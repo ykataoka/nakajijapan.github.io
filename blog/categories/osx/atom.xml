@@ -4,7 +4,7 @@
   <title><![CDATA[categories: OSX | Nakajijapan]]></title>
   <link href="http://nakajijapan.github.io/blog/categories/osx/atom.xml" rel="self"/>
   <link href="http://nakajijapan.github.io/"/>
-  <updated>2015-02-16T10:27:26+09:00</updated>
+  <updated>2015-04-04T23:54:19+09:00</updated>
   <id>http://nakajijapan.github.io/</id>
   <author>
     <name><![CDATA[nakajijapan]]></name>
@@ -12,6 +12,27 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[teiten をv1.1.1にした]]></title>
+    <link href="http://nakajijapan.github.io/blog/2015/03/17/teiten-v1-dot-1-1/"/>
+    <updated>2015-03-17T13:49:00+09:00</updated>
+    <id>http://nakajijapan.github.io/blog/2015/03/17/teiten-v1-dot-1-1</id>
+    <content type="html"><![CDATA[<p><img src="http://teiten.nakajijapan.net/images/icon.png" width="300" /></p>
+
+<p><a href="http://teiten.nakajijapan.net/">Teiten</a>のバージョンアップを行いました。</p>
+
+<p>バージョンアップ内容は以下の内容です。</p>
+
+<ul>
+<li>画像を保存するときに画像の解像度を選択できるようになりました。</li>
+<li><code>File</code> &ndash;> <code>Open Saved Images</code> で保存されているディレクトリをFinderで開ける用にしました。</li>
+</ul>
+
+
+<p>地味なバージョアンアップでした。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[OS X Advent Calendar 2014 - 初めてMacOS X App作成してみた。]]></title>
