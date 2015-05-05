@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Apple Watch App - Nakajijapan</title>
+  <meta name="author" content="nakajijapan">
+
+  
+  <meta name="description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;">
+  <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
+
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://nakajijapan.github.io/blog/2015/05/05/apple-watch">
+  <link href="/favicon.ico" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Nakajijapan" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+
+  <!-- twitter -->
+  <meta name="twitter:creator" content="@nakajijapan">
+  <meta name="twitter:url" content="http://nakajijapan.github.io/blog/2015/05/05/apple-watch">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="nakajijapan">
+  <meta name="twitter:description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;">
+
+
+  <!-- facebook -->
+  <meta property="og:title" content="nakajijapan" />
+  <meta property="og:type"  content="website" />
+  <meta property="og:url"   content="http://nakajijapan.github.io/blog/2015/05/05/apple-watch" />
+  <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
+  <meta property="og:description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;" />
+
+
+
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Nakajijapan</a></h1>
+  
+    <h2>生きるのに必死です。</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:nakajijapan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="http://www.nakajijapan.net">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Apple Watch App</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-05T18:21:00+09:00" pubdate data-updated="true">May 5<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/images/posts/2015-05-05-01.png" alt="nakajijapan" /></p>
+
+<p>折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。</p>
+
+<h2>どんな機能があるのか</h2>
+
+<h3>WatchKit App</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/storyboard_layout_2x.png" width=150 /></p>
+
+<ul>
+<li>通常Apple Watchで利用するアプリ</li>
+<li>階層型、ページ型がある</li>
+</ul>
+
+
+<h3>Glance</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/glance_lister_2x.png" width=100 /></p>
+
+<ul>
+<li>意味合いの通り、「ちらっ」確認する用の画面。</li>
+<li>下スワイプから出現されるもの。</li>
+<li>１ページのみ。</li>
+</ul>
+
+
+<h3>Notification</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/shortlook_calendar_2x.png" width="200" /></p>
+
+<ul>
+<li>iPhoneのプッシュ通知をApple Watch側から見れるようにしたもの</li>
+</ul>
+
+
+<h2>新しく増えたインタラクション</h2>
+
+<ul>
+<li>プレス
+
+<ul>
+<li>強く押す感じ</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>構造</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/DesigningaWatchKitApp.html#//apple_ref/doc/uid/TP40014969-CH3-SW1">WatchKit App Architecture</a></li>
+</ul>
+
+
+<p><img src="https://developer.apple.com/library/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/app_communication_2x.png" alt="" /></p>
+
+<ul>
+<li>通信はWatchKit経由で通信を行う。</li>
+</ul>
+
+
+<h3>InterfaceController</h3>
+
+<ul>
+<li>画面はInterfaceControllerなるものごとに管理されている</li>
+</ul>
+
+
+<h3>Life Cycle</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/watch_app_lifecycle_simple_2x.png" alt="" /></p>
+
+<h4>init</h4>
+
+<ul>
+<li>インスタンス化時に呼び出される</li>
+</ul>
+
+
+<h4>awakeWithContext</h4>
+
+<ul>
+<li>UIの更新</li>
+<li>ロードされたデータをView側に更新するときに呼び出される</li>
+<li>コンテキストデータの更新はここで行われることが推奨されるけど、必須ではない</li>
+</ul>
+
+
+<h4>willActivate</h4>
+
+<ul>
+<li>表示されたときよびだされる</li>
+<li>Interfaceに対する小さな変更をするときなど利用する
+
+<ul>
+<li>アニメーションの変更のときとかかな</li>
+</ul>
+</li>
+</ul>
+
+
+<h4>didDeactivate</h4>
+
+<ul>
+<li>利用されなくなった、しばらく経過すると呼び出される</li>
+<li>ここではInterfaceオブジェクトの変数を変更できない、willActivateが呼び出されるまで無視される</li>
+</ul>
+
+
+<h2>要素</h2>
+
+<p>クラスはこれだけ。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import WatchKit.WKDefines
+</span><span class='line'>import WatchKit.WKError
+</span><span class='line'>import WatchKit.WKInterfaceButton
+</span><span class='line'>import WatchKit.WKInterfaceController
+</span><span class='line'>import WatchKit.WKInterfaceDate
+</span><span class='line'>import WatchKit.WKInterfaceDevice
+</span><span class='line'>import WatchKit.WKInterfaceGroup
+</span><span class='line'>import WatchKit.WKInterfaceImage
+</span><span class='line'>import WatchKit.WKInterfaceLabel
+</span><span class='line'>import WatchKit.WKInterfaceMap
+</span><span class='line'>import WatchKit.WKInterfaceObject
+</span><span class='line'>import WatchKit.WKInterfaceSeparator
+</span><span class='line'>import WatchKit.WKInterfaceSlider
+</span><span class='line'>import WatchKit.WKInterfaceSwitch
+</span><span class='line'>import WatchKit.WKInterfaceTable
+</span><span class='line'>import WatchKit.WKInterfaceTimer</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Leveraging iOS Technologies</h2>
+
+<ul>
+<li>テクノロジーの制限は受け入れるべきだ！
+
+<ul>
+<li>ユーザは位置情報(例)の制限している可能性があるのでそれに準拠すべき</li>
+</ul>
+</li>
+<li>バックグランド処理は利用しない
+
+<ul>
+<li>ユーザの操作のみで作用するべき</li>
+</ul>
+</li>
+<li>時間のかかる処理はしない
+
+<ul>
+<li>ユーザの操作が止まるとしばらくしたら止まるので、その処理も止まってしまう。</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>参照</h2>
+
+<p>だいたいこの辺調べれば知りたいこと知れる。</p>
+
+<p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/index.html#//apple_ref/doc/uid/TP40014969-CH8-SW1">Developing for Apple Watch</a></p>
+</div>
+
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">nakajijapan</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-05T18:21:00+09:00" pubdate data-updated="true">May 5<span>th</span>, 2015</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div class="twitter">
+    <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://nakajijapan.github.io/blog/2015/05/05/apple-watch/" data-via="nakajijapan" data-counturl="http://nakajijapan.github.io/blog/2015/05/05/apple-watch/" >Tweet</a>
+  </div>
+  
+  
+  <div class="google">
+    <div class="g-plusone" data-size="medium"></div>
+  </div>
+  
+
+  <div class="hatena">
+    <a href="http://b.hatena.ne.jp/entry/http://nakajijapan.github.io/blog/2015/05/05/apple-watch/" class="hatena-bookmark-button" data-hatena-bookmark-title="nakajijapan" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+  </div>
+
+  
+    <!--
+    <div class="fb-like" data-send="true" data-width="400" data-show-faces="false"></div>
+    -->
+    <div class="fb-like" data-href="http://nakajijapan.github.io/blog/2015/05/05/apple-watch/" data-layout="button_count" data-send="false" data-show-faces="false"></div>
+
+  
+
+</div>
+
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2015/04/24/get-apple-watch/" title="Previous Post: 僕の左腕にApple Watchがキタ！">&laquo; 僕の左腕にApple Watchがキタ！</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Profile</h1>
+  <div style="text-align: center;">
+    <img src="http://blog.nakajijapan.net/wp-content/uploads/2012/09/ore.jpg" width="200px" style="border-radius: 100px;"/>
+  </div>
+  <div>
+    <div><b>nakajijapan</b></div>
+    <a href="http://twitter.com/nakajijapan">Twitter @nakajijapan</a><br />
+    <a href="http://www.nakajijapan.net">www.nakajijapan.net</a><br />
+  </div>  
+</section>
+<section>
+  <h1>My Products</h1>
+
+  <a href="http://www.frustration.me" style="text-decoration: none;">
+    <img src="https://raw.github.com/nakajijapan/frustrationme_app/master/app/assets/images/icon500_500.png" width="200px" />
+  </a>
+  
+  <a href="https://itunes.apple.com/jp/app/xin-ling-xie-zhenapuri-owakariitadaketadarouka/id455944521?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1758.phobos.apple.com/us/r30/Purple4/v4/88/23/fc/8823fce4-bb15-45c1-aff0-57f3dd2b1d44/mzl.uettjbrc.png" width="200px" alt="心霊写真アプリ 「おわかりいただけただろうか」 - HajiShiraZu" />
+  </a>
+
+  <a href="https://itunes.apple.com/jp/app/xin-ling-dong-huaapuri-mou/id696530211?mt=8&uo=4" style="text-decoration: none;">
+    <img src="http://a1745.phobos.apple.com/us/r30/Purple6/v4/88/a2/77/88a27754-3407-af16-2c8d-2bfec9c508f0/mzl.llawgtne.png" width="200px" alt="心霊動画アプリ もう一度ご覧いただこう - HajiShiraZu" />
+  </a>
+
+ 
+  <a href="https://itunes.apple.com/jp/app/zhong-dao-qing-sao-ju/id580907679?mt=8" style="text-decoration: none;">
+    <img src="http://a1561.phobos.apple.com/us/r1000/113/Purple/v4/bb/21/b8/bb21b8dd-3ec6-dea5-d7eb-64a033ca8ae2/mzl.rmbpduxb.png" width="200px" />
+  </a>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/05/05/apple-watch/">Apple Watch App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/24/get-apple-watch/">僕の左腕にApple Watchがキタ！</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/13/get-nexus6/">Nexus6がキタ！</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/teiten-v1-dot-1-1/">Teiten をv1.1.1にした</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/03/17/nkjmoviecomposer-swift/">NKJMovieComposerをSwiftにした</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>Categories</h1>
+    <ul id="category-list"><li><a href='/blog/categories/backbonejs/'>backbonejs (4)</a></li><li><a href='/blog/categories/ci/'>ci (1)</a></li><li><a href='/blog/categories/cloudkit/'>CloudKit (1)</a></li><li><a href='/blog/categories/diary/'>Diary (1)</a></li><li><a href='/blog/categories/diary/'>diary (1)</a></li><li><a href='/blog/categories/ios/'>iOS (25)</a></li><li><a href='/blog/categories/javascript/'>javascript (1)</a></li><li><a href='/blog/categories/osx/'>OSX (3)</a></li><li><a href='/blog/categories/osx-swift/'>OSX,Swift (2)</a></li><li><a href='/blog/categories/rails/'>Rails (1)</a></li><li><a href='/blog/categories/ruby/'>Ruby (2)</a></li><li><a href='/blog/categories/study/'>study (1)</a></li><li><a href='/blog/categories/swift/'>Swift (3)</a></li><li><a href='/blog/categories/swift-ios/'>Swift,iOS (1)</a></li><li><a href='/blog/categories/vagrant/'>vagrant (1)</a></li><li><a href='/blog/categories/wwdc/'>WWDC (2)</a></li></ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/nakajijapan">@nakajijapan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'nakajijapan',
+            count: 10,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - nakajijapan -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

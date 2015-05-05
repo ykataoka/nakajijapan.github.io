@@ -9,8 +9,8 @@
   <meta name="author" content="nakajijapan">
 
   
-  <meta name="description" content="Teitenのバージョンアップを行いました。 バージョンアップ内容は以下の内容です。 画像を保存するときに画像の解像度を選択できるようになりました。
-File &ndash;> Open Saved Images で保存されているディレクトリをFinderで開ける用にしました。 &hellip;">
+  <meta name="description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;">
   <meta name="keywords" content="nakajijapan,iOS,ナカジ,Swift,CloudKit,AVFoundation,Cocoa">
 
 
@@ -35,8 +35,8 @@ File &ndash;> Open Saved Images で保存されているディレクトリをFin
   <meta name="twitter:url" content="http://nakajijapan.github.io">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="nakajijapan">
-  <meta name="twitter:description" content="Teitenのバージョンアップを行いました。 バージョンアップ内容は以下の内容です。 画像を保存するときに画像の解像度を選択できるようになりました。
-File &ndash;> Open Saved Images で保存されているディレクトリをFinderで開ける用にしました。 &hellip;">
+  <meta name="twitter:description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;">
 
 
   <!-- facebook -->
@@ -44,8 +44,8 @@ File &ndash;> Open Saved Images で保存されているディレクトリをFin
   <meta property="og:type"  content="website" />
   <meta property="og:url"   content="http://nakajijapan.github.io" />
   <meta property="og:image" content="http://nakajijapan.github.io/favicon.ico" />
-  <meta property="og:description" content="Teitenのバージョンアップを行いました。 バージョンアップ内容は以下の内容です。 画像を保存するときに画像の解像度を選択できるようになりました。
-File &ndash;> Open Saved Images で保存されているディレクトリをFinderで開ける用にしました。 &hellip;" />
+  <meta property="og:description" content="折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。 どんな機能があるのか WatchKit App 通常Apple Watchで利用するアプリ
+階層型、ページ型がある Glance 意味合いの通り、「ちらっ」確認する用の画面 &hellip;" />
 
 
 
@@ -89,6 +89,318 @@ File &ndash;> Open Saved Images で保存されているディレクトリをFin
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/05/05/apple-watch/">Apple Watch App</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-05-05T18:21:00+09:00" pubdate data-updated="true">May 5<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/images/posts/2015-05-05-01.png" alt="nakajijapan" /></p>
+
+<p>折角Apple Watchを購入したので、何かしら作れるようになりたいので、WatchKitのことを雑に自分用にメモした。</p>
+
+<h2>どんな機能があるのか</h2>
+
+<h3>WatchKit App</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/storyboard_layout_2x.png" width=150 /></p>
+
+<ul>
+<li>通常Apple Watchで利用するアプリ</li>
+<li>階層型、ページ型がある</li>
+</ul>
+
+
+<h3>Glance</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/glance_lister_2x.png" width=100 /></p>
+
+<ul>
+<li>意味合いの通り、「ちらっ」確認する用の画面。</li>
+<li>下スワイプから出現されるもの。</li>
+<li>１ページのみ。</li>
+</ul>
+
+
+<h3>Notification</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/shortlook_calendar_2x.png" width="200" /></p>
+
+<ul>
+<li>iPhoneのプッシュ通知をApple Watch側から見れるようにしたもの</li>
+</ul>
+
+
+<h2>新しく増えたインタラクション</h2>
+
+<ul>
+<li>プレス
+
+<ul>
+<li>強く押す感じ</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>構造</h2>
+
+<ul>
+<li><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/DesigningaWatchKitApp.html#//apple_ref/doc/uid/TP40014969-CH3-SW1">WatchKit App Architecture</a></li>
+</ul>
+
+
+<p><img src="https://developer.apple.com/library/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/app_communication_2x.png" alt="" /></p>
+
+<ul>
+<li>通信はWatchKit経由で通信を行う。</li>
+</ul>
+
+
+<h3>InterfaceController</h3>
+
+<ul>
+<li>画面はInterfaceControllerなるものごとに管理されている</li>
+</ul>
+
+
+<h3>Life Cycle</h3>
+
+<p><img src="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/Art/watch_app_lifecycle_simple_2x.png" alt="" /></p>
+
+<h4>init</h4>
+
+<ul>
+<li>インスタンス化時に呼び出される</li>
+</ul>
+
+
+<h4>awakeWithContext</h4>
+
+<ul>
+<li>UIの更新</li>
+<li>ロードされたデータをView側に更新するときに呼び出される</li>
+<li>コンテキストデータの更新はここで行われることが推奨されるけど、必須ではない</li>
+</ul>
+
+
+<h4>willActivate</h4>
+
+<ul>
+<li>表示されたときよびだされる</li>
+<li>Interfaceに対する小さな変更をするときなど利用する
+
+<ul>
+<li>アニメーションの変更のときとかかな</li>
+</ul>
+</li>
+</ul>
+
+
+<h4>didDeactivate</h4>
+
+<ul>
+<li>利用されなくなった、しばらく経過すると呼び出される</li>
+<li>ここではInterfaceオブジェクトの変数を変更できない、willActivateが呼び出されるまで無視される</li>
+</ul>
+
+
+<h2>要素</h2>
+
+<p>クラスはこれだけ。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import WatchKit.WKDefines
+</span><span class='line'>import WatchKit.WKError
+</span><span class='line'>import WatchKit.WKInterfaceButton
+</span><span class='line'>import WatchKit.WKInterfaceController
+</span><span class='line'>import WatchKit.WKInterfaceDate
+</span><span class='line'>import WatchKit.WKInterfaceDevice
+</span><span class='line'>import WatchKit.WKInterfaceGroup
+</span><span class='line'>import WatchKit.WKInterfaceImage
+</span><span class='line'>import WatchKit.WKInterfaceLabel
+</span><span class='line'>import WatchKit.WKInterfaceMap
+</span><span class='line'>import WatchKit.WKInterfaceObject
+</span><span class='line'>import WatchKit.WKInterfaceSeparator
+</span><span class='line'>import WatchKit.WKInterfaceSlider
+</span><span class='line'>import WatchKit.WKInterfaceSwitch
+</span><span class='line'>import WatchKit.WKInterfaceTable
+</span><span class='line'>import WatchKit.WKInterfaceTimer</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>Leveraging iOS Technologies</h2>
+
+<ul>
+<li>テクノロジーの制限は受け入れるべきだ！
+
+<ul>
+<li>ユーザは位置情報(例)の制限している可能性があるのでそれに準拠すべき</li>
+</ul>
+</li>
+<li>バックグランド処理は利用しない
+
+<ul>
+<li>ユーザの操作のみで作用するべき</li>
+</ul>
+</li>
+<li>時間のかかる処理はしない
+
+<ul>
+<li>ユーザの操作が止まるとしばらくしたら止まるので、その処理も止まってしまう。</li>
+</ul>
+</li>
+</ul>
+
+
+<h2>参照</h2>
+
+<p>だいたいこの辺調べれば知りたいこと知れる。</p>
+
+<p><a href="https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/WatchKitProgrammingGuide/index.html#//apple_ref/doc/uid/TP40014969-CH8-SW1">Developing for Apple Watch</a></p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/24/get-apple-watch/">僕の左腕にApple Watchがキタ！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-24T19:49:00+09:00" pubdate data-updated="true">Apr 24<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="4" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:50% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://instagram.com/p/12Bm0jsR_o/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_top">未来</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">daichi nakajimaさん(@nakajijapan)が投稿した写真 - <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2015-04-24T04:23:56+00:00">2015  4月 23 9:23午後 PDT</time></p></div></blockquote>
+
+
+<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+
+
+<p>とりあえず、未来を感じたかったので購入しました。
+６月に届くのかと思いきや4月２４日に来たのでびっくり。
+まだまだ未開拓な領域であるけど何起こるかわからんから押さえられるとこ抑えとこ。</p>
+</div>
+  
+  
+
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2015/04/13/get-nexus6/">Nexus6がキタ！</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2015-04-13T19:57:00+09:00" pubdate data-updated="true">Apr 13<span>th</span>, 2015</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="4" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:50% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://instagram.com/p/1Z1z5bMRwy/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_top">iPhone6Plusと二台持ちになった</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">daichi nakajimaさん(@nakajijapan)が投稿した写真 - <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2015-04-13T05:42:08+00:00">2015 4月 12 10:42午後 PDT</time></p></div></blockquote>
+
+
+<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+
+
+<p>普段は、バッグエンドとかiOSとかいじってるけどそろそろAndroidもいじらんとなと思うようになったので購入してみた。</p>
+
+<h3>なぜ</h3>
+
+<p>同僚の<a href="https://twitter.com/misyobun">@misyobun</a>がなぜ購入しないのかと言わんばかりの顔を毎日していたのも理由のうちにあるでしょう。
+また、Androidの勉強でシミュレータで実行して確認してたけど、なんかぱっとしない。やっぱ実機でできた感だしたいので。
+あとは、Androidの優良アプリを普段から利用することでその吸収できるところはをしておこうという魂胆です。</p>
+
+<p>あとは、インターネットに繋がないとあまり意味ないので<a href="http://mvno.dmm.com/">DMMmobile</a>の3GBを契約しました。
+月８５０円なのでかなりお得。</p>
+
+<p>これで準備は整った！！！！！！！</p>
+</div>
+  
+  
+
+
+
+    </article>
   
   
     <article>
@@ -193,439 +505,6 @@ Swiftは名前空間あるのでキラキラ名にするでも良かったんだ
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/10/osx-dandd2/">自作のアプリから他のWindowに画像をドラッグする</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-10T21:15:00+09:00" pubdate data-updated="true">Feb 10<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>タイトルの通り。たとえば、自作アプリで生成された画像をそのままGitHubにドロップして画像を登録する。
-っていうことをできるようにしたい。だけど前回の記事だとどうしてもドロップする機能が実装できなくて
-困っていたのですができる方法が見つかったので記録しておく。</p>
-
-<p>結論からいうと<code>NSTableView</code>をうまく利用することでできるようになった。</p>
-
-<p><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">公式ドキュメント</a>
-にもあるのですが、Draggingの操作があらかじめ用意されていてすくない実装で目的のことができるようになります。</p>
-
-<h3>Setup</h3>
-
-<p><code>NSTableView</code>は初期化されていることは前提で、それ以外で必要な設定を説明します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>let types = [NSImage.imagePasteboardTypes()]
-</span><span class='line'>tableView.registerForDraggedTypes(types)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これはドロップできるデータのデータのタイプを指定します。
-この場合だと画像の種類を指定しています。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tableView.setDraggingSourceOperationMask(NSDragOperation.Copy, forLocal: false)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これは、ドラッグできる操作の種類、他のWindowにもドラッグできるかどうかも指定できます。
-この場合だとファイルのコピーを他のWindowにドロップします。</p>
-
-<p>ドラッグの種類は<a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">ここ</a>
-にすべて記述してあります。</p>
-
-<h3>NSTableViewDataSource</h3>
-
-<p>今回は一つだけ表示できればいいので要素を一つのみ表示する処理をします。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>// MARK: - NSTableViewDataSource
-</span><span class='line'>
-</span><span class='line'>func numberOfRowsInTableView(tableView: NSTableView) -&gt; Int {
-</span><span class='line'>    return 1
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -&gt; NSView? {
-</span><span class='line'>    var view = tableView.makeViewWithIdentifier("imageCell", owner: self) as NSView
-</span><span class='line'>
-</span><span class='line'>    self.entity = Entity()
-</span><span class='line'>    var imageView = view.viewWithTag(1) as NSImageView
-</span><span class='line'>    imageView.image = self.entity.image
-</span><span class='line'>
-</span><span class='line'>    return view
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>func tableView(tableView: NSTableView, pasteboardWriterForRow row: Int) -&gt; NSPasteboardWriting? {
-</span><span class='line'>     return self.entity
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>データを管理するEntityを作成</h3>
-
-<p>TableViewを扱うというとはCellが必要になってそこに描画するデータが必要になります。
-今回はそのデータを管理するクラスを作成して、そこにドラッグするデータを保持します。
-さらにそのデータをドロップしたときの処理も<code>NSPasteboardWriting</code>を宣言して実装していきます。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Class Entity: NSObject, NSPasteboardWriting {
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    (..snip..)
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>    var fileURL:NSURL!
-</span><span class='line'>
-</span><span class='line'>    // MARK: - NSPasteboardWriting
-</span><span class='line'>
-</span><span class='line'>    func writableTypesForPasteboard(pasteboard: NSPasteboard!) -&gt; [AnyObject]! {
-</span><span class='line'>        return self.fileURL.writableTypesForPasteboard(pasteboard)
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    func pasteboardPropertyListForType(type: String!) -&gt; AnyObject! {
-</span><span class='line'>        return self.fileURL.pasteboardPropertyListForType(type)
-</span><span class='line'>    }
-</span><span class='line'>
-</span><span class='line'>    func writinOptionsForType(type: String!, pasteboard: NSPasteboard!) -&gt; NSPasteboardWritingOptions {
-</span><span class='line'>        return self.fileURL.writingOptionsForType(type, pasteboard: pasteboard)
-</span><span class='line'>    }
-</span><span class='line'>}
-</span><span class='line'>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ここではファイルのパスをPasteboardにファイルURLのデータをどの型でどのオブジェクトを返すのかを実装しています。
-NSURLがNSPasteboardWritingの実装をしてくれているのでそのまま返せば問題ありません。</p>
-
-<h2>まとめ</h2>
-
-<p>これで画像をドラッグしてFinder等にドロップして画像を保存することが可能になりました。
-今回は<code>NSTableView</code>を利用して目的を実現できましたが、まわりくどいやりかたしなくてもできそうな気はぬぐいきれないのです。
-単純にNSView側にドラッグとドロップの処理実装できればシンプルになりそうな気がした今日この頃です。それができると信じて
-調査したんだけどリタイヤしたのが前回の記事の話でした。</p>
-
-<h2>参考</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTableView_Class/index.html#//apple_ref/occ/instm/NSTableViiew">NSTableView</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingInfo_Protocol/#//apple_ref/c/tdef/NSDragOperation">NSDragOperation</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/#//apple_ref/occ/instp/NSDraggingSession/draggingLocation">NSDraggingSession</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/02/01/book/">最近読んだ本</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-02-01T22:52:00+09:00" pubdate data-updated="true">Feb 1<span>st</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近読んだ本</p>
-
-<p><img src="https://imagery.pragprog.com/products/373/adios2_xlargebeta.jpg?1414692598" alt="" /></p>
-
-<p><a href="https://pragprog.com/book/adios2/ios-8-sdk-development">iOS 8 SDK Development: Creating iPhone and iPad Apps with Swift</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank" title="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー"><img src="http://ecx.images-amazon.com/images/I/51WbR9eLwOL._SL160_.jpg" width="101" height="150" alt="ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D/dp/B00RX1951E%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00RX1951E" target="_blank">ジョナサン・アイブ　偉大な製品を生み出すアップルの天才デザイナー</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank" title="Pro iOS Continuous Integration"><img src="http://ecx.images-amazon.com/images/I/41bLTp-nTpL._SL160_.jpg" width="121" height="150" alt="Pro iOS Continuous Integration" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/Pro-Continuous-Integration-Romain-Pouclet-ebook/dp/B00K6N4K2A%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00K6N4K2A" target="_blank">Pro iOS Continuous Integration</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank" title="マイクロインタラクション ―UI/UXデザインの神が宿る細部"><img src="http://ecx.images-amazon.com/images/I/51LgvWft-IL._SL160_.jpg" width="105" height="150" alt="マイクロインタラクション ―UI/UXデザインの神が宿る細部" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/%E3%83%9E%E3%82%A4%E3%82%AF%E3%83%AD%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%A9%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3-%E2%80%95UI-UX%E3%83%87%E3%82%B6%E3%82%A4%E3%83%B3%E3%81%AE%E7%A5%9E%E3%81%8C%E5%AE%BF%E3%82%8B%E7%B4%B0%E9%83%A8-Dan-Saffer/dp/4873116597%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D4873116597" target="_blank">マイクロインタラクション ―UI/UXデザインの神が宿る細部</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank" title="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)"><img src="http://ecx.images-amazon.com/images/I/51PLsDdMCbL._SL160_.jpg" width="115" height="150" alt="iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/iOS-UICollectionView-Complete-Edition-Programming-ebook/dp/B00IHZKDCU%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00IHZKDCU" target="_blank">iOS UICollectionView: The Complete Guide (2nd Edition) (Mobile Programming)</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank" title="Swift Development with Cocoa: Developing for the Mac and iOS App Stores"><img src="http://ecx.images-amazon.com/images/I/51QozVPjPiL._SL160_.jpg" width="114" height="150" alt="Swift Development with Cocoa: Developing for the Mac and iOS App Stores" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.com/Swift-Development-Cocoa-Developing-Stores/dp/1491908947%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Dbooklogjp-20%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D1491908947" target="_blank">Swift Development with Cocoa: Developing for the Mac and iOS App Stores</a></p>
-
-<div style="margin-bottom:5px;"><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank" title="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework"><img src="http://ecx.images-amazon.com/images/I/51njEv08GbL._SL160_.jpg" width="116" height="150" alt="Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework" style="border:0;border-radius:0" /></a></div>
-
-
-<p><a href="http://www.amazon.co.jp/Learning-Foundation-Hands-Mastering-Framework-ebook/dp/B00OV3DFGI%3FSubscriptionId%3D0AVSM5SVKRWTFMG7ZR82%26tag%3Ddaichibnejp-22%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3DB00OV3DFGI" target="_blank">Learning AV Foundation: A Hands-on Guide to Mastering the AV Foundation Framework</a></p>
-</div>
-  
-  
-
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2015/01/20/osx-dandd/">OSX ドラッグアンドドロップの調査</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2015-01-20T17:01:00+09:00" pubdate data-updated="true">Jan 20<span>th</span>, 2015</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>ドラッギングアンドドロップ関連の調査</p>
-
-<h2>NSDraggingSource</h2>
-
-<p>プロトコルメソッドで、Dragging Session内のオブジェクトによって実装される。
-ドラッグ捜査中に受け取るメッセージ</p>
-
-<h3>draggingSession(_:sourceOperationMaskForDraggingContext:)</h3>
-
-<p>ドラッギングしている状況を教えて、どんなドラッグのタイプを許すか設定します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>enum NSDraggingContext : Int {
-</span><span class='line'>
-</span><span class='line'>    case OutsideApplication
-</span><span class='line'>    case WithinApplication
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ドラッグ操作のマスク。ここでどんな操作を許すのかの種類</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>struct NSDragOperation : RawOptionSetType {
-</span><span class='line'>    init(_ rawValue: UInt)
-</span><span class='line'>    init(rawValue: UInt)
-</span><span class='line'>
-</span><span class='line'>    static var None: NSDragOperation { get }
-</span><span class='line'>    static var Copy: NSDragOperation { get }
-</span><span class='line'>    static var Link: NSDragOperation { get }
-</span><span class='line'>    static var Generic: NSDragOperation { get }
-</span><span class='line'>    static var Private: NSDragOperation { get }
-</span><span class='line'>    static var Move: NSDragOperation { get }
-</span><span class='line'>    static var Delete: NSDragOperation { get }
-</span><span class='line'>    static var Every: NSDragOperation { get }
-</span><span class='line'>
-</span><span class='line'>    static var All_Obsolete: NSDragOperation { get } // Use NSDragOperationEvery
-</span><span class='line'>    static var All: NSDragOperation { get } // Use NSDragOperationEvery
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以下は、指定されたスクリーン上をトリガーにして呼び出されるメソッド
-その時の位置も保持している。</p>
-
-<h3>draggingSession(_:willBeginAtPoint:)</h3>
-
-<p>スクリーン上でドラッグされ始めたときに呼び出される</p>
-
-<h3>draggingSession(_:endedAtPoint:operation:)</h3>
-
-<p>スクリーン上でドラッグが終了したときに呼び出される</p>
-
-<h3>draggingSession(_:movedToPoint:)</h3>
-
-<p>スクリーン上でドラッグされているときに呼び出される</p>
-
-<h2>NSDraggingDestination</h2>
-
-<p>プロトコルメソッド。実装したViewに対してイベントが呼び出される</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>draggingEntered(_:)
-</span><span class='line'>draggingUpdated(_:)
-</span><span class='line'>draggingEnded(_:)
-</span><span class='line'>draggingExited(_:)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以下は、ドロップ処理の実行要求。
-上記メソッドでドロップ可能と返した状態でこのテキストフィールド上でマウスボタンを放した時に呼び出されます。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>prepareForDragOperation(_:)
-</span><span class='line'>performDragOperation(_:)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ここでドラッグしたオブジェクトが対象のオブジェクトに対してどうゆう処理をするのかを実装する</p>
-
-<h2>NSDraggingSession</h2>
-
-<p>ドラッグアンドドロップ関連の処理を提供してくれる。ドラッグ処理中に編集を許可する。</p>
-
-<h3>Example</h3>
-
-<p>以下のようにして対象のオブジェクトを監視する</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>var draggingSession:NSDraggingSession = self.beginDraggingSessionWithItems([dragItem], event: theEvent, source: self)
-</span><span class='line'>
-</span><span class='line'># 失敗したときに画像をもとの位置に戻すかどうか
-</span><span class='line'>draggingSession.animatesToStartingPositionsOnCancelOrFail = true
-</span><span class='line'>
-</span><span class='line'># ドラッグしている状態のビジュアルをどんな表現するかの設定
-</span><span class='line'>#    None: 画像をポイントに維持させる
-</span><span class='line'>draggingSession.draggingFormation = NSDraggingFormation.None</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>まとめ</h2>
-
-<p>ここで対象のオブジェクトをドラッグアンドドロップできるようになる。
-たとえばFinderにある画像を実装したオブジェクトに画像とかをドロップできたりできる。
-ただ、実装したオブジェクトをドラッグしてFinderにドロップして（画像を保存したり）はできないのでもうすこし調査が必要。</p>
-
-<h2>参照</h2>
-
-<ul>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/DragandDrop/DragandDrop.html#//apple_ref/doc/uid/10000069i">Introduction to Drag and Drop</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingDestination_Protocol/#//apple_ref/occ/intfm/NSDraggingDestination/prepareForDragOperation:">NSDraggingDestination</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Protocols/NSDraggingSource_Protocol/#//apple_ref/occ/intfm/NSDraggingSource/draggingSession:willBeginAtPoint:">NSDraggingSource</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/AppKit/Reference/NSDraggingSession_Class/">NSDraggingSession</a></li>
-<li><a href="https://developer.apple.com/library/mac/documentation/Cocoa/Reference/NSPasteboardWriting_Protocol/index.html#//apple_ref/occ/intfm/NSPasteboardWriting/writableTypesForPasteboard:">NSPasteboardWriting</a></li>
-</ul>
-
-</div>
-  
-  
-
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -672,23 +551,23 @@ NSURLがNSPasteboardWritingの実装をしてくれているのでそのまま�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/05/05/apple-watch/">Apple Watch App</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/24/get-apple-watch/">僕の左腕にApple Watchがキタ！</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2015/04/13/get-nexus6/">Nexus6がキタ！</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2015/03/17/teiten-v1-dot-1-1/">Teiten をv1.1.1にした</a>
       </li>
     
       <li class="post">
         <a href="/blog/2015/03/17/nkjmoviecomposer-swift/">NKJMovieComposerをSwiftにした</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/02/10/osx-dandd2/">自作のアプリから他のWindowに画像をドラッグする</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/02/01/book/">最近読んだ本</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2015/01/20/osx-dandd/">OSX ドラッグアンドドロップの調査</a>
       </li>
     
   </ul>
